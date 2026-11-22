@@ -47,18 +47,32 @@ function App() {
           </button>
         </header>
 
-        <main className="content-area">
-          {activeTab === "dashboard" ? (
-            <window.Dashboard onNavigate={setActiveTab} />
-          ) : (
-            <div className="placeholder-box">
-              <h2>{activeTab.toUpperCase()} Module</h2>
-              <p style={{ marginTop: "0.5rem" }}>
-                Ready to build next.
-              </p>
-            </div>
-          )}
-        </main>
+       
+<main className="content-area">
+
+  {activeTab === "dashboard" && (
+    <window.Dashboard onNavigate={setActiveTab} />
+  )}
+
+  {activeTab === "customers" && (
+    <window.Customers />
+  )}
+
+  {activeTab === "orders" && (
+  <window.Orders />
+)}
+
+{activeTab !== "dashboard" &&
+ activeTab !== "customers" &&
+ activeTab !== "orders" && (
+  <div className="placeholder-box">
+    <h2>{activeTab.toUpperCase()} Module</h2>
+    <p>Ready to build next.</p>
+  </div>
+)}
+
+</main>
+
       </div>
     </div>
   );
