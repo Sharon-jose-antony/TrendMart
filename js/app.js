@@ -50,6 +50,8 @@ function App() {
         <main className="content-area">
           {activeTab === "dashboard" ? (
             <window.Dashboard onNavigate={setActiveTab} />
+          ) : activeTab === "products" ? (
+            <window.Products />
           ) : (
             <div className="placeholder-box">
               <h2>{activeTab.toUpperCase()} Module</h2>
