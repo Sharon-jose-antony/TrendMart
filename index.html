@@ -1,16 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/webp" href="/logo.webp" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrendMart – Premium E-Commerce Admin</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white transition-colors duration-200">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrendMart – Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/settings.css" />
+  <link rel="stylesheet" href="css/customers-orders.css" />
+  <link rel="stylesheet" href="css/orders.css" />
+  <link rel="stylesheet" href="css/products.css" />
+  <link rel="stylesheet" href="css/banners-profile.css" />
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React & ReactDOM (CDN) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <!-- Babel for JSX support in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/storage.js"></script>
+  <script type="text/babel" src="js/components/Sidebar.js"></script>
+  <script type="text/babel" src="js/pages/Dashboard.js"></script>
+  <script type="text/babel" src="js/pages/Customers.js"></script>
+  <script type="text/babel" src="js/pages/Orders.js"></script>
+  <script type="text/babel" src="js/pages/Products.js"></script>
+  <script type="text/babel" src="js/pages/Banners.js"></script>
+  <script type="text/babel" src="js/pages/Profile.js"></script>
+  <script type="text/babel" src="js/pages/Settings.js"></script>
+  <script type="text/babel" src="js/app.js"></script>
+</body>
 </html>
