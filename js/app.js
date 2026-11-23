@@ -36,10 +36,19 @@ function App() {
 
   useEffect(() => {
     const syncProfile = () => setAdminProfile(getSavedAdminProfile());
+    const syncTheme = (e) => {
+      if (e.detail && e.detail.theme) {
+        setTheme(e.detail.theme);
+      }
+    };
+
     window.addEventListener("tm-profile-updated", syncProfile);
+    window.addEventListener("tm-theme-updated", syncTheme);
     window.addEventListener("storage", syncProfile);
+
     return () => {
       window.removeEventListener("tm-profile-updated", syncProfile);
+      window.removeEventListener("tm-theme-updated", syncTheme);
       window.removeEventListener("storage", syncProfile);
     };
   }, []);
@@ -131,6 +140,10 @@ function App() {
 
           {activeTab === "profile" && <window.Profile />}
 
+          {activeTab === "settings" && (
+            <window.Settings onNavigate={setActiveTab} />
+          )}
+
           {![
             "dashboard",
             "customers",
@@ -138,6 +151,7 @@ function App() {
             "products",
             "banners",
             "profile",
+            "settings",
           ].includes(activeTab) && (
             <div className="placeholder-box">
               <h2>{activeTab.toUpperCase()} Module</h2>
