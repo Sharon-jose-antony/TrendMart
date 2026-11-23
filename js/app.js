@@ -125,13 +125,20 @@ function App() {
 
           {activeTab === "orders" && <window.Orders />}
 
+          {activeTab === "products" && <window.Products />}
+
           {activeTab === "banners" && <window.Banners />}
 
           {activeTab === "profile" && <window.Profile />}
 
-          {!["dashboard", "customers", "orders", "banners", "profile"].includes(
-            activeTab
-          ) && (
+          {![
+            "dashboard",
+            "customers",
+            "orders",
+            "products",
+            "banners",
+            "profile",
+          ].includes(activeTab) && (
             <div className="placeholder-box">
               <h2>{activeTab.toUpperCase()} Module</h2>
               <p>Ready to build next.</p>
