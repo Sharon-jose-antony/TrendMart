@@ -1,5 +1,5 @@
 /* ========================================================
-   TRENDMART - MODULE 8: SETTINGS COMPONENT
+   TRENDMART - MODULE 8: AMAZON SELLER CENTRAL SETTINGS
    Native React 18 / In-Browser Babel Standalone Architecture
 ======================================================== */
 
@@ -16,11 +16,12 @@ window.Settings = function Settings({ onNavigate }) {
     );
   });
 
-  // Admin profile state
+  // Seller profile state
   const [profile, setProfile] = useState({
     name: "Admin User",
     email: "admin@trendmart.in",
-    role: "Super Admin",
+    role: "Primary Account Owner",
+    merchantId: "TM-IN-889421",
   });
 
   // Store settings state
@@ -29,20 +30,22 @@ window.Settings = function Settings({ onNavigate }) {
       const saved = JSON.parse(localStorage.getItem("tm_store_settings"));
       return (
         saved || {
-          storeName: "TrendMart E-Commerce",
+          storeName: "TrendMart E-Commerce Official",
+          marketplace: "IN - India (TrendMart.in)",
           currency: "INR",
           lowStockThreshold: 10,
           contactEmail: "admin@trendmart.in",
-          autoInvoice: true,
+          fulfillmentChannel: "TrendMart Express & Prime FBA",
         }
       );
     } catch {
       return {
-        storeName: "TrendMart E-Commerce",
+        storeName: "TrendMart E-Commerce Official",
+        marketplace: "IN - India (TrendMart.in)",
         currency: "INR",
         lowStockThreshold: 10,
         contactEmail: "admin@trendmart.in",
-        autoInvoice: true,
+        fulfillmentChannel: "TrendMart Express & Prime FBA",
       };
     }
   });
@@ -75,7 +78,7 @@ window.Settings = function Settings({ onNavigate }) {
     );
   };
 
-  // Handle form change for store preferences
+  // Handle form change
   const handleSettingChange = (e) => {
     const { name, value, type, checked } = e.target;
     setStoreSettings((prev) => ({
@@ -88,22 +91,19 @@ window.Settings = function Settings({ onNavigate }) {
   const handleSaveSettings = (e) => {
     e.preventDefault();
     localStorage.setItem("tm_store_settings", JSON.stringify(storeSettings));
-    setSaveMessage("Store preferences saved successfully!");
+    setSaveMessage("Seller Central preferences updated successfully!");
     setTimeout(() => setSaveMessage(""), 3000);
   };
 
-  // Perform secure logout
+  // Logout handler
   const handleConfirmLogout = () => {
     setShowLogoutModal(false);
     setIsLoggedOut(true);
 
-    // Clear session-specific flag without deleting business data
     sessionStorage.clear();
     localStorage.removeItem("tm_active_session");
 
-    // Notification toast/state
     setTimeout(() => {
-      // If a login page exists or tab can be reset
       if (typeof onNavigate === "function") {
         onNavigate("dashboard");
       }
@@ -115,86 +115,83 @@ window.Settings = function Settings({ onNavigate }) {
 
   return (
     <div className="settings-container">
-      {/* PAGE HEADER */}
-      <div className="settings-header">
-        <div>
-          <h2>Store & System Settings</h2>
-          <p>Configure theme appearance, store defaults, and session security.</p>
+      {/* 1. SELLER CENTRAL SETTINGS HEADER */}
+      <div className="settings-header-banner">
+        <div className="seller-settings-info">
+          <h2>
+            <span>Seller Central Account & Store Settings</span>
+            <span className="seller-token-pill">TOKEN: {profile.merchantId || "TM-IN-889421"}</span>
+          </h2>
+          <p>Configure theme appearance, marketplace fulfillment, catalog preferences, and security access.</p>
         </div>
       </div>
 
       {saveMessage && (
-        <div className="settings-success-alert">
+        <div className="amazon-safe-banner" style={{ fontSize: "0.9rem" }}>
           <span>✓ {saveMessage}</span>
-          <button
-            style={{ background: "none", border: "none", cursor: "pointer", color: "inherit", fontWeight: 700 }}
-            onClick={() => setSaveMessage("")}
-          >
-            ✕
-          </button>
         </div>
       )}
 
-      {/* SECTION 1: APPEARANCE & THEME */}
-      <div className="settings-card">
-        <h3 className="settings-section-title">
-          <span>🎨</span>
-          <span>Appearance & Visual Theme</span>
-        </h3>
-        <p className="settings-section-subtitle">
-          Select your desired theme mode. Changes apply immediately across all modules, sidebar, and modals.
-        </p>
+      {/* 2. THEME & APPEARANCE */}
+      <div className="amazon-settings-card">
+        <div className="amazon-card-header">
+          <h3>
+            <span>🎨</span>
+            <span>Display Theme & Seller Central Appearance</span>
+          </h3>
+          <p>Choose your workspace theme. Changes apply seamlessly across all dashboards, tables, and dialogs.</p>
+        </div>
 
-        <div className="theme-selector-grid">
-          {/* Light Theme Card */}
+        <div className="amazon-theme-grid">
+          {/* Light Mode */}
           <div
-            className={`theme-card-option ${currentTheme === "light" ? "selected" : ""}`}
+            className={`amazon-theme-tile ${currentTheme === "light" ? "active-theme" : ""}`}
             onClick={() => handleThemeChange("light")}
           >
-            <div className="theme-preview-mockup mockup-light">
-              <div className="mock-sidebar">
-                <div className="mock-sidebar-line active"></div>
-                <div className="mock-sidebar-line"></div>
-                <div className="mock-sidebar-line"></div>
+            <div className="mockup-frame mockup-light-theme">
+              <div className="side-pane">
+                <div className="side-bar-item amber"></div>
+                <div className="side-bar-item"></div>
+                <div className="side-bar-item"></div>
               </div>
-              <div className="mock-content">
-                <div className="mock-card"></div>
+              <div className="main-pane">
+                <div className="mock-widget"></div>
               </div>
             </div>
 
-            <div className="theme-card-info">
-              <div className="theme-card-text">
-                <h4>☀️ Light Mode</h4>
-                <p>Clean, high-contrast, modern daylight palette</p>
+            <div className="theme-tile-label-row">
+              <div className="theme-name-group">
+                <h4>☀️ Amazon Prime Daylight</h4>
+                <p>High-contrast, clean professional e-commerce palette</p>
               </div>
-              <div className="theme-check-badge">
+              <div className="radio-check-bubble">
                 {currentTheme === "light" ? "✓" : ""}
               </div>
             </div>
           </div>
 
-          {/* Dark Theme Card */}
+          {/* Dark Mode */}
           <div
-            className={`theme-card-option ${currentTheme === "dark" ? "selected" : ""}`}
+            className={`amazon-theme-tile ${currentTheme === "dark" ? "active-theme" : ""}`}
             onClick={() => handleThemeChange("dark")}
           >
-            <div className="theme-preview-mockup mockup-dark">
-              <div className="mock-sidebar">
-                <div className="mock-sidebar-line active"></div>
-                <div className="mock-sidebar-line"></div>
-                <div className="mock-sidebar-line"></div>
+            <div className="mockup-frame mockup-dark-theme">
+              <div className="side-pane">
+                <div className="side-bar-item amber"></div>
+                <div className="side-bar-item"></div>
+                <div className="side-bar-item"></div>
               </div>
-              <div className="mock-content">
-                <div className="mock-card"></div>
+              <div className="main-pane">
+                <div className="mock-widget"></div>
               </div>
             </div>
 
-            <div className="theme-card-info">
-              <div className="theme-card-text">
-                <h4>🌙 Dark Mode</h4>
-                <p>Deep obsidian theme optimized for low-light environments</p>
+            <div className="theme-tile-label-row">
+              <div className="theme-name-group">
+                <h4>🌙 Obsidian Night Mode</h4>
+                <p>Deep dark palette optimized for evening monitoring</p>
               </div>
-              <div className="theme-check-badge">
+              <div className="radio-check-bubble">
                 {currentTheme === "dark" ? "✓" : ""}
               </div>
             </div>
@@ -202,19 +199,19 @@ window.Settings = function Settings({ onNavigate }) {
         </div>
       </div>
 
-      {/* SECTION 2: STORE PREFERENCES */}
-      <div className="settings-card">
-        <h3 className="settings-section-title">
-          <span>🏬</span>
-          <span>Store & Catalog Preferences</span>
-        </h3>
-        <p className="settings-section-subtitle">
-          Configure default regional settings and inventory stock warning thresholds.
-        </p>
+      {/* 3. STORE & FULFILLMENT PREFERENCES */}
+      <div className="amazon-settings-card">
+        <div className="amazon-card-header">
+          <h3>
+            <span>🏬</span>
+            <span>Storefront & Merchant Fulfillment Settings</span>
+          </h3>
+          <p>Set regional marketplace parameters, currency formatting, and safety thresholds.</p>
+        </div>
 
-        <form onSubmit={handleSaveSettings} className="settings-form-grid">
-          <div className="settings-input-group">
-            <label>Store Brand Name</label>
+        <form onSubmit={handleSaveSettings} className="merchant-form-grid">
+          <div className="merchant-field-group">
+            <label>Legal Merchant Store Name</label>
             <input
               type="text"
               name="storeName"
@@ -224,7 +221,20 @@ window.Settings = function Settings({ onNavigate }) {
             />
           </div>
 
-          <div className="settings-input-group">
+          <div className="merchant-field-group">
+            <label>Primary Marketplace</label>
+            <select
+              name="marketplace"
+              value={storeSettings.marketplace}
+              onChange={handleSettingChange}
+            >
+              <option value="IN - India (TrendMart.in)">IN - India (TrendMart.in)</option>
+              <option value="US - United States (TrendMart.com)">US - United States (TrendMart.com)</option>
+              <option value="EU - European Union (TrendMart.eu)">EU - European Union (TrendMart.eu)</option>
+            </select>
+          </div>
+
+          <div className="merchant-field-group">
             <label>Display Currency</label>
             <select
               name="currency"
@@ -237,8 +247,8 @@ window.Settings = function Settings({ onNavigate }) {
             </select>
           </div>
 
-          <div className="settings-input-group">
-            <label>Low Stock Warning Threshold (units)</label>
+          <div className="merchant-field-group">
+            <label>Low-Stock Restock Warning Level (units)</label>
             <input
               type="number"
               name="lowStockThreshold"
@@ -249,8 +259,20 @@ window.Settings = function Settings({ onNavigate }) {
             />
           </div>
 
-          <div className="settings-input-group">
-            <label>Store Support & Alerts Email</label>
+          <div className="merchant-field-group merchant-full-row">
+            <label>Default Fulfillment Channel</label>
+            <select
+              name="fulfillmentChannel"
+              value={storeSettings.fulfillmentChannel}
+              onChange={handleSettingChange}
+            >
+              <option value="TrendMart Express & Prime FBA">TrendMart Express & Prime FBA (Recommended)</option>
+              <option value="Merchant Fulfilled Network (MFN)">Merchant Fulfilled Network (MFN)</option>
+            </select>
+          </div>
+
+          <div className="merchant-field-group merchant-full-row">
+            <label>Merchant Support & Notification Email</label>
             <input
               type="email"
               name="contactEmail"
@@ -259,38 +281,39 @@ window.Settings = function Settings({ onNavigate }) {
             />
           </div>
 
-          <div className="settings-full-width settings-actions-row">
-            <button type="submit" className="btn btn-primary">
-              Save Store Preferences
+          <div className="merchant-full-row merchant-btn-bar">
+            <button type="submit" className="btn-amazon-primary">
+              Save Merchant Settings
             </button>
           </div>
         </form>
       </div>
 
-      {/* SECTION 3: SESSION & LOGOUT */}
-      <div className="settings-card">
-        <h3 className="settings-section-title">
-          <span>🔐</span>
-          <span>Administrator Session & Security</span>
-        </h3>
-        <p className="settings-section-subtitle">
-          Manage your active administration login session and security sign-out.
-        </p>
+      {/* 4. SECURITY & SESSION */}
+      <div className="amazon-settings-card">
+        <div className="amazon-card-header">
+          <h3>
+            <span>🔐</span>
+            <span>Seller Account Access & Security Sign-Out</span>
+          </h3>
+          <p>Manage your authorized administrative session and security credentials.</p>
+        </div>
 
-        <div className="session-user-box">
-          <div className="session-user-left">
-            <div className="session-avatar">{avatarInitial}</div>
-            <div className="session-user-details">
+        <div className="session-card-content">
+          <div className="session-badge-info">
+            <div className="avatar-initial-box">{avatarInitial}</div>
+            <div className="session-text">
               <h4>
-                {profile.name} <span className="session-badge-role">{profile.role}</span>
+                {profile.name}
+                <span className="tag-owner">Primary Owner</span>
               </h4>
-              <p>{profile.email} • Active Session Established</p>
+              <p>{profile.email} • Authenticated via Two-Factor Security</p>
             </div>
           </div>
 
           <button
             type="button"
-            className="btn-logout-danger"
+            className="btn-amazon-danger"
             onClick={() => setShowLogoutModal(true)}
           >
             <span>🚪</span>
@@ -299,29 +322,29 @@ window.Settings = function Settings({ onNavigate }) {
         </div>
       </div>
 
-      {/* SECTION 4: LOGOUT CONFIRMATION MODAL */}
+      {/* 5. LOGOUT CONFIRMATION MODAL */}
       {showLogoutModal && (
         <div
-          className="settings-modal-overlay"
+          className="amazon-modal-overlay"
           onClick={(e) => {
             if (e.target === e.currentTarget) setShowLogoutModal(false);
           }}
         >
-          <div className="settings-modal-box">
-            <div className="modal-icon-danger">⚠️</div>
-            <h3>Confirm Sign Out</h3>
+          <div className="amazon-modal-card">
+            <div className="amazon-modal-icon">⚠️</div>
+            <h3>End Seller Central Session?</h3>
             <p>
-              Are you sure you want to end your current administrative session?
+              Are you sure you want to sign out of TrendMart Seller Central? You will be returned to the store overview.
             </p>
 
-            <div className="modal-notice-banner">
+            <div className="amazon-safe-banner">
               <span>🛡️</span>
               <span>
-                <strong>Data Safe:</strong> Your store catalog, orders, and customer records will remain fully preserved and untouched.
+                <strong>Catalog & Order Safe:</strong> Your listings, customer records, and active orders are securely preserved.
               </span>
             </div>
 
-            <div className="modal-actions-pair">
+            <div className="amazon-modal-actions">
               <button
                 type="button"
                 className="btn btn-secondary"
@@ -334,28 +357,22 @@ window.Settings = function Settings({ onNavigate }) {
                 className="btn btn-delete"
                 onClick={handleConfirmLogout}
               >
-                Log Out
+                Confirm Sign Out
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* LOGOUT SUCCESS NOTIFICATION */}
+      {/* 6. LOGOUT NOTIFICATION */}
       {isLoggedOut && (
-        <div className="settings-modal-overlay">
-          <div className="settings-modal-box" style={{ textAlign: "center" }}>
-            <div
-              style={{
-                fontSize: "2.5rem",
-                color: "#059669",
-                marginBottom: "0.75rem",
-              }}
-            >
+        <div className="amazon-modal-overlay">
+          <div className="amazon-modal-card" style={{ textAlign: "center" }}>
+            <div style={{ fontSize: "2.5rem", color: "#067d62", marginBottom: "0.5rem" }}>
               ✓
             </div>
-            <h3>Session Successfully Ended</h3>
-            <p>You have been safely signed out. Returning to dashboard overview...</p>
+            <h3>Signed Out Successfully</h3>
+            <p>Your session has ended safely. Redirecting...</p>
           </div>
         </div>
       )}
