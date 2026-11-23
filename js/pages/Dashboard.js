@@ -324,8 +324,8 @@ window.Dashboard = function Dashboard({ onNavigate }) {
           >
             <defs>
               <linearGradient id="amazonSalesGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ff9900" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#ff9900" stopOpacity="0.0" />
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.22" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.0" />
               </linearGradient>
             </defs>
 

@@ -1,6 +1,6 @@
 /* ========================================================
-   TRENDMART - AMAZON SELLER CENTRAL GRADE DASHBOARD UI
-   Premium E-Commerce Administration & Performance Analytics
+   TRENDMART - ELEGANT E-COMMERCE SELLER CENTRAL UI
+   Refined Typography, Sleek Lines & Understated Luxury
 ======================================================== */
 
 .dashboard-container {
@@ -10,16 +10,16 @@
   width: 100%;
 }
 
-/* 1. SELLER CENTRAL PULSE & ACCOUNT HEALTH BAR */
+/* 1. ELEGANT SELLER IDENTITY & HEALTH BAR */
 .amazon-pulse-bar {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1rem 1.5rem;
+  padding: 1.15rem 1.6rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.02);
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -27,88 +27,99 @@
 .seller-identity-wrap {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1rem;
 }
 
 .seller-avatar-badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  background: #232f3e;
-  color: #ff9900;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  color: #f59e0b;
   display: grid;
   place-items: center;
-  font-weight: 800;
-  font-size: 1.1rem;
-  border: 1px solid #37475a;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .seller-title-group h2 {
   font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  margin-bottom: 0.2rem;
 }
 
 .seller-badge-central {
-  background: #ff9900;
-  color: #111;
-  font-size: 0.68rem;
-  font-weight: 800;
-  padding: 0.18rem 0.5rem;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+[data-theme="dark"] .seller-badge-central {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 .seller-title-group p {
   font-size: 0.82rem;
   color: var(--text-muted);
+  font-weight: 400;
 }
 
 .health-metrics-row {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.35rem;
   flex-wrap: wrap;
 }
 
 .health-metric-item {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.2rem;
 }
 
 .health-metric-item span {
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 500;
   color: var(--text-muted);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .health-metric-item strong {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.88rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
+  color: var(--text-primary);
 }
 
 .health-good {
-  color: #067d62;
+  color: #059669 !important;
 }
 
 .health-divider {
   width: 1px;
-  height: 28px;
+  height: 26px;
   background: var(--border);
 }
 
-/* 2. AMAZON SELLER KPI METRIC CARDS */
+/* 2. REFINED KPI METRIC CARDS */
 .amazon-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -119,77 +130,81 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1.35rem 1.4rem;
+  padding: 1.35rem 1.45rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  overflow: hidden;
 }
 
 .amazon-stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  border-color: #ff9900;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  border-color: rgba(245, 158, 11, 0.45);
 }
 
 .stat-card-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
 }
 
 .stat-category-label {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.76rem;
+  font-weight: 500;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 .stat-icon-amber {
-  font-size: 1.4rem;
-  padding: 0.4rem;
+  font-size: 1.25rem;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
-  background: rgba(255, 153, 0, 0.12);
+  background: rgba(245, 158, 11, 0.08);
+  display: grid;
+  place-items: center;
   color: #d97706;
 }
 
 .stat-main-number {
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   color: var(--text-primary);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.2;
 }
 
 .stat-footer-subtext {
   font-size: 0.78rem;
   color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
+  font-weight: 400;
 }
 
 .tag-up-trend {
-  color: #067d62;
-  font-weight: 700;
-  background: rgba(6, 125, 98, 0.1);
-  padding: 0.15rem 0.45rem;
-  border-radius: 4px;
+  color: #059669;
+  font-weight: 500;
+  background: rgba(5, 150, 105, 0.08);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-/* 3. AMAZON SALES VELOCITY & REVENUE ANALYTICS */
+/* 3. ELEGANT SALES VELOCITY & REVENUE ANALYTICS */
 .analytics-amazon-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1.5rem 1.65rem;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .analytics-top-bar {
@@ -202,17 +217,20 @@
 }
 
 .analytics-title-area h3 {
-  font-size: 1.15rem;
-  font-weight: 800;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 0.2rem;
 }
 
 .analytics-title-area p {
   font-size: 0.82rem;
   color: var(--text-muted);
+  font-weight: 400;
 }
 
 .amazon-filter-pills {
@@ -220,8 +238,8 @@
   background: var(--bg-subtle);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0.2rem;
-  gap: 0.2rem;
+  padding: 0.25rem;
+  gap: 0.25rem;
 }
 
 .amazon-filter-btn {
@@ -229,9 +247,9 @@
   border: none;
   font-family: inherit;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-secondary);
-  padding: 0.4rem 0.85rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -240,9 +258,8 @@
 .amazon-filter-btn.active {
   background: var(--bg-card);
   color: var(--text-primary);
-  font-weight: 700;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  border: 1px solid var(--border);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .amazon-snapshot-grid {
@@ -255,16 +272,16 @@
 .snapshot-box {
   background: var(--bg-subtle);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.85rem 1rem;
+  border-radius: 9px;
+  padding: 0.9rem 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.25rem;
 }
 
 .snapshot-box label {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -272,20 +289,21 @@
 
 .snapshot-box strong {
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
 }
 
 .snapshot-box small {
-  font-size: 0.72rem;
-  color: #067d62;
-  font-weight: 600;
+  font-size: 0.74rem;
+  color: #059669;
+  font-weight: 500;
 }
 
-/* SVG Chart */
+/* SVG Chart - Slender & Elegant */
 .svg-chart-container {
   width: 100%;
-  height: 230px;
+  height: 220px;
   position: relative;
   margin-top: 0.5rem;
 }
@@ -299,13 +317,15 @@
 .grid-line-svg {
   stroke: var(--border);
   stroke-dasharray: 4 4;
-  stroke-width: 1;
+  stroke-width: 0.8;
+  opacity: 0.7;
 }
 
 .axis-text-svg {
   fill: var(--text-muted);
   font-size: 11px;
   font-family: inherit;
+  font-weight: 400;
 }
 
 .area-fill-svg {
@@ -314,43 +334,38 @@
 
 .line-stroke-svg {
   fill: none;
-  stroke: #ff9900;
-  stroke-width: 3.5;
+  stroke: #f59e0b;
+  stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .dot-svg {
   fill: var(--bg-card);
-  stroke: #ff9900;
-  stroke-width: 2.8;
+  stroke: #f59e0b;
+  stroke-width: 2;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .dot-svg:hover {
-  r: 6.5;
-  stroke-width: 4;
+  r: 5.5;
+  stroke-width: 2.8;
 }
 
-/* 4. INVENTORY HEALTH & RESTOCK RECOMMENDATIONS BANNER */
+/* 4. UNDERSTATED RESTOCK RECOMMENDATIONS BANNER */
 .amazon-restock-banner {
   background: var(--bg-card);
-  border: 1px solid #fcd34d;
-  border-left: 5px solid #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-left: 4px solid #f59e0b;
   border-radius: 10px;
-  padding: 1.15rem 1.4rem;
+  padding: 1.1rem 1.4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1.25rem;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   flex-wrap: wrap;
-}
-
-[data-theme="dark"] .amazon-restock-banner {
-  border-color: #78350f;
-  border-left-color: #f59e0b;
 }
 
 .restock-left-group {
@@ -360,13 +375,13 @@
 }
 
 .restock-alert-icon {
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   color: #d97706;
 }
 
 .restock-text h4 {
-  font-size: 0.95rem;
-  font-weight: 800;
+  font-size: 0.92rem;
+  font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.15rem;
 }
@@ -374,6 +389,7 @@
 .restock-text p {
   font-size: 0.82rem;
   color: var(--text-muted);
+  font-weight: 400;
 }
 
 .restock-chips-list {
@@ -384,22 +400,22 @@
 }
 
 .chip-low-stock {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
-  padding: 0.25rem 0.65rem;
-  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
   font-size: 0.74rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 [data-theme="dark"] .chip-low-stock {
-  background: #451a03;
+  background: rgba(245, 158, 11, 0.15);
   color: #fde68a;
-  border-color: #78350f;
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
-/* 5. DUAL TABLES: AMAZON CATALOG & RECENT CUSTOMER ORDERS */
+/* 5. REFINED DUAL TABLES */
 .amazon-tables-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -411,13 +427,13 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
 }
 
 .table-card-header {
-  padding: 1rem 1.35rem;
+  padding: 1rem 1.4rem;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
@@ -426,34 +442,30 @@
 }
 
 .table-card-header h3 {
-  font-size: 1rem;
-  font-weight: 800;
+  font-size: 0.96rem;
+  font-weight: 600;
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .table-action-link {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #007185;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent);
   background: none;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  transition: color 0.15s ease;
+  transition: opacity 0.15s ease;
 }
 
 .table-action-link:hover {
-  color: #c45500;
+  opacity: 0.8;
   text-decoration: underline;
-}
-
-[data-theme="dark"] .table-action-link {
-  color: #56b6c2;
 }
 
 .amazon-data-table {
@@ -465,27 +477,27 @@
   background: var(--bg-card);
   color: var(--text-muted);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  padding: 10px 14px;
+  letter-spacing: 0.04em;
+  padding: 11px 15px;
   text-align: left;
   border-bottom: 1px solid var(--border);
 }
 
 .amazon-data-table td {
-  padding: 11px 14px;
+  padding: 12px 15px;
   font-size: 13px;
   color: var(--text-primary);
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
+  font-weight: 400;
 }
 
 .amazon-data-table tbody tr:hover {
-  background: rgba(255, 153, 0, 0.04);
+  background: rgba(245, 158, 11, 0.025);
 }
 
-/* Product item cell */
 .amazon-product-row {
   display: flex;
   align-items: center;
@@ -493,12 +505,12 @@
 }
 
 .amazon-thumb {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 6px;
   object-fit: cover;
   border: 1px solid var(--border);
-  background: #fff;
+  background: var(--bg-subtle);
   flex-shrink: 0;
 }
 
@@ -508,74 +520,71 @@
 }
 
 .amazon-prod-title {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
   font-size: 0.88rem;
 }
 
 .amazon-asin-badge {
   font-size: 0.72rem;
-  color: #007185;
+  color: var(--text-muted);
   font-family: monospace;
-  font-weight: 600;
-}
-
-[data-theme="dark"] .amazon-asin-badge {
-  color: #61afef;
+  font-weight: 400;
 }
 
 .amazon-price-bold {
-  font-weight: 800;
-  color: #b12704;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-[data-theme="dark"] .amazon-price-bold {
-  color: #ff9900;
-}
-
-/* Amazon Badges */
 .badge-amazon-prime {
-  background: #00a8e1;
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 0.15rem 0.4rem;
-  border-radius: 3px;
+  background: rgba(14, 165, 233, 0.1);
+  color: #0284c7;
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
   display: inline-block;
   margin-top: 0.2rem;
 }
 
+[data-theme="dark"] .badge-amazon-prime {
+  background: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+}
+
 .status-badge-delivered {
-  background: #e7f4f0;
-  color: #067d62;
-  border: 1px solid #a3d9c9;
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
+  background: rgba(5, 150, 105, 0.08);
+  color: #059669;
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
   font-size: 0.74rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .status-badge-pending {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.08);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
   font-size: 0.74rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .status-badge-processing {
-  background: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
-  padding: 0.2rem 0.55rem;
-  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.08);
+  color: #4f46e5;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
   font-size: 0.74rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
-/* 6. QUICK NAVIGATION TILES */
+/* 6. ELEGANT SHORTCUT TILES */
 .amazon-quick-links-area {
   display: flex;
   flex-direction: column;
@@ -583,8 +592,9 @@
 }
 
 .quick-links-header {
-  font-size: 1.05rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 
@@ -597,41 +607,42 @@
 .quick-tile-btn {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 1.1rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.35rem;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
   font-family: inherit;
 }
 
 .quick-tile-btn:hover {
-  border-color: #ff9900;
+  border-color: rgba(245, 158, 11, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .tile-icon {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   margin-bottom: 0.2rem;
 }
 
 .tile-label {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.88rem;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
 .tile-desc {
   font-size: 0.74rem;
   color: var(--text-muted);
+  font-weight: 400;
 }
 
-/* RESPONSIVE DESIGN */
+/* RESPONSIVE */
 @media (max-width: 1200px) {
   .amazon-kpi-grid {
     grid-template-columns: repeat(2, 1fr);
