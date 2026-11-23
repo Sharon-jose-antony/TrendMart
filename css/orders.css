@@ -1,0 +1,84 @@
+
+/* ORDER STATUS DROPDOWN */
+
+.order-status-select {
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.order-status-select.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.order-status-select.processing {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.order-status-select.delivered {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.order-status-select:focus {
+  border-color: var(--accent);
+}
+
+/* ORDER ACTION BUTTONS */
+
+.order-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.order-delete-btn {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 9px 15px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.order-delete-btn:hover {
+  background: #fecaca;
+}
+
+/* ORDER NOTIFICATIONS */
+
+.order-message {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 14px 18px;
+  border-radius: 9px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.order-message button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+@media (max-width: 600px) {
+  .order-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

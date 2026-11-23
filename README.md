@@ -1,40 +1,29 @@
-# 🛍️ TrendMart – Module 1: Dashboard
+# TrendMart – Module 1: Dashboard
 
-This branch (`feat/module-1-dashboard`) implements **Module 1 (Primary Dashboard)** for the **TrendMart** E-Commerce Admin Platform using React.js, Vite, and Tailwind CSS.
+Premium E-Commerce Administration Dashboard built for the **TrendMart** platform.
 
----
+## Features
+- **Welcome Hero Section**: Personalized greeting using `tm_admin_profile`, live formatted date, and quick action buttons.
+- **KPI Statistics**: Real-time totals for Products, Categories, Customers, and Orders directly wired into `window.StorageAPI`.
+- **Sales & Revenue Analytics**: Interactive SVG trend chart with dynamic time-range filters (Past 7 Days, 30 Days, Year to Date) and hover tooltips.
+- **Inventory Overview & Health**: Real-time low-stock alerts identifying products with $\le$ 10 units.
+- **Recent Products Table**: Visual thumbnail, product name, category, formatted ₹ INR price, and stock badge (`In Stock` / `Low Stock`).
+- **Recent Orders Table**: Order ID, customer name, order total, and order fulfillment status badge.
+- **Quick Navigation**: Single-click access to Products, Categories, Customers, Orders, and Banners.
 
-## 🌟 Included in Module 1:
+## Technology Stack
+- **Framework**: React 18 (in-browser CDN)
+- **Compiler**: Babel Standalone (`@babel/standalone`)
+- **Styling**: Native CSS tokens & variables supporting Light Mode and Dark Mode (`css/style.css`, `css/dashboard.css`)
+- **Data Persistence**: `window.StorageAPI` (`localStorage`)
 
-- **Welcome Section**: Time-sensitive greeting, formatted date, live dashboard refresh button.
-- **Dynamic KPI Statistic Cards**:
-  - Total Products (calculated from store data)
-  - Total Categories (calculated from taxonomy)
-  - Total Customers (with growth indicators)
-  - Total Orders (with total revenue calculation)
-- **Sales & Revenue Analytics**:
-  - Interactive Recharts component with multi-gradient fills (Area & Bar views).
-  - Multi-period filters: 7 Days, 30 Days, 90 Days, 1 Year.
-  - KPI summary badges (Gross Sales, Orders Volume, Average Order Value).
-- **Recent Products Table**: Search filter, category badges, stock level indicators (*In Stock*, *Low Stock*, *Out of Stock*).
-- **Recent Orders Table**: Live order status switcher (*Pending*, *Processing*, *Delivered*, *Cancelled*).
-- **Quick Navigation**: Shortcuts to store management workflows.
-- **Inventory Alerts**: Stock ratio health bar and low-stock items with one-click **"+15 Restock"** button.
-- **Recent Activity Feed**: Real-time event log.
-- **Store Performance**: Conversion rate, retention, fulfillment speed, cart completion benchmarks.
-- **Navigation Shell**: Responsive collapsible sidebar with official brand logo, topbar breadcrumbs, global command palette (`Ctrl+K`), and notification popover.
-
----
-
-## 💻 Quick Start
-
+## Running the Application
+No build tools or bundlers required. Simply open `index.html` in any modern web browser or serve via any static HTTP server:
 ```bash
-# Install dependencies
-npm install
+# Using python HTTP server
+python -m http.server 8000
 
-# Start Vite dev server
-npm run dev
-
-# Build for production
-npm run build
+# Or using npx serve
+npx serve .
 ```
+Open `http://localhost:8000` in your browser.
