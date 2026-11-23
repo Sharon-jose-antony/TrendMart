@@ -1,5 +1,5 @@
 /* ========================================================
-   TRENDMART - MODULE 1: DASHBOARD COMPONENT
+   TRENDMART - MODULE 1: AMAZON SELLER CENTRAL DASHBOARD
    Native React 18 / In-Browser Babel Standalone Architecture
 ======================================================== */
 
@@ -15,7 +15,7 @@ window.Dashboard = function Dashboard({ onNavigate }) {
   const [timeRange, setTimeRange] = useState("7D"); // "7D" | "30D" | "YTD"
   const [hoveredPoint, setHoveredPoint] = useState(null);
 
-  // Load data from unified window.StorageAPI
+  // Load live data from unified StorageAPI
   useEffect(() => {
     window.StorageAPI.init();
 
@@ -35,21 +35,19 @@ window.Dashboard = function Dashboard({ onNavigate }) {
         setAdminName(savedProfile.name);
       }
     } catch (e) {
-      // fallback to default
+      // fallback
     }
   }, []);
 
-  // Compute total revenue and metrics
+  // Compute live revenue and metrics
   const totalRevenue = useMemo(() => {
     return orders.reduce((sum, ord) => sum + Number(ord.total || 0), 0);
   }, [orders]);
 
-  const avgOrderValue = useMemo(() => {
-    if (!orders.length) return 0;
-    return Math.round(totalRevenue / orders.length);
-  }, [orders, totalRevenue]);
+  const totalUnits = useMemo(() => {
+    return products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
+  }, [products]);
 
-  // Identify low-stock inventory (stock <= 10)
   const lowStockItems = useMemo(() => {
     return products.filter((p) => Number(p.stock) <= 10);
   }, [products]);
@@ -58,43 +56,43 @@ window.Dashboard = function Dashboard({ onNavigate }) {
   const todayFormatted = useMemo(() => {
     const now = new Date();
     return now.toLocaleDateString("en-IN", {
-      weekday: "long",
-      year: "numeric",
-      month: "short",
+      weekday: "short",
       day: "numeric",
+      month: "short",
+      year: "numeric",
     });
   }, []);
 
-  // Time-range specific sales chart datasets
+  // Dataset by time-range
   const chartData = useMemo(() => {
     if (timeRange === "7D") {
       return [
-        { label: "Mon", revenue: 14500, orders: 4 },
-        { label: "Tue", revenue: 22800, orders: 6 },
-        { label: "Wed", revenue: 19400, orders: 5 },
-        { label: "Thu", revenue: 31200, orders: 8 },
-        { label: "Fri", revenue: 28900, orders: 7 },
-        { label: "Sat", revenue: 42500, orders: 12 },
-        { label: "Sun", revenue: 36800, orders: 10 },
+        { label: "Mon", revenue: 18500, units: 12 },
+        { label: "Tue", revenue: 26400, units: 18 },
+        { label: "Wed", revenue: 21900, units: 15 },
+        { label: "Thu", revenue: 34800, units: 24 },
+        { label: "Fri", revenue: 29500, units: 20 },
+        { label: "Sat", revenue: 48600, units: 36 },
+        { label: "Sun", revenue: 41200, units: 28 },
       ];
     } else if (timeRange === "30D") {
       return [
-        { label: "Week 1", revenue: 98000, orders: 28 },
-        { label: "Week 2", revenue: 135000, orders: 39 },
-        { label: "Week 3", revenue: 124000, orders: 34 },
-        { label: "Week 4", revenue: 168000, orders: 46 },
+        { label: "W1", revenue: 112000, units: 82 },
+        { label: "W2", revenue: 148000, units: 104 },
+        { label: "W3", revenue: 139000, units: 95 },
+        { label: "W4", revenue: 189000, units: 132 },
       ];
     } else {
       return [
-        { label: "Q1", revenue: 340000, orders: 95 },
-        { label: "Q2", revenue: 420000, orders: 118 },
-        { label: "Q3", revenue: 390000, orders: 104 },
-        { label: "Q4", revenue: 560000, orders: 152 },
+        { label: "Q1", revenue: 410000, units: 310 },
+        { label: "Q2", revenue: 520000, units: 390 },
+        { label: "Q3", revenue: 470000, units: 345 },
+        { label: "Q4", revenue: 680000, units: 510 },
       ];
     }
   }, [timeRange]);
 
-  // Chart SVG Coordinates Calculation
+  // Chart coordinates
   const chartCoordinates = useMemo(() => {
     const width = 680;
     const height = 180;
@@ -117,150 +115,133 @@ window.Dashboard = function Dashboard({ onNavigate }) {
     const lastPt = points[points.length - 1];
     const areaPath = `${linePath} L ${lastPt.x} ${height - padding} L ${firstPt.x} ${height - padding} Z`;
 
-    return { points, linePath, areaPath, width, height, padding, maxRev };
+    return { points, linePath, areaPath, width, height, padding };
   }, [chartData]);
 
-  // Stat cards definition
-  const statCards = [
+  // Amazon Seller Stat Cards
+  const kpiCards = [
     {
-      id: "products",
-      label: "Total Products",
-      value: products.length,
-      icon: "📦",
-      trend: "+8% this month",
-      navTab: "products",
-    },
-    {
-      id: "categories",
-      label: "Total Categories",
-      value: categories.length,
-      icon: "🗂️",
-      trend: "All catalog active",
-      navTab: "categories",
-    },
-    {
-      id: "customers",
-      label: "Total Customers",
-      value: customers.length,
-      icon: "👥",
-      trend: "+15% new users",
-      navTab: "customers",
+      id: "sales",
+      label: "Today's Gross Sales",
+      value: `₹${(totalRevenue || 6148).toLocaleString("en-IN")}`,
+      subtext: "+14.8% vs yesterday",
+      isPositive: true,
+      icon: "💵",
+      tab: "orders",
     },
     {
       id: "orders",
-      label: "Total Orders",
+      label: "Customer Orders",
       value: orders.length,
-      icon: "🛒",
-      trend: `₹${totalRevenue.toLocaleString("en-IN")} vol`,
-      navTab: "orders",
+      subtext: `${orders.length} open for dispatch`,
+      isPositive: true,
+      icon: "📦",
+      tab: "orders",
+    },
+    {
+      id: "catalog",
+      label: "Active Catalog Listings",
+      value: products.length,
+      subtext: `${categories.length} categories live`,
+      isPositive: true,
+      icon: "🏷️",
+      tab: "products",
+    },
+    {
+      id: "buyers",
+      label: "Registered Customers",
+      value: customers.length,
+      subtext: "100% verified buyers",
+      isPositive: true,
+      icon: "👥",
+      tab: "customers",
     },
   ];
 
   // Quick navigation deck
   const quickLinks = [
-    {
-      id: "products",
-      label: "Products",
-      desc: "Manage catalog & stock",
-      icon: "📦",
-    },
-    {
-      id: "categories",
-      label: "Categories",
-      desc: "Organize taxonomy",
-      icon: "🗂️",
-    },
-    {
-      id: "customers",
-      label: "Customers",
-      desc: "View buyer directory",
-      icon: "👥",
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      desc: "Track & fulfill sales",
-      icon: "🛒",
-    },
-    {
-      id: "banners",
-      label: "Banners",
-      desc: "Storefront campaigns",
-      icon: "🖼️",
-    },
+    { id: "products", label: "Manage Inventory", desc: "Catalog & stock levels", icon: "📦" },
+    { id: "orders", label: "Manage Orders", desc: "Dispatch & tracking", icon: "🛒" },
+    { id: "categories", label: "Product Categories", desc: "Storefront taxonomy", icon: "🗂️" },
+    { id: "customers", label: "Customer Relations", desc: "Buyer directory", icon: "👥" },
+    { id: "banners", label: "Storefront Campaigns", desc: "Promos & hero ads", icon: "🖼️" },
   ];
-
-  // Recent 5 products
-  const recentProductsList = useMemo(() => {
-    return [...products].reverse().slice(0, 5);
-  }, [products]);
-
-  // Recent 5 orders
-  const recentOrdersList = useMemo(() => {
-    return [...orders].reverse().slice(0, 5);
-  }, [orders]);
 
   return (
     <div className="dashboard-container">
-      {/* SECTION A: WELCOME HERO */}
-      <div className="welcome-hero">
-        <div className="welcome-content">
-          <h2>Welcome back, {adminName} 👋</h2>
-          <p>
-            Here is what is happening across TrendMart today. All systems and store modules are operational.
-          </p>
-        </div>
-        <div className="welcome-actions">
-          <div className="welcome-date-badge">
-            <span>📅</span>
-            <span>{todayFormatted}</span>
+      {/* 1. AMAZON SELLER PULSE & ACCOUNT HEALTH */}
+      <div className="amazon-pulse-bar">
+        <div className="seller-identity-wrap">
+          <div className="seller-avatar-badge">TM</div>
+          <div className="seller-title-group">
+            <h2>
+              <span>TrendMart Seller Central</span>
+              <span className="seller-badge-central">Official Merchant</span>
+            </h2>
+            <p>Welcome, {adminName} • Merchant ID: #TM-IN-889421 • {todayFormatted}</p>
           </div>
+        </div>
+
+        <div className="health-metrics-row">
+          <div className="health-metric-item">
+            <span>Account Health</span>
+            <strong className="health-good">✓ Healthy (100%)</strong>
+          </div>
+          <div className="health-divider"></div>
+          <div className="health-metric-item">
+            <span>Buy Box Win Rate</span>
+            <strong>96.4%</strong>
+          </div>
+          <div className="health-divider"></div>
+          <div className="health-metric-item">
+            <span>On-Time Dispatch</span>
+            <strong className="health-good">99.8%</strong>
+          </div>
+          <div className="health-divider"></div>
           <button
             className="btn btn-primary btn-sm"
             onClick={() => onNavigate("products")}
           >
-            + Add Product
+            + Add New Listing
           </button>
         </div>
       </div>
 
-      {/* SECTION B: STATISTICS KPI CARDS */}
-      <div className="stats-grid-dashboard">
-        {statCards.map((card) => (
+      {/* 2. AMAZON SELLER KPI METRIC CARDS */}
+      <div className="amazon-kpi-grid">
+        {kpiCards.map((card) => (
           <div
             key={card.id}
-            className="dashboard-stat-card"
-            onClick={() => onNavigate(card.navTab)}
-            title={`Click to view ${card.label}`}
+            className="amazon-stat-card"
+            onClick={() => onNavigate(card.tab)}
+            title={`Open ${card.label}`}
           >
-            <div className="stat-metric-wrap">
-              <span className="stat-label-text">{card.label}</span>
-              <span className="stat-number-text">{card.value}</span>
-              <span className="stat-trend-pill trend-up">
-                <span>↗</span>
-                <span>{card.trend}</span>
-              </span>
+            <div className="stat-card-top">
+              <span className="stat-category-label">{card.label}</span>
+              <span className="stat-icon-amber">{card.icon}</span>
             </div>
-            <div className="stat-icon-wrapper">
-              <span>{card.icon}</span>
+            <div className="stat-main-number">{card.value}</div>
+            <div className="stat-footer-subtext">
+              <span className="tag-up-trend">↗ {card.subtext}</span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* SECTION G: INVENTORY HEALTH & LOW STOCK ALERT */}
+      {/* 3. INVENTORY ALERT & RESTOCK BANNER */}
       {lowStockItems.length > 0 && (
-        <div className="inventory-alert-card">
-          <div className="inventory-alert-left">
-            <div className="inventory-alert-icon">⚠️</div>
-            <div className="inventory-alert-text">
-              <h4>Inventory Attention Needed ({lowStockItems.length} Low-Stock Products)</h4>
-              <p>Items have 10 or fewer units remaining. Restock to prevent lost sales.</p>
+        <div className="amazon-restock-banner">
+          <div className="restock-left-group">
+            <span className="restock-alert-icon">⚠️</span>
+            <div className="restock-text">
+              <h4>Inventory Action Alert: {lowStockItems.length} Products Low in Stock</h4>
+              <p>Estimated days of supply is below recommended safety threshold (10 units). Restock now to maintain Buy Box eligibility.</p>
             </div>
           </div>
-          <div className="inventory-alert-tags">
+
+          <div className="restock-chips-list">
             {lowStockItems.slice(0, 3).map((item) => (
-              <span key={item.id} className="low-stock-chip">
+              <span key={item.id} className="chip-low-stock">
                 {item.name}: <strong>{item.stock} left</strong>
               </span>
             ))}
@@ -268,35 +249,38 @@ window.Dashboard = function Dashboard({ onNavigate }) {
               className="btn btn-sm btn-secondary"
               onClick={() => onNavigate("products")}
             >
-              Manage Inventory →
+              Restock Listings →
             </button>
           </div>
         </div>
       )}
 
-      {/* SECTION C: SALES ANALYTICS & INTERACTIVE CHART */}
-      <div className="analytics-section-card">
-        <div className="analytics-header-row">
-          <div className="analytics-title-group">
-            <h3>Sales & Revenue Performance</h3>
-            <p>Real-time transaction tracking across customer checkouts</p>
+      {/* 4. SALES VELOCITY & REVENUE PERFORMANCE (AMAZON STYLE) */}
+      <div className="analytics-amazon-card">
+        <div className="analytics-top-bar">
+          <div className="analytics-title-area">
+            <h3>
+              <span>📈</span>
+              <span>Sales Velocity & Revenue Performance</span>
+            </h3>
+            <p>Real-time gross order value and units sold across TrendMart</p>
           </div>
 
-          <div className="filter-btn-group">
+          <div className="amazon-filter-pills">
             <button
-              className={`filter-pill-btn ${timeRange === "7D" ? "active" : ""}`}
+              className={`amazon-filter-btn ${timeRange === "7D" ? "active" : ""}`}
               onClick={() => setTimeRange("7D")}
             >
               Past 7 Days
             </button>
             <button
-              className={`filter-pill-btn ${timeRange === "30D" ? "active" : ""}`}
+              className={`amazon-filter-btn ${timeRange === "30D" ? "active" : ""}`}
               onClick={() => setTimeRange("30D")}
             >
               Past 30 Days
             </button>
             <button
-              className={`filter-pill-btn ${timeRange === "YTD" ? "active" : ""}`}
+              className={`amazon-filter-btn ${timeRange === "YTD" ? "active" : ""}`}
               onClick={() => setTimeRange("YTD")}
             >
               Year to Date
@@ -304,73 +288,66 @@ window.Dashboard = function Dashboard({ onNavigate }) {
           </div>
         </div>
 
-        {/* Metric summary pills */}
-        <div className="chart-summary-pills">
-          <div className="summary-metric-box">
-            <span>Period Revenue</span>
-            <strong>₹{totalRevenue ? (totalRevenue * (timeRange === "7D" ? 1 : timeRange === "30D" ? 3.5 : 8)).toLocaleString("en-IN") : "₹78,450"}</strong>
+        {/* Snapshot Metric Grid */}
+        <div className="amazon-snapshot-grid">
+          <div className="snapshot-box">
+            <label>Ordered Product Sales</label>
+            <strong>₹{(totalRevenue ? totalRevenue * (timeRange === "7D" ? 1 : timeRange === "30D" ? 3.8 : 9) : 48500).toLocaleString("en-IN")}</strong>
+            <small>+12.4% vs prev. period</small>
           </div>
-          <div className="summary-metric-box">
-            <span>Avg. Order Value</span>
-            <strong>₹{avgOrderValue ? avgOrderValue.toLocaleString("en-IN") : "₹2,140"}</strong>
+
+          <div className="snapshot-box">
+            <label>Total Units Ordered</label>
+            <strong>{orders.length * 4 + 18} units</strong>
+            <small>Avg 3.2 units/order</small>
           </div>
-          <div className="summary-metric-box">
-            <span>Store Conversion Rate</span>
-            <strong>3.84%</strong>
+
+          <div className="snapshot-box">
+            <label>Average Order Value</label>
+            <strong>₹{orders.length ? Math.round(totalRevenue / orders.length).toLocaleString("en-IN") : "₹2,450"}</strong>
+            <small>Top quartile</small>
+          </div>
+
+          <div className="snapshot-box">
+            <label>Conversion Rate</label>
+            <strong>4.12%</strong>
+            <small>+0.6% uplift</small>
           </div>
         </div>
 
-        {/* SVG Interactive Chart */}
-        <div className="svg-chart-wrapper">
+        {/* Interactive SVG Curve */}
+        <div className="svg-chart-container">
           <svg
-            className="chart-svg"
+            className="amazon-chart-svg"
             viewBox={`0 0 ${chartCoordinates.width} ${chartCoordinates.height}`}
             preserveAspectRatio="none"
           >
             <defs>
-              <linearGradient id="dashboardChartGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#6366f1" stopOpacity="0.45" />
-                <stop offset="100%" stopColor="#6366f1" stopOpacity="0.0" />
+              <linearGradient id="amazonSalesGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#ff9900" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#ff9900" stopOpacity="0.0" />
               </linearGradient>
             </defs>
 
             {/* Grid Guidelines */}
-            <line
-              x1={chartCoordinates.padding}
-              y1="30"
-              x2={chartCoordinates.width - chartCoordinates.padding}
-              y2="30"
-              className="chart-grid-line"
-            />
-            <line
-              x1={chartCoordinates.padding}
-              y1="85"
-              x2={chartCoordinates.width - chartCoordinates.padding}
-              y2="85"
-              className="chart-grid-line"
-            />
-            <line
-              x1={chartCoordinates.padding}
-              y1={chartCoordinates.height - chartCoordinates.padding}
-              x2={chartCoordinates.width - chartCoordinates.padding}
-              y2={chartCoordinates.height - chartCoordinates.padding}
-              className="chart-grid-line"
-            />
+            <line x1={chartCoordinates.padding} y1="30" x2={chartCoordinates.width - chartCoordinates.padding} y2="30" className="grid-line-svg" />
+            <line x1={chartCoordinates.padding} y1="85" x2={chartCoordinates.width - chartCoordinates.padding} y2="85" className="grid-line-svg" />
+            <line x1={chartCoordinates.padding} y1={chartCoordinates.height - chartCoordinates.padding} x2={chartCoordinates.width - chartCoordinates.padding} y2={chartCoordinates.height - chartCoordinates.padding} className="grid-line-svg" />
 
-            {/* Area Fill */}
-            <path d={chartCoordinates.areaPath} className="chart-area-fill" />
+            {/* Shaded Area */}
+            <path d={chartCoordinates.areaPath} className="area-fill-svg" />
 
-            {/* Stroke Line */}
-            <path d={chartCoordinates.linePath} className="chart-line-stroke" />
+            {/* Main Stroke */}
+            <path d={chartCoordinates.linePath} className="line-stroke-svg" />
 
-            {/* Interactive Data Points & Labels */}
+            {/* Points & Labels */}
             {chartCoordinates.points.map((pt, idx) => (
               <g key={idx}>
                 <text
                   x={pt.x}
                   y={chartCoordinates.height - 8}
                   textAnchor="middle"
-                  className="chart-axis-label"
+                  className="axis-text-svg"
                 >
                   {pt.label}
                 </text>
@@ -378,8 +355,8 @@ window.Dashboard = function Dashboard({ onNavigate }) {
                 <circle
                   cx={pt.x}
                   cy={pt.y}
-                  r="4.5"
-                  className="chart-dot"
+                  r="5"
+                  className="dot-svg"
                   onMouseEnter={() => setHoveredPoint(pt)}
                   onMouseLeave={() => setHoveredPoint(null)}
                 />
@@ -387,24 +364,34 @@ window.Dashboard = function Dashboard({ onNavigate }) {
                 {hoveredPoint && hoveredPoint.label === pt.label && (
                   <g>
                     <rect
-                      x={pt.x - 45}
-                      y={pt.y - 36}
-                      width="90"
-                      height="26"
+                      x={pt.x - 52}
+                      y={pt.y - 42}
+                      width="104"
+                      height="32"
                       rx="6"
-                      fill="var(--bg-sidebar)"
-                      stroke="var(--border)"
-                      strokeWidth="1"
+                      fill="#131921"
+                      stroke="#ff9900"
+                      strokeWidth="1.2"
                     />
                     <text
                       x={pt.x}
-                      y={pt.y - 19}
+                      y={pt.y - 28}
                       textAnchor="middle"
-                      fill="#ffffff"
-                      fontSize="10.5"
-                      fontWeight="700"
+                      fill="#ff9900"
+                      fontSize="11"
+                      fontWeight="800"
                     >
                       ₹{pt.revenue.toLocaleString("en-IN")}
+                    </text>
+                    <text
+                      x={pt.x}
+                      y={pt.y - 15}
+                      textAnchor="middle"
+                      fill="#ffffff"
+                      fontSize="9.5"
+                      fontWeight="500"
+                    >
+                      {pt.units} units ordered
                     </text>
                   </g>
                 )}
@@ -414,152 +401,159 @@ window.Dashboard = function Dashboard({ onNavigate }) {
         </div>
       </div>
 
-      {/* SECTION D & E: RECENT PRODUCTS & RECENT ORDERS TABLE PAIR */}
-      <div className="dashboard-tables-grid">
-        {/* RECENT PRODUCTS */}
-        <div className="dashboard-panel-card">
-          <div className="panel-header">
+      {/* 5. DUAL TABLES: ACTIVE CATALOG & ORDERS OVERVIEW */}
+      <div className="amazon-tables-split">
+        {/* ACTIVE CATALOG LISTINGS */}
+        <div className="amazon-table-card">
+          <div className="table-card-header">
             <h3>
               <span>📦</span>
-              <span>Recent Products</span>
+              <span>Catalog Listings ({products.length})</span>
             </h3>
             <button
-              className="panel-view-all-btn"
+              className="table-action-link"
               onClick={() => onNavigate("products")}
             >
-              View Catalog →
+              Manage All Listings →
             </button>
           </div>
 
           <div style={{ overflowX: "auto" }}>
-            {recentProductsList.length === 0 ? (
-              <div className="empty-state" style={{ padding: "2rem" }}>
-                <i>📦</i>
-                <p>No products in store catalog yet.</p>
-              </div>
-            ) : (
-              <table className="dashboard-table">
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentProductsList.map((p) => {
-                    const isLow = Number(p.stock) <= 10;
-                    return (
-                      <tr key={p.id}>
-                        <td>
-                          <div className="product-cell-flex">
-                            <img
-                              src={p.image || "https://via.placeholder.com/40?text=Item"}
-                              alt={p.name}
-                              className="product-thumb-small"
-                              onError={(e) => {
-                                e.target.src = "https://via.placeholder.com/40?text=Item";
-                              }}
-                            />
-                            <div className="product-cell-text">
-                              <span className="product-cell-name">{p.name}</span>
-                              <span className="product-cell-category">ID: #{p.id}</span>
-                            </div>
+            <table className="amazon-data-table">
+              <thead>
+                <tr>
+                  <th>Product Listing</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock & Fulfillment</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.slice(0, 5).map((p) => {
+                  const isLow = Number(p.stock) <= 10;
+                  return (
+                    <tr key={p.id}>
+                      <td>
+                        <div className="amazon-product-row">
+                          <img
+                            src={p.image || "https://via.placeholder.com/40?text=Item"}
+                            alt={p.name}
+                            className="amazon-thumb"
+                            onError={(e) => {
+                              e.target.src = "https://via.placeholder.com/40?text=Item";
+                            }}
+                          />
+                          <div className="amazon-prod-info">
+                            <span className="amazon-prod-title">{p.name}</span>
+                            <span className="amazon-asin-badge">ASIN: B0{p.id}88X</span>
                           </div>
-                        </td>
-                        <td>{p.category || "General"}</td>
-                        <td>
-                          <strong>₹{Number(p.price || 0).toLocaleString("en-IN")}</strong>
-                        </td>
-                        <td>
+                        </div>
+                      </td>
+                      <td>{p.category || "General"}</td>
+                      <td>
+                        <span className="amazon-price-bold">
+                          ₹{Number(p.price || 0).toLocaleString("en-IN")}
+                        </span>
+                      </td>
+                      <td>
+                        <div>
                           <span
-                            className={`stock-badge ${isLow ? "low-stock" : "in-stock"}`}
+                            className={isLow ? "chip-low-stock" : "status-badge-delivered"}
                           >
-                            {isLow ? `Low Stock (${p.stock})` : `In Stock (${p.stock})`}
+                            {isLow ? `Low (${p.stock})` : `In Stock (${p.stock})`}
                           </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
+                          <div>
+                            <span className="badge-amazon-prime">Prime Fulfilled</span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        {/* RECENT ORDERS */}
-        <div className="dashboard-panel-card">
-          <div className="panel-header">
+        {/* RECENT ORDERS OVERVIEW */}
+        <div className="amazon-table-card">
+          <div className="table-card-header">
             <h3>
               <span>🛒</span>
-              <span>Recent Orders</span>
+              <span>Recent Customer Orders ({orders.length})</span>
             </h3>
             <button
-              className="panel-view-all-btn"
+              className="table-action-link"
               onClick={() => onNavigate("orders")}
             >
-              All Orders →
+              View Order Pipeline →
             </button>
           </div>
 
           <div style={{ overflowX: "auto" }}>
-            {recentOrdersList.length === 0 ? (
-              <div className="empty-state" style={{ padding: "2rem" }}>
-                <i>🛒</i>
-                <p>No customer orders recorded yet.</p>
-              </div>
-            ) : (
-              <table className="dashboard-table">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentOrdersList.map((ord) => {
-                    const statusClass = String(ord.status || "pending").toLowerCase();
-                    return (
-                      <tr key={ord.id}>
-                        <td>
-                          <strong>{ord.id}</strong>
-                        </td>
-                        <td>{ord.customer}</td>
-                        <td>
-                          <strong>₹{Number(ord.total || 0).toLocaleString("en-IN")}</strong>
-                        </td>
-                        <td>
-                          <span className={`order-status ${statusClass}`}>
-                            {ord.status || "Pending"}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            )}
+            <table className="amazon-data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Total Amount</th>
+                  <th>Fulfillment Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.slice(0, 5).map((ord) => {
+                  const status = String(ord.status || "Pending").toLowerCase();
+                  let badgeClass = "status-badge-pending";
+                  if (status === "delivered") badgeClass = "status-badge-delivered";
+                  if (status === "processing") badgeClass = "status-badge-processing";
+
+                  return (
+                    <tr key={ord.id}>
+                      <td>
+                        <strong style={{ color: "#007185", fontFamily: "monospace" }}>
+                          #{ord.id}
+                        </strong>
+                      </td>
+                      <td>
+                        <div>
+                          <strong>{ord.customer}</strong>
+                          <div style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                            Standard Delivery
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <strong className="amazon-price-bold">
+                          ₹{Number(ord.total || 0).toLocaleString("en-IN")}
+                        </strong>
+                      </td>
+                      <td>
+                        <span className={badgeClass}>
+                          {ord.status || "Pending"}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      {/* SECTION F: QUICK NAVIGATION */}
-      <div className="quick-nav-section">
-        <h3 className="quick-nav-title">Quick Module Navigation</h3>
-        <div className="quick-nav-cards-row">
+      {/* 6. QUICK NAVIGATION TILES */}
+      <div className="amazon-quick-links-area">
+        <h3 className="quick-links-header">Seller Central Management Shortcuts</h3>
+        <div className="quick-tiles-grid">
           {quickLinks.map((link) => (
             <button
               key={link.id}
-              className="quick-nav-item"
+              className="quick-tile-btn"
               onClick={() => onNavigate(link.id)}
             >
-              <span className="quick-nav-icon">{link.icon}</span>
-              <span className="quick-nav-label">{link.label}</span>
-              <span className="quick-nav-desc">{link.desc}</span>
-              <span className="quick-nav-arrow">Open Module →</span>
+              <span className="tile-icon">{link.icon}</span>
+              <span className="tile-label">{link.label}</span>
+              <span className="tile-desc">{link.desc}</span>
             </button>
           ))}
         </div>
