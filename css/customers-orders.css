@@ -95,8 +95,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+width: 100%;
   margin: 0 auto 24px auto;
-  width: 100%;
 }
 
 .customers-toolbar input {
