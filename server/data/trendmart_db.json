@@ -1,0 +1,684 @@
+{
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "Electronics",
+      "slug": "electronics",
+      "icon": "⚡",
+      "description": "Gadgets, smartphones, and smart gear"
+    },
+    {
+      "id": "cat-2",
+      "name": "Fashion & Apparel",
+      "slug": "fashion",
+      "icon": "👔",
+      "description": "Clothing, footwear, and accessories"
+    },
+    {
+      "id": "cat-3",
+      "name": "Home & Kitchen",
+      "slug": "home-kitchen",
+      "icon": "🏡",
+      "description": "Decor, kitchenware, and furniture"
+    },
+    {
+      "id": "cat-4",
+      "name": "Beauty & Wellness",
+      "slug": "beauty",
+      "icon": "✨",
+      "description": "Skincare, haircare, and personal grooming"
+    },
+    {
+      "id": "cat-5",
+      "name": "Sports & Outdoors",
+      "slug": "sports",
+      "icon": "⚽",
+      "description": "Sporting goods and fitness gear"
+    }
+  ],
+  "sellers": [
+    {
+      "id": "seller-1",
+      "storeName": "AeroTech Electronics",
+      "ownerName": "Vikram Malhotra",
+      "email": "vikram@aerotech.com",
+      "password": "password123",
+      "phone": "+91 98765 43210",
+      "address": "Indiranagar, Bengaluru, Karnataka 560038",
+      "rating": 4.8,
+      "totalSales": 450000,
+      "status": "active",
+      "joinedAt": "2026-01-15"
+    },
+    {
+      "id": "seller-2",
+      "storeName": "Urban Chic Apparels",
+      "ownerName": "Pooja Singhania",
+      "email": "pooja@urbanchic.in",
+      "password": "password123",
+      "phone": "+91 98112 34567",
+      "address": "Bandra West, Mumbai, Maharashtra 400050",
+      "rating": 4.6,
+      "totalSales": 320000,
+      "status": "active",
+      "joinedAt": "2026-02-10"
+    },
+    {
+      "id": "seller-3",
+      "storeName": "Heritage Home & Living",
+      "ownerName": "Rameshwar Sharma",
+      "email": "rameshwar@heritagehome.in",
+      "password": "password123",
+      "phone": "+91 98290 12345",
+      "address": "MI Road, Jaipur, Rajasthan 302001",
+      "rating": 4.9,
+      "totalSales": 280000,
+      "status": "active",
+      "joinedAt": "2026-03-01"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-1",
+      "title": "Noise-Cancelling Wireless Headphones Pro",
+      "description": "Active hybrid noise cancellation with 40-hour playtime, high-res audio drivers, and comfortable memory foam ear cushions.",
+      "price": 4999,
+      "originalPrice": 8999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 45,
+      "rating": 4.8,
+      "reviewsCount": 142,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-10T10:00:00Z"
+    },
+    {
+      "id": "prod-2",
+      "title": "Smart Fitness Tracker Watch AMOLED",
+      "description": "Track heart rate, SpO2, sleep quality, and 120 sports modes with 1.43-inch vibrant Always-On AMOLED touch display.",
+      "price": 2499,
+      "originalPrice": 4999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 12,
+      "rating": 4.5,
+      "reviewsCount": 89,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-12T11:30:00Z"
+    },
+    {
+      "id": "prod-3",
+      "title": "Mechanical Gaming Keyboard RGB Backlit",
+      "description": "Hot-swappable tactile switches, per-key RGB lighting effects, aircraft-grade aluminum top plate, and detachable braided USB-C cable.",
+      "price": 3499,
+      "originalPrice": 5999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 27,
+      "rating": 4.7,
+      "reviewsCount": 64,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-14T09:00:00Z"
+    },
+    {
+      "id": "prod-4",
+      "title": "3-in-1 Fast Wireless Magnetic Charging Station",
+      "description": "Simultaneously charge your phone, smartwatch, and wireless earbuds with 15W Qi-certified safety surge protection.",
+      "price": 1899,
+      "originalPrice": 3299,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 5,
+      "rating": 4.6,
+      "reviewsCount": 38,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1622445262464-84b1456045b6?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-16T14:20:00Z"
+    },
+    {
+      "id": "prod-5",
+      "title": "Portable Waterproof Bluetooth Outdoor Speaker",
+      "description": "360-degree immersive punchy bass, IPX7 water resistance rating, dual pairing mode, and 18-hour continuous battery life.",
+      "price": 2199,
+      "originalPrice": 3999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 19,
+      "rating": 4.9,
+      "reviewsCount": 112,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-18T16:45:00Z"
+    },
+    {
+      "id": "prod-6",
+      "title": "Tailored Slim-Fit Cotton Oxford Shirt",
+      "description": "100% breathable combed organic cotton. Features classic button-down collar and durable pearlized buttons.",
+      "price": 1299,
+      "originalPrice": 2299,
+      "category": "Fashion & Apparel",
+      "categoryId": "cat-2",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 60,
+      "rating": 4.6,
+      "reviewsCount": 78,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-11T12:00:00Z"
+    },
+    {
+      "id": "prod-7",
+      "title": "Vintage Washed Denim Trucker Jacket",
+      "description": "Heavyweight premium ring-spun denim with antique brass buttons, twin chest pockets, and relaxed tailored silhouette.",
+      "price": 2799,
+      "originalPrice": 4499,
+      "category": "Fashion & Apparel",
+      "categoryId": "cat-2",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 22,
+      "rating": 4.7,
+      "reviewsCount": 53,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-13T15:10:00Z"
+    },
+    {
+      "id": "prod-8",
+      "title": "Minimalist Vegan Leather Crossbody Bag",
+      "description": "Scratch-resistant vegan leather with gold-tone hardware, multiple interior dividers, and adjustable strap.",
+      "price": 1699,
+      "originalPrice": 2999,
+      "category": "Fashion & Apparel",
+      "categoryId": "cat-2",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 8,
+      "rating": 4.8,
+      "reviewsCount": 95,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-15T11:40:00Z"
+    },
+    {
+      "id": "prod-9",
+      "title": "Classic Low-Top Canvas Sneakers White",
+      "description": "Cushioned vulcanized rubber sole with reinforced toe cap and breathable canvas upper for all-day comfort.",
+      "price": 1499,
+      "originalPrice": 2499,
+      "category": "Fashion & Apparel",
+      "categoryId": "cat-2",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 35,
+      "rating": 4.5,
+      "reviewsCount": 67,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-17T13:20:00Z"
+    },
+    {
+      "id": "prod-10",
+      "title": "Polarized Aviator Sunglasses UV400",
+      "description": "Ultralight stainless frame with shatterproof TAC polarized lenses, anti-glare coating, and protective hard case.",
+      "price": 899,
+      "originalPrice": 1799,
+      "category": "Fashion & Apparel",
+      "categoryId": "cat-2",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 40,
+      "rating": 4.4,
+      "reviewsCount": 42,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-19T08:30:00Z"
+    },
+    {
+      "id": "prod-11",
+      "title": "Artisanal Ceramic Pour-Over Coffee Dripper Set",
+      "description": "Handcrafted ceramic cone dripper with heat-resistant borosilicate glass carafe and bamboo coaster collar.",
+      "price": 1899,
+      "originalPrice": 2599,
+      "category": "Home & Kitchen",
+      "categoryId": "cat-3",
+      "sellerId": "seller-3",
+      "sellerName": "Heritage Home & Living",
+      "stock": 7,
+      "rating": 4.9,
+      "reviewsCount": 51,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-12T10:00:00Z"
+    },
+    {
+      "id": "prod-12",
+      "title": "Ergonomic Memory Foam Lumbar Support Cushion",
+      "description": "High-density orthopedic memory foam engineered with 3D breathable mesh cover and dual adjustable back straps.",
+      "price": 999,
+      "originalPrice": 1799,
+      "category": "Home & Kitchen",
+      "categoryId": "cat-3",
+      "sellerId": "seller-3",
+      "sellerName": "Heritage Home & Living",
+      "stock": 4,
+      "rating": 4.4,
+      "reviewsCount": 38,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-14T14:45:00Z"
+    },
+    {
+      "id": "prod-13",
+      "title": "Premium Damascus Pattern Chef Knife Set (3-Piece)",
+      "description": "High-carbon Japanese stainless steel blades with ergonomic Pakkawood handles and magnetic display block.",
+      "price": 3299,
+      "originalPrice": 5999,
+      "category": "Home & Kitchen",
+      "categoryId": "cat-3",
+      "sellerId": "seller-3",
+      "sellerName": "Heritage Home & Living",
+      "stock": 14,
+      "rating": 4.9,
+      "reviewsCount": 88,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-16T17:15:00Z"
+    },
+    {
+      "id": "prod-14",
+      "title": "Ultrasonic Essential Oil Aromatherapy Diffuser",
+      "description": "500ml capacity tank with 7 ambient LED mood light modes, whisper-quiet operation, and auto shut-off safety.",
+      "price": 1199,
+      "originalPrice": 1999,
+      "category": "Home & Kitchen",
+      "categoryId": "cat-3",
+      "sellerId": "seller-3",
+      "sellerName": "Heritage Home & Living",
+      "stock": 25,
+      "rating": 4.7,
+      "reviewsCount": 76,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-18T11:00:00Z"
+    },
+    {
+      "id": "prod-15",
+      "title": "Botanical Vitamin C Glow Face Serum (30ml)",
+      "description": "Pure 15% Ethyl Ascorbic acid enriched with hyaluronic acid, ferulic acid, and aloe extract for vibrant radiant skin.",
+      "price": 799,
+      "originalPrice": 1299,
+      "category": "Beauty & Wellness",
+      "categoryId": "cat-4",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 50,
+      "rating": 4.8,
+      "reviewsCount": 130,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-13T09:30:00Z"
+    },
+    {
+      "id": "prod-16",
+      "title": "Cold-Pressed Moroccan Argan Hair Treatment Oil",
+      "description": "100% pure organic virgin argan oil. Repairs split ends, tames frizz, and restores silky lustrous shine.",
+      "price": 649,
+      "originalPrice": 1099,
+      "category": "Beauty & Wellness",
+      "categoryId": "cat-4",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 32,
+      "rating": 4.7,
+      "reviewsCount": 92,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1608248597359-548d1e2e17ea?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-15T15:20:00Z"
+    },
+    {
+      "id": "prod-17",
+      "title": "Detoxifying Activated Bamboo Charcoal Face Scrub",
+      "description": "Gentle exfoliating micro-beads infuse walnut shell and tea tree oil to unclog pores and remove excess oil.",
+      "price": 499,
+      "originalPrice": 899,
+      "category": "Beauty & Wellness",
+      "categoryId": "cat-4",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 3,
+      "rating": 4.5,
+      "reviewsCount": 45,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-17T12:40:00Z"
+    },
+    {
+      "id": "prod-18",
+      "title": "Eco-Friendly High-Density Non-Slip Yoga Mat",
+      "description": "6mm dual-layer TPE alignment grid mat with carrying strap. Tear-resistant, waterproof, and non-toxic.",
+      "price": 1399,
+      "originalPrice": 2299,
+      "category": "Sports & Outdoors",
+      "categoryId": "cat-5",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 30,
+      "rating": 4.8,
+      "reviewsCount": 84,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-11T16:00:00Z"
+    },
+    {
+      "id": "prod-19",
+      "title": "Insulated Stainless Steel Sports Flask (750ml)",
+      "description": "Double-wall vacuum insulation keeps liquids cold for 24 hours or hot for 12 hours. BPA-free leakproof chug cap.",
+      "price": 799,
+      "originalPrice": 1499,
+      "category": "Sports & Outdoors",
+      "categoryId": "cat-5",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 45,
+      "rating": 4.6,
+      "reviewsCount": 71,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-14T08:15:00Z"
+    },
+    {
+      "id": "prod-20",
+      "title": "Latex Resistance Loop Exercise Bands Set (5 Pack)",
+      "description": "5 resistance levels from Extra Light to Extra Heavy. Ideal for stretching, physical therapy, glutes, and home workouts.",
+      "price": 599,
+      "originalPrice": 1199,
+      "category": "Sports & Outdoors",
+      "categoryId": "cat-5",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 50,
+      "rating": 4.7,
+      "reviewsCount": 118,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-16T10:30:00Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust-1",
+      "name": "Aarav Sharma",
+      "email": "aarav.sharma@example.com",
+      "password": "password123",
+      "phone": "+91 98765 11223",
+      "address": "Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103",
+      "ordersCount": 5,
+      "totalSpent": 15995,
+      "registeredAt": "2026-01-20"
+    },
+    {
+      "id": "cust-2",
+      "name": "Diya Patel",
+      "email": "diya.patel@example.com",
+      "password": "password123",
+      "phone": "+91 98234 55667",
+      "address": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "ordersCount": 4,
+      "totalSpent": 21489,
+      "registeredAt": "2026-02-05"
+    },
+    {
+      "id": "cust-3",
+      "name": "Rohan Verma",
+      "email": "rohan.verma@example.com",
+      "password": "password123",
+      "phone": "+91 97112 33445",
+      "address": "Sector 62, Noida, Uttar Pradesh 201309",
+      "ordersCount": 1,
+      "totalSpent": 4999,
+      "registeredAt": "2026-02-18"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-3417",
+      "orderNumber": "TM-2026-26448",
+      "customerId": "cust-1795529272159",
+      "customerName": "Diya Patel",
+      "customerEmail": "diya.patel@example.com",
+      "customerPhone": "+91 98234 55667",
+      "shippingAddress": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "items": [
+        {
+          "productId": "prod-11",
+          "sellerId": "seller-3",
+          "title": "Artisanal Ceramic Pour-Over Coffee Dripper Set",
+          "price": 1899,
+          "quantity": 8
+        }
+      ],
+      "totalAmount": 15192,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "status": "Delivered",
+      "orderDate": "2026-11-24T14:07:52.159Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-24T14:07:52.159Z",
+          "note": "Order confirmed successfully on TrendMart"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-11-24T14:07:52.159Z",
+          "note": "Seller notified for dispatch packaging"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-11-24T14:08:01.166Z",
+          "note": "Updated by seller Heritage Home & Living"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-11-24T14:08:03.803Z",
+          "note": "Updated by seller Heritage Home & Living"
+        }
+      ]
+    },
+    {
+      "id": "ORD-1008",
+      "orderNumber": "TM-2026-55597",
+      "customerId": "cust-1795528263635",
+      "customerName": "Diya Patel",
+      "customerEmail": "diya.patel@example.com",
+      "customerPhone": "+91 98234 55667",
+      "shippingAddress": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "items": [
+        {
+          "productId": "prod-11",
+          "sellerId": "seller-3",
+          "title": "Artisanal Ceramic Pour-Over Coffee Dripper Set",
+          "price": 1899,
+          "quantity": 1
+        }
+      ],
+      "totalAmount": 1899,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "status": "Delivered",
+      "orderDate": "2026-11-24T13:51:03.635Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-24T13:51:03.635Z",
+          "note": "Order confirmed successfully on TrendMart"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-11-24T13:51:03.635Z",
+          "note": "Seller notified for dispatch packaging"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-11-24T13:51:39.393Z",
+          "note": "Updated by seller Heritage Home & Living"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-11-24T14:07:30.656Z",
+          "note": "Updated by seller Heritage Home & Living"
+        }
+      ]
+    },
+    {
+      "id": "ORD-9419",
+      "orderNumber": "TM-2026-95049",
+      "customerId": "cust-1795528117951",
+      "customerName": "Aarav Sharma",
+      "customerEmail": "aarav.sharma@example.com",
+      "customerPhone": "+91 98765 11223",
+      "shippingAddress": "Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103",
+      "items": [
+        {
+          "productId": "prod-3",
+          "sellerId": "seller-1",
+          "title": "Mechanical Gaming Keyboard RGB Backlit",
+          "price": 3499,
+          "quantity": 1
+        }
+      ],
+      "totalAmount": 3499,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "status": "Processing",
+      "orderDate": "2026-11-24T13:48:37.951Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-24T13:48:37.951Z",
+          "note": "Order confirmed successfully on TrendMart"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-11-24T13:48:37.951Z",
+          "note": "Seller notified for dispatch packaging"
+        }
+      ]
+    },
+    {
+      "id": "ORD-1001",
+      "orderNumber": "TM-2026-1001",
+      "customerId": "cust-1",
+      "customerName": "Aarav Sharma",
+      "customerEmail": "aarav.sharma@example.com",
+      "customerPhone": "+91 98765 11223",
+      "shippingAddress": "Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103",
+      "items": [
+        {
+          "productId": "prod-1",
+          "sellerId": "seller-1",
+          "title": "Noise-Cancelling Wireless Headphones Pro",
+          "quantity": 1,
+          "price": 4999
+        }
+      ],
+      "totalAmount": 4999,
+      "paymentMethod": "UPI / Card",
+      "paymentStatus": "Paid",
+      "status": "Delivered",
+      "orderDate": "2026-03-25T14:32:00Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-03-25T14:32:00Z",
+          "note": "Order confirmed"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-03-25T16:00:00Z",
+          "note": "Packed by seller AeroTech Electronics"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-03-26T09:30:00Z",
+          "note": "Dispatched via BlueDart Express"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-03-27T15:20:00Z",
+          "note": "Delivered to customer"
+        }
+      ]
+    },
+    {
+      "id": "ORD-1002",
+      "orderNumber": "TM-2026-1002",
+      "customerId": "cust-2",
+      "customerName": "Diya Patel",
+      "customerEmail": "diya.patel@example.com",
+      "customerPhone": "+91 98234 55667",
+      "shippingAddress": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "items": [
+        {
+          "productId": "prod-3",
+          "sellerId": "seller-2",
+          "title": "Tailored Slim-Fit Cotton Oxford Shirt",
+          "quantity": 2,
+          "price": 1299
+        }
+      ],
+      "totalAmount": 2598,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending",
+      "status": "Processing",
+      "orderDate": "2026-03-28T10:15:00Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-03-28T10:15:00Z",
+          "note": "Order confirmed"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-03-28T11:00:00Z",
+          "note": "Awaiting seller dispatch"
+        }
+      ]
+    }
+  ],
+  "banners": [
+    {
+      "id": "ban-1",
+      "title": "Summer Mega Fest 2026",
+      "subtitle": "Up to 60% OFF on Top Electronics & Apparel",
+      "linkText": "Shop the Sale",
+      "category": "Electronics",
+      "active": true,
+      "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "ban-2",
+      "title": "Smart Living, Smarter Prices",
+      "subtitle": "Trending home decor & kitchen essentials curated for you",
+      "linkText": "Explore Home",
+      "category": "Home & Kitchen",
+      "active": true,
+      "image": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&auto=format&fit=crop&q=80"
+    }
+  ]
+}
