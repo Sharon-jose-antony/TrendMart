@@ -130,6 +130,8 @@ function App() {
             <window.Dashboard onNavigate={setActiveTab} />
           )}
 
+          {activeTab === "categories" && <window.Categories />}
+
           {activeTab === "customers" && <window.Customers />}
 
           {activeTab === "orders" && <window.Orders />}
