@@ -1,16 +1,31 @@
 const { useState, useEffect } = React;
 
 const DEFAULT_ADMIN_PROFILE = {
-  name: "Admin User",
+  fullName: "Admin 1",
+  name: "Admin 1",
   email: "admin@trendmart.in",
-  role: "Super Admin",
-  phone: "+91 98765 43210",
+  role: "Store Administrator",
+  avatar: "",
 };
 
 function getSavedAdminProfile() {
   try {
-    const saved = JSON.parse(localStorage.getItem("tm_admin_profile"));
-    return saved ? { ...DEFAULT_ADMIN_PROFILE, ...saved } : DEFAULT_ADMIN_PROFILE;
+    const fromStorageApi =
+      window.StorageAPI?.get && window.StorageAPI?.KEYS?.PROFILE
+        ? window.StorageAPI.get(window.StorageAPI.KEYS.PROFILE)
+        : null;
+    if (
+      fromStorageApi &&
+      typeof fromStorageApi === "object" &&
+      !Array.isArray(fromStorageApi)
+    ) {
+      return { ...DEFAULT_ADMIN_PROFILE, ...fromStorageApi };
+    }
+
+    const legacySaved = JSON.parse(localStorage.getItem("tm_admin_profile"));
+    return legacySaved
+      ? { ...DEFAULT_ADMIN_PROFILE, ...legacySaved }
+      : DEFAULT_ADMIN_PROFILE;
   } catch {
     return DEFAULT_ADMIN_PROFILE;
   }
@@ -35,10 +50,19 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
-    const syncProfile = () => setAdminProfile(getSavedAdminProfile());
+    const syncProfile = (event) => {
+      if (event?.detail && typeof event.detail === "object") {
+        setAdminProfile((prev) => ({ ...prev, ...event.detail }));
+        return;
+      }
+      setAdminProfile(getSavedAdminProfile());
+    };
+
+    window.addEventListener("trendmart:profile-updated", syncProfile);
     window.addEventListener("tm-profile-updated", syncProfile);
     window.addEventListener("storage", syncProfile);
     return () => {
+      window.removeEventListener("trendmart:profile-updated", syncProfile);
       window.removeEventListener("tm-profile-updated", syncProfile);
       window.removeEventListener("storage", syncProfile);
     };
@@ -48,8 +72,13 @@ function App() {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  const displayName = (adminProfile.name || "Admin User").trim();
+  const displayName = (
+    adminProfile.fullName ||
+    adminProfile.name ||
+    "Admin 1"
+  ).trim();
   const avatarInitial = displayName.charAt(0).toUpperCase() || "A";
+  const avatarUrl = String(adminProfile.avatar || "").trim();
 
   return (
     <div className="app-layout">
@@ -92,21 +121,35 @@ function App() {
                 fontWeight: 600,
               }}
             >
-              <span
-                style={{
-                  width: "26px",
-                  height: "26px",
-                  borderRadius: "50%",
-                  background: "var(--accent)",
-                  color: "#ffffff",
-                  display: "grid",
-                  placeItems: "center",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                }}
-              >
-                {avatarInitial}
-              </span>
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={displayName}
+                  style={{
+                    width: "26px",
+                    height: "26px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              ) : (
+                <span
+                  style={{
+                    width: "26px",
+                    height: "26px",
+                    borderRadius: "50%",
+                    background: "var(--accent)",
+                    color: "#ffffff",
+                    display: "grid",
+                    placeItems: "center",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                  }}
+                >
+                  {avatarInitial}
+                </span>
+              )}
               <span>{displayName}</span>
             </button>
 
