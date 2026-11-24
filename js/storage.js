@@ -364,9 +364,14 @@ window.StorageAPI = {
       }
     });
 
-    // Optional background sync from central DB if server is live
+    // Live background sync from central DB
+    const apiBase = (typeof window !== 'undefined' && window.location && window.location.port === '5000') 
+      ? '/api' 
+      : 'http://localhost:5000/api';
+
     if (typeof fetch === 'function') {
-      fetch('/api/products')
+      // Sync products
+      fetch(`${apiBase}/products`)
         .then(r => r.json())
         .then(apiProducts => {
           if (Array.isArray(apiProducts) && apiProducts.length >= 15) {
@@ -376,6 +381,31 @@ window.StorageAPI = {
               title: p.title || p.name
             }));
             localStorage.setItem("tm_products", JSON.stringify(normalized));
+          }
+        })
+        .catch(() => {});
+
+      // Sync orders
+      fetch(`${apiBase}/orders`)
+        .then(r => r.json())
+        .then(apiOrders => {
+          if (Array.isArray(apiOrders) && apiOrders.length > 0) {
+            const normalized = apiOrders.map(o => ({
+              ...o,
+              customer: o.customerName || o.customer || 'Customer',
+              total: Number(o.totalAmount || o.total || 0)
+            }));
+            localStorage.setItem("tm_orders", JSON.stringify(normalized));
+          }
+        })
+        .catch(() => {});
+
+      // Sync customers
+      fetch(`${apiBase}/customers`)
+        .then(r => r.json())
+        .then(apiCustomers => {
+          if (Array.isArray(apiCustomers) && apiCustomers.length > 0) {
+            localStorage.setItem("tm_customers", JSON.stringify(apiCustomers));
           }
         })
         .catch(() => {});

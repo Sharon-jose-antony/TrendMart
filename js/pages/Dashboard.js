@@ -15,7 +15,7 @@ window.Dashboard = function Dashboard({ onNavigate }) {
   const [timeRange, setTimeRange] = useState("7D"); // "7D" | "30D" | "YTD"
   const [hoveredPoint, setHoveredPoint] = useState(null);
 
-  // Load live data from unified StorageAPI
+  // Load live data from unified StorageAPI & Central API
   useEffect(() => {
     window.StorageAPI.init();
 
@@ -28,6 +28,24 @@ window.Dashboard = function Dashboard({ onNavigate }) {
     setCategories(c);
     setCustomers(cu);
     setOrders(o);
+
+    // Live sync from TrendMartAPI
+    if (window.TrendMartAPI) {
+      if (typeof window.TrendMartAPI.getOrders === 'function') {
+        window.TrendMartAPI.getOrders().then(apiOrders => {
+          if (Array.isArray(apiOrders) && apiOrders.length > 0) {
+            setOrders(apiOrders);
+          }
+        }).catch(() => {});
+      }
+      if (typeof window.TrendMartAPI.getProducts === 'function') {
+        window.TrendMartAPI.getProducts().then(apiProducts => {
+          if (Array.isArray(apiProducts) && apiProducts.length > 0) {
+            setProducts(apiProducts);
+          }
+        }).catch(() => {});
+      }
+    }
 
     try {
       const savedProfile = JSON.parse(localStorage.getItem("tm_admin_profile"));

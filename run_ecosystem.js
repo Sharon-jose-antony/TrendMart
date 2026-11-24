@@ -22,7 +22,34 @@ const MIME_TYPES = {
 
 function createStaticServer(siteName, rootDir, port) {
   const server = http.createServer((req, res) => {
-    const rawPath = url.parse(req.url).pathname || '/';
+    const parsedUrl = url.parse(req.url);
+    const rawPath = parsedUrl.pathname || '/';
+
+    // Transparent proxy for REST API to Central Server (Port 5000)
+    if (rawPath.startsWith('/api/')) {
+      const proxyReq = http.request({
+        hostname: 'localhost',
+        port: 5000,
+        path: req.url,
+        method: req.method,
+        headers: { ...req.headers, host: 'localhost:5000' }
+      }, (proxyRes) => {
+        res.writeHead(proxyRes.statusCode, {
+          ...proxyRes.headers,
+          'Access-Control-Allow-Origin': '*'
+        });
+        proxyRes.pipe(res);
+      });
+
+      proxyReq.on('error', (err) => {
+        res.writeHead(502, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+        res.end(JSON.stringify({ error: 'API Gateway Proxy Error', message: err.message }));
+      });
+
+      req.pipe(proxyReq);
+      return;
+    }
+
     let cleanPath = rawPath.replace(/^\/(customer|seller)(\/|$)/, '/');
     let safePath = path.normalize(cleanPath).replace(/^(\.\.[\/\\])+/, '');
     if (safePath.startsWith(path.sep)) safePath = safePath.slice(1);

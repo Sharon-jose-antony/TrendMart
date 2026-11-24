@@ -815,6 +815,17 @@ class TrendMartDB {
     return order;
   }
 
+  deleteOrder(id) {
+    const data = this.loadData();
+    const initialLen = (data.orders || []).length;
+    data.orders = (data.orders || []).filter(o => o.id !== id && o.orderNumber !== id);
+    if (data.orders.length < initialLen) {
+      this.saveData(data);
+      return true;
+    }
+    return false;
+  }
+
   // --- Customers CRUD ---
   getCustomers() {
     return (this.loadData().customers || []).map(({ password, ...c }) => c);

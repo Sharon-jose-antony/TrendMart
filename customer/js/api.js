@@ -230,6 +230,25 @@
       }
     },
 
+    deleteOrder: async (id) => {
+      try {
+        const res = await fetch(`${API_BASE}/orders/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (window.StorageAPI && window.StorageAPI.KEYS) {
+          const cur = window.StorageAPI.get(window.StorageAPI.KEYS.ORDERS) || [];
+          window.StorageAPI.save(window.StorageAPI.KEYS.ORDERS, cur.filter(o => o.id !== id && o.orderNumber !== id));
+        }
+        return data.success;
+      } catch (e) {
+        if (window.StorageAPI && window.StorageAPI.KEYS) {
+          const cur = window.StorageAPI.get(window.StorageAPI.KEYS.ORDERS) || [];
+          window.StorageAPI.save(window.StorageAPI.KEYS.ORDERS, cur.filter(o => o.id !== id && o.orderNumber !== id));
+          return true;
+        }
+        return false;
+      }
+    },
+
     // Customers
     getCustomers: async () => {
       try {

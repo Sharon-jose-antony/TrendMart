@@ -174,6 +174,15 @@ const server = http.createServer(async (req, res) => {
         const item = db.getOrderById(orderMatch[1]);
         return item ? sendJSON(res, 200, item) : sendJSON(res, 404, { error: 'Order not found' });
       }
+      if (orderMatch && method === 'PUT') {
+        const body = await parseBody(req);
+        const updated = db.updateOrderStatus(orderMatch[1], body.status || body.newStatus, body.note);
+        return updated ? sendJSON(res, 200, updated) : sendJSON(res, 404, { error: 'Order not found' });
+      }
+      if (orderMatch && method === 'DELETE') {
+        const deleted = db.deleteOrder(orderMatch[1]);
+        return deleted ? sendJSON(res, 200, { success: true }) : sendJSON(res, 404, { error: 'Order not found' });
+      }
       const orderStatusMatch = pathname.match(/^\/api\/orders\/([^\/]+)\/status$/);
       if (orderStatusMatch && method === 'PUT') {
         const body = await parseBody(req);
