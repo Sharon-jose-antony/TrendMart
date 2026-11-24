@@ -76,6 +76,23 @@
   ],
   "products": [
     {
+      "id": "prod-1795525393448",
+      "title": "Test Wireless Mechanical Keyboard",
+      "description": "RGB backlight, hot-swappable switches",
+      "price": 3499,
+      "originalPrice": 4999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 23,
+      "rating": 5,
+      "reviewsCount": 0,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-11-24T13:03:13.448Z"
+    },
+    {
       "id": "prod-1",
       "title": "Noise-Cancelling Wireless Headphones Pro",
       "description": "Active noise cancellation with 40-hour battery life, high-res audio drivers, and comfortable memory foam ear cushions.",
@@ -208,9 +225,58 @@
       "ordersCount": 1,
       "totalSpent": 4999,
       "registeredAt": "2026-02-18"
+    },
+    {
+      "id": "cust-1795525393457",
+      "name": "Priya Sundaram",
+      "email": "priya@example.com",
+      "phone": "+91 99887 76655",
+      "address": "45, MG Road, Bengaluru 560001",
+      "ordersCount": 1,
+      "totalSpent": 6998,
+      "registeredAt": "2026-11-24T13:03:13.457Z"
     }
   ],
   "orders": [
+    {
+      "id": "ORD-1297",
+      "orderNumber": "TM-2026-94342",
+      "customerId": "cust-1795525393457",
+      "customerName": "Priya Sundaram",
+      "customerEmail": "priya@example.com",
+      "customerPhone": "+91 99887 76655",
+      "shippingAddress": "45, MG Road, Bengaluru 560001",
+      "items": [
+        {
+          "productId": "prod-1795525393448",
+          "title": "Test Wireless Mechanical Keyboard",
+          "price": 3499,
+          "quantity": 2
+        }
+      ],
+      "totalAmount": 6998,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "status": "Shipped",
+      "orderDate": "2026-11-24T13:03:13.457Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-24T13:03:13.457Z",
+          "note": "Order confirmed successfully on TrendMart"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-11-24T13:03:13.457Z",
+          "note": "Seller notified for dispatch packaging"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-11-24T13:03:13.472Z",
+          "note": "Dispatched via Express Courier"
+        }
+      ]
+    },
     {
       "id": "ORD-1001",
       "orderNumber": "TM-2026-1001",
