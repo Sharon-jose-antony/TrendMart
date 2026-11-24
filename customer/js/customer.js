@@ -235,68 +235,107 @@ function CustomerStoreApp() {
       {/* 1. Header / Navbar */}
       <header className="store-header">
         <div className="store-topbar">
-          <div className="store-brand" onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}>
-            <img src="assets/logo-light.png" alt="TrendMart" className="store-brand-logo" onError={(e) => { e.target.style.display='none'; }} />
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#4338ca', letterSpacing: '-0.02em', marginLeft: '0.25rem' }}>TrendMart</h2>
+          {/* Logo only - clicking takes user to home page */}
+          <div 
+            className="store-brand" 
+            onClick={() => { setActiveCategory('all'); setSearchQuery(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            title="TrendMart Home"
+          >
+            <img 
+              src="assets/logo-light.png" 
+              alt="TrendMart - Shop Smarter, Live Better" 
+              className="store-brand-logo" 
+            />
           </div>
 
           <div className="store-search-wrap">
-            <span className="store-search-icon">🔍</span>
+            <span className="store-search-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
             <input
               type="text"
               className="store-search-input"
-              placeholder="Search products, brands, or electronics..."
+              placeholder="Search products, brands, or categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
           <div className="store-nav-actions">
+            {/* Direct Switcher Links */}
+            <a href="http://localhost:3000" className="portal-link" title="Open Admin Panel">
+              Admin (3000)
+            </a>
+            <a href="http://localhost:3002" className="portal-link" title="Open Seller Center">
+              Seller Hub (3002)
+            </a>
+
+            {/* Cart Button */}
+            <button className="store-btn store-btn-primary" onClick={() => setIsCartOpen(true)} title="View Cart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span>Cart</span>
+              {cartCount > 0 && <span className="store-badge">{cartCount}</span>}
+            </button>
+
+            {/* My Orders Button (Before User Profile) */}
+            <button className="store-btn store-btn-secondary" onClick={openMyOrders} title="View My Orders">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <span>My Orders</span>
+            </button>
+
+            {/* User Profile on the Top Right Corner */}
             {currentUser ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--tm-bg)', padding: '0.35rem 0.75rem', borderRadius: '8px', border: '1px solid var(--tm-border)' }}>
-                <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--tm-primary)' }}>
-                  👤 {currentUser.name.split(' ')[0]}
+              <div className="user-profile-badge">
+                <div className="user-avatar-circle">
+                  {(currentUser.name || 'U').charAt(0).toUpperCase()}
+                </div>
+                <span className="user-profile-name" title={currentUser.name}>
+                  {currentUser.name}
                 </span>
                 <button 
-                  className="store-btn store-btn-secondary" 
-                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', marginLeft: '0.25rem' }}
+                  className="user-signout-btn" 
                   onClick={handleLogout}
+                  title="Sign out of account"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <button className="store-btn store-btn-secondary" onClick={() => { setAuthError(''); setIsAuthModalOpen(true); }}>
-                🔑 Sign In
+              <button 
+                className="store-btn store-btn-secondary" 
+                style={{ background: '#4338ca', color: '#ffffff', borderColor: '#4338ca' }}
+                onClick={() => { setAuthError(''); setIsAuthModalOpen(true); }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Sign In</span>
               </button>
             )}
-
-            <button className="store-btn store-btn-secondary" onClick={openMyOrders}>
-              📦 My Orders
-            </button>
-
-            <button className="store-btn store-btn-primary" onClick={() => setIsCartOpen(true)}>
-              🛒 Cart
-              {cartCount > 0 && <span className="store-badge">{cartCount}</span>}
-            </button>
-
-            <a href="http://localhost:3000" className="store-btn store-btn-secondary" title="Switch to Admin Management">
-              ⚙️ Admin Panel (3000)
-            </a>
-            <a href="http://localhost:3002" className="store-btn store-btn-secondary" title="Switch to Seller Portal">
-              💼 Seller Hub (3002)
-            </a>
           </div>
         </div>
 
-        {/* Category Pills Bar */}
+        {/* Clean, Professional Category Bar without Emojis */}
         <div className="category-filter-bar">
           <div className="category-filter-inner">
             <button
               className={`cat-pill ${activeCategory === 'all' ? 'active' : ''}`}
               onClick={() => setActiveCategory('all')}
             >
-              🔥 All Deals
+              All Deals
             </button>
             {categories.map(cat => (
               <button
@@ -304,7 +343,7 @@ function CustomerStoreApp() {
                 className={`cat-pill ${activeCategory === cat.name ? 'active' : ''}`}
                 onClick={() => setActiveCategory(cat.name)}
               >
-                {cat.icon} {cat.name}
+                {cat.name}
               </button>
             ))}
           </div>

@@ -1,4 +1,4 @@
-// TrendMart Seller Hub React Application
+// TrendMart Seller Hub React Application - Enterprise SaaS Edition
 const { useState, useEffect, useMemo } = React;
 
 function SellerHubApp() {
@@ -195,7 +195,7 @@ function SellerHubApp() {
 
   // --- CRUD: Delete Product ---
   const handleDeleteProduct = async (id, title) => {
-    if (confirm(`Are you sure you want to remove "${title}" from your store?`)) {
+    if (confirm(`Are you sure you want to remove "${title}" from your store catalog?`)) {
       try {
         await window.TrendMartAPI.deleteProduct(id);
         loadSellerData();
@@ -217,14 +217,15 @@ function SellerHubApp() {
 
   return (
     <div className="seller-app">
-      {/* 1. Sidebar */}
+      {/* 1. Professional Sidebar */}
       <aside className="seller-sidebar">
         <div className="seller-brand">
-          <span style={{ fontSize: '1.5rem' }}>💼</span>
-          <div>
-            <div className="seller-brand-title">TrendMart</div>
-            <span className="seller-brand-tag">Seller Center</span>
-          </div>
+          <img 
+            src="assets/logo-light.png" 
+            alt="TrendMart Logo" 
+            className="seller-brand-img"
+          />
+          <span className="seller-brand-tag">Seller Center</span>
         </div>
 
         <ul className="seller-nav">
@@ -232,109 +233,189 @@ function SellerHubApp() {
             className={`seller-nav-item ${currentView === 'inventory' ? 'active' : ''}`}
             onClick={() => setCurrentView('inventory')}
           >
-            📦 Products & Stock ({sellerProducts.length})
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span>Products & Stock</span>
+            <span className="nav-count-badge">{sellerProducts.length}</span>
           </li>
           <li
             className={`seller-nav-item ${currentView === 'orders' ? 'active' : ''}`}
             onClick={() => setCurrentView('orders')}
           >
-            🛒 Store Orders ({sellerOrders.length})
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span>Orders & Dispatch</span>
+            <span className="nav-count-badge">{sellerOrders.length}</span>
           </li>
           <li
             className={`seller-nav-item ${currentView === 'analytics' ? 'active' : ''}`}
             onClick={() => setCurrentView('analytics')}
           >
-            📈 Earnings & Analytics
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>Earnings & Analytics</span>
           </li>
         </ul>
 
-        <div style={{ marginTop: 'auto', borderTop: '1px solid var(--sh-border)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <a href="http://localhost:3001" className="seller-nav-item" style={{ textDecoration: 'none' }} target="_blank">
-            🛍️ Open Customer Store (3001) →
+        {/* Ecosystem Interconnected Navigation */}
+        <div className="seller-portal-links">
+          <div className="portal-links-label">TrendMart Ecosystem</div>
+          <a href="http://localhost:3001" className="seller-nav-link" target="_blank" rel="noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Customer Store (3001)</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto' }}>
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
           </a>
-          <a href="http://localhost:3000" className="seller-nav-item" style={{ textDecoration: 'none' }}>
-            👑 Admin Dashboard (3000) →
+          <a href="http://localhost:3000" className="seller-nav-link" target="_blank" rel="noreferrer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Admin Console (3000)</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto' }}>
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
           </a>
         </div>
       </aside>
 
       {/* 2. Main Content Area */}
       <main className="seller-main">
-        {/* Topbar */}
+        {/* Modern Topbar */}
         <header className="seller-topbar">
           <div className="seller-store-select-wrap">
-            <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--sh-text-muted)' }}>Store Profile:</span>
             {currentSeller ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontWeight: 700, color: 'var(--sh-primary)', fontSize: '0.95rem' }}>
-                  🏪 {currentSeller.storeName} ({currentSeller.ownerName})
-                </span>
+              <div className="seller-profile-chip">
+                <div className="seller-profile-avatar">
+                  {(currentSeller.storeName || 'S').charAt(0).toUpperCase()}
+                </div>
+                <div className="seller-profile-details">
+                  <span className="seller-profile-name">{currentSeller.storeName}</span>
+                  <span className="seller-profile-sub">{currentSeller.ownerName}</span>
+                </div>
                 <button
-                  className="btn-icon"
-                  style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
+                  className="btn-ghost-sm"
                   onClick={() => { setAuthError(''); setIsSellerAuthOpen(true); }}
+                  title="Switch Vendor Store"
                 >
-                  Switch Store
+                  Switch
                 </button>
                 <button
-                  className="btn-icon btn-icon-danger"
-                  style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
+                  className="btn-ghost-sm btn-ghost-danger"
                   onClick={handleSellerLogout}
+                  title="Sign out of seller account"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <button className="btn-primary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem' }} onClick={() => { setAuthError(''); setIsSellerAuthOpen(true); }}>
-                🔑 Seller Sign In / Register Store
+              <button className="btn-primary-sm" onClick={() => { setAuthError(''); setIsSellerAuthOpen(true); }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                  <polyline points="10 17 15 12 10 7"></polyline>
+                  <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                <span>Seller Sign In / Register</span>
               </button>
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 600 }}>
-              ● Live DB Synchronized
-            </span>
+          <div className="topbar-actions">
+            <div className="live-sync-indicator" title="Connected to Central Database (Port 5000)">
+              <span className="live-sync-pulse"></span>
+              <span>Live DB Connected</span>
+            </div>
             <button className="btn-primary" onClick={handleOpenAddProduct}>
-              + Add New Product
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Product</span>
             </button>
           </div>
         </header>
 
         {/* Dynamic Content Views */}
         <div className="seller-content">
-          {/* KPI Cards Strip */}
+          {/* Refined KPI Metric Cards */}
           <div className="metrics-grid">
             <div className="metric-card">
-              <div className="metric-icon-wrap icon-blue">💰</div>
-              <div>
-                <div className="metric-value">₹{sellerRevenue.toLocaleString('en-IN')}</div>
-                <div className="metric-label">Total Store Revenue</div>
+              <div className="metric-header">
+                <span className="metric-label">Store Revenue</span>
+                <div className="metric-icon-wrap icon-blue">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
               </div>
+              <div className="metric-value">₹{sellerRevenue.toLocaleString('en-IN')}</div>
+              <div className="metric-subtext">Cumulative vendor sales</div>
             </div>
 
             <div className="metric-card">
-              <div className="metric-icon-wrap icon-purple">📦</div>
-              <div>
-                <div className="metric-value">{sellerProducts.length}</div>
-                <div className="metric-label">Active Listed Products</div>
+              <div className="metric-header">
+                <span className="metric-label">Active Catalog</span>
+                <div className="metric-icon-wrap icon-purple">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                  </svg>
+                </div>
               </div>
+              <div className="metric-value">{sellerProducts.length}</div>
+              <div className="metric-subtext">Published marketplace items</div>
             </div>
 
             <div className="metric-card">
-              <div className="metric-icon-wrap icon-green">🛒</div>
-              <div>
-                <div className="metric-value">{sellerOrders.length}</div>
-                <div className="metric-label">Incoming Orders</div>
+              <div className="metric-header">
+                <span className="metric-label">Incoming Orders</span>
+                <div className="metric-icon-wrap icon-green">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                </div>
               </div>
+              <div className="metric-value">{sellerOrders.length}</div>
+              <div className="metric-subtext">Orders placed by customers</div>
             </div>
 
             <div className="metric-card">
-              <div className="metric-icon-wrap icon-amber">⚠️</div>
-              <div>
-                <div className="metric-value">{lowStockProducts.length}</div>
-                <div className="metric-label">Low Stock Alerts</div>
+              <div className="metric-header">
+                <span className="metric-label">Stock Attention</span>
+                <div className={`metric-icon-wrap ${lowStockProducts.length > 0 ? 'icon-amber' : 'icon-gray'}`}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
               </div>
+              <div className="metric-value">{lowStockProducts.length}</div>
+              <div className="metric-subtext">Items with ≤ 10 units in inventory</div>
             </div>
           </div>
 
@@ -343,13 +424,17 @@ function SellerHubApp() {
             <div>
               <div className="section-header-bar">
                 <div>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Product Inventory Management</h2>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--sh-text-muted)' }}>
-                    Add, edit pricing, restock units, or remove items from the marketplace
+                  <h2 className="section-title">Product Catalog & Inventory</h2>
+                  <p className="section-desc">
+                    Manage pricing, update stock units, or publish new merchandise to the customer storefront.
                   </p>
                 </div>
                 <button className="btn-primary" onClick={handleOpenAddProduct}>
-                  + Add Product
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span>Add Product</span>
                 </button>
               </div>
 
@@ -360,16 +445,24 @@ function SellerHubApp() {
                       <th>Product</th>
                       <th>Category</th>
                       <th>Selling Price</th>
-                      <th>Stock Units</th>
-                      <th>Status</th>
-                      <th>Actions</th>
+                      <th>Stock Level</th>
+                      <th>Inventory Status</th>
+                      <th style={{ textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sellerProducts.length === 0 ? (
                       <tr>
-                        <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
-                          No products listed yet. Click "+ Add Product" to publish your first item!
+                        <td colSpan="6" className="table-empty-cell">
+                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 0.75rem', display: 'block' }}>
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                          </svg>
+                          <div>No products listed yet in this store catalog.</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--sh-text-muted)', marginTop: '0.25rem' }}>
+                            Click &ldquo;Add Product&rdquo; above to publish your first offering!
+                          </div>
                         </td>
                       </tr>
                     ) : (
@@ -379,37 +472,48 @@ function SellerHubApp() {
                             <div className="product-row-title">
                               <img src={p.image} alt={p.title} className="product-thumb" />
                               <div>
-                                <strong style={{ color: 'var(--sh-text)' }}>{p.title}</strong>
-                                <div style={{ fontSize: '0.78rem', color: 'var(--sh-text-muted)' }}>ID: {p.id}</div>
+                                <span className="product-item-name">{p.title}</span>
+                                <span className="product-item-sku">SKU: {p.id}</span>
                               </div>
                             </div>
                           </td>
-                          <td>{p.category}</td>
                           <td>
-                            <strong>₹{p.price.toLocaleString('en-IN')}</strong>
-                            {p.originalPrice > p.price && (
-                              <span style={{ fontSize: '0.78rem', color: 'var(--sh-text-muted)', marginLeft: '0.4rem', textDecoration: 'line-through' }}>
-                                ₹{p.originalPrice.toLocaleString('en-IN')}
-                              </span>
-                            )}
+                            <span className="category-badge">{p.category}</span>
                           </td>
                           <td>
-                            <strong>{p.stock}</strong> units
+                            <div className="price-stack">
+                              <span className="selling-price">₹{p.price.toLocaleString('en-IN')}</span>
+                              {p.originalPrice > p.price && (
+                                <span className="mrp-price">₹{p.originalPrice.toLocaleString('en-IN')}</span>
+                              )}
+                            </div>
+                          </td>
+                          <td>
+                            <span className="stock-number">{p.stock}</span> units
                           </td>
                           <td>
                             <span className={`status-pill ${
                               p.stock > 10 ? 'status-in-stock' : (p.stock > 0 ? 'status-low-stock' : 'status-out-of-stock')
                             }`}>
+                              <span className="status-dot"></span>
                               {p.stock > 10 ? 'In Stock' : (p.stock > 0 ? 'Low Stock' : 'Out of Stock')}
                             </span>
                           </td>
-                          <td>
-                            <div className="action-btn-group">
-                              <button className="btn-icon" onClick={() => handleOpenEditProduct(p)}>
-                                ✏️ Edit
+                          <td style={{ textAlign: 'right' }}>
+                            <div className="action-btn-group" style={{ justifyContent: 'flex-end' }}>
+                              <button className="btn-icon" onClick={() => handleOpenEditProduct(p)} title="Edit product pricing and inventory">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span>Edit</span>
                               </button>
-                              <button className="btn-icon btn-icon-danger" onClick={() => handleDeleteProduct(p.id, p.title)}>
-                                🗑️ Delete
+                              <button className="btn-icon btn-icon-danger" onClick={() => handleDeleteProduct(p.id, p.title)} title="Delete product">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                <span>Delete</span>
                               </button>
                             </div>
                           </td>
@@ -427,9 +531,9 @@ function SellerHubApp() {
             <div>
               <div className="section-header-bar">
                 <div>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Orders & Fulfillment</h2>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--sh-text-muted)' }}>
-                    Fulfill customer purchases and update dispatch tracking
+                  <h2 className="section-title">Order Processing & Fulfillment</h2>
+                  <p className="section-desc">
+                    Track incoming purchases placed on the Customer Storefront and update dispatch status.
                   </p>
                 </div>
               </div>
@@ -439,18 +543,26 @@ function SellerHubApp() {
                   <thead>
                     <tr>
                       <th>Order ID</th>
-                      <th>Customer</th>
-                      <th>Ordered Items</th>
-                      <th>Total Amount</th>
-                      <th>Fulfillment Status</th>
-                      <th>Action</th>
+                      <th>Customer Details</th>
+                      <th>Store Items</th>
+                      <th>Order Total</th>
+                      <th>Status</th>
+                      <th>Update Fulfillment</th>
                     </tr>
                   </thead>
                   <tbody>
                     {sellerOrders.length === 0 ? (
                       <tr>
-                        <td colSpan="6" style={{ textAlign: 'center', padding: '3rem' }}>
-                          No customer orders for this store yet. Orders placed on the storefront will appear here instantly!
+                        <td colSpan="6" className="table-empty-cell">
+                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 0.75rem', display: 'block' }}>
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                          </svg>
+                          <div>No customer orders for this store yet.</div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--sh-text-muted)', marginTop: '0.25rem' }}>
+                            Orders placed on the customer storefront will synchronize here automatically.
+                          </div>
                         </td>
                       </tr>
                     ) : (
@@ -461,37 +573,45 @@ function SellerHubApp() {
                         return (
                           <tr key={o.id}>
                             <td>
-                              <strong style={{ color: '#0284c7' }}>{o.orderNumber || o.id}</strong>
-                              <div style={{ fontSize: '0.78rem', color: 'var(--sh-text-muted)' }}>
-                                {new Date(o.orderDate).toLocaleDateString()}
+                              <span className="order-code">{o.orderNumber || o.id}</span>
+                              <div className="order-date">
+                                {new Date(o.orderDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                               </div>
                             </td>
                             <td>
-                              <strong>{o.customerName}</strong>
-                              <div style={{ fontSize: '0.78rem', color: 'var(--sh-text-muted)' }}>{o.shippingAddress}</div>
+                              <div className="customer-info">
+                                <span className="customer-name">{o.customerName}</span>
+                                <span className="customer-address">{o.shippingAddress}</span>
+                              </div>
                             </td>
                             <td>
-                              {storeItems.map((it, idx) => (
-                                <div key={idx} style={{ fontSize: '0.84rem' }}>
-                                  • {it.title} (x{it.quantity})
-                                </div>
-                              ))}
+                              <div className="order-item-list">
+                                {storeItems.map((it, idx) => (
+                                  <div key={idx} className="order-item-chip">
+                                    <span className="order-item-title">{it.title}</span>
+                                    <span className="order-item-qty">x{it.quantity}</span>
+                                  </div>
+                                ))}
+                              </div>
                             </td>
                             <td>
-                              <strong>₹{storeAmount.toLocaleString('en-IN')}</strong>
-                              <div style={{ fontSize: '0.75rem', color: '#10b981' }}>{o.paymentMethod}</div>
+                              <div className="order-amount-wrap">
+                                <span className="order-amount">₹{storeAmount.toLocaleString('en-IN')}</span>
+                                <span className="order-payment-tag">{o.paymentMethod}</span>
+                              </div>
                             </td>
                             <td>
                               <span className={`status-pill ${
                                 o.status === 'Delivered' ? 'status-delivered' : 
                                 o.status === 'Shipped' ? 'status-shipped' : 'status-processing'
                               }`}>
+                                <span className="status-dot"></span>
                                 {o.status}
                               </span>
                             </td>
                             <td>
                               <select
-                                className="seller-store-select"
+                                className="fulfillment-select"
                                 value={o.status}
                                 onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
                               >
@@ -515,33 +635,85 @@ function SellerHubApp() {
             <div>
               <div className="section-header-bar">
                 <div>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Store Performance & Analytics</h2>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--sh-text-muted)' }}>
-                    Financial overview and sales insights for {activeSeller.storeName}
+                  <h2 className="section-title">Store Performance & Insights</h2>
+                  <p className="section-desc">
+                    Comprehensive overview of financial payouts and logistics efficiency for {activeSeller.storeName}.
                   </p>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-                <div className="data-card" style={{ padding: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Vendor Profile</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-                    <div><strong>Store:</strong> {activeSeller.storeName}</div>
-                    <div><strong>Proprietor:</strong> {activeSeller.ownerName}</div>
-                    <div><strong>Registered Email:</strong> {activeSeller.email}</div>
-                    <div><strong>Helpline:</strong> {activeSeller.phone}</div>
-                    <div><strong>Dispatch Hub:</strong> {activeSeller.address}</div>
-                    <div><strong>Vendor Rating:</strong> ⭐ {activeSeller.rating || '4.8'} / 5.0</div>
+              <div className="analytics-grid">
+                <div className="analytics-card">
+                  <div className="analytics-card-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--sh-primary)' }}>
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <h3 className="analytics-card-title">Vendor Account Profile</h3>
+                  </div>
+                  <div className="profile-detail-list">
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Storefront Name</span>
+                      <span className="detail-val">{activeSeller.storeName}</span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Account Proprietor</span>
+                      <span className="detail-val">{activeSeller.ownerName}</span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Business Email</span>
+                      <span className="detail-val">{activeSeller.email}</span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Helpline Number</span>
+                      <span className="detail-val">{activeSeller.phone || '+91 98765 43210'}</span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Dispatch Warehouse</span>
+                      <span className="detail-val">{activeSeller.address || 'Central Logistic Park, Sector 4, Bangalore'}</span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Merchant Rating</span>
+                      <span className="detail-val rating-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span>{activeSeller.rating || '4.8'} / 5.0</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="data-card" style={{ padding: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Fulfillment Health</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
-                    <div><strong>Total Fulfilled Orders:</strong> {sellerOrders.filter(o => o.status === 'Delivered').length}</div>
-                    <div><strong>Active Pending Fulfillment:</strong> {sellerOrders.filter(o => o.status !== 'Delivered').length}</div>
-                    <div><strong>Inventory Health:</strong> {lowStockProducts.length === 0 ? '🟢 All products well-stocked' : `⚠️ ${lowStockProducts.length} items low in stock`}</div>
-                    <div><strong>Net Payout Balance:</strong> <span style={{ color: '#0284c7', fontWeight: 800 }}>₹{sellerRevenue.toLocaleString('en-IN')}</span></div>
+                <div className="analytics-card">
+                  <div className="analytics-card-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#10b981' }}>
+                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                    <h3 className="analytics-card-title">Fulfillment Health & Metrics</h3>
+                  </div>
+                  <div className="profile-detail-list">
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Fulfilled Orders</span>
+                      <span className="detail-val" style={{ color: '#10b981', fontWeight: 700 }}>
+                        {sellerOrders.filter(o => o.status === 'Delivered').length} orders
+                      </span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Pending Dispatch</span>
+                      <span className="detail-val" style={{ color: '#f59e0b', fontWeight: 700 }}>
+                        {sellerOrders.filter(o => o.status !== 'Delivered').length} orders
+                      </span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Stock Health</span>
+                      <span className="detail-val">
+                        {lowStockProducts.length === 0 ? 'Optimal (No stockouts)' : `${lowStockProducts.length} low-stock alerts`}
+                      </span>
+                    </div>
+                    <div className="profile-detail-row">
+                      <span className="detail-key">Net Payout Accrued</span>
+                      <span className="detail-val payout-val">₹{sellerRevenue.toLocaleString('en-IN')}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -555,23 +727,35 @@ function SellerHubApp() {
         <div className="seller-modal-overlay" onClick={() => setIsProductModalOpen(false)}>
           <div className="seller-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{editingProduct ? 'Edit Store Product' : 'Add New Product to Store'}</h3>
-              <button style={{ background: 'transparent', border: 'none', fontSize: '1.25rem', cursor: 'pointer' }} onClick={() => setIsProductModalOpen(false)}>✕</button>
+              <div className="modal-title-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--sh-primary)' }}>
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <h3>{editingProduct ? 'Edit Catalog Product' : 'Add New Product to Store'}</h3>
+              </div>
+              <button className="modal-close-btn" onClick={() => setIsProductModalOpen(false)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
             <form onSubmit={handleSaveProduct} className="modal-body">
               <div className="form-group">
-                <label className="form-label">Product Title</label>
+                <label className="form-label">Product Name / Title</label>
                 <input
                   type="text"
                   required
                   className="form-control"
-                  placeholder="e.g. Wireless Bluetooth Earbuds"
+                  placeholder="e.g. Sony WH-1000XM5 Wireless Headphones"
                   value={productForm.title}
                   onChange={(e) => setProductForm({ ...productForm, title: e.target.value })}
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-row-2">
                 <div className="form-group">
                   <label className="form-label">Category</label>
                   <select
@@ -585,7 +769,7 @@ function SellerHubApp() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Stock Units</label>
+                  <label className="form-label">Available Inventory Units</label>
                   <input
                     type="number"
                     required
@@ -598,7 +782,7 @@ function SellerHubApp() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-row-2">
                 <div className="form-group">
                   <label className="form-label">Selling Price (₹)</label>
                   <input
@@ -606,7 +790,7 @@ function SellerHubApp() {
                     required
                     min="1"
                     className="form-control"
-                    placeholder="e.g. 1999"
+                    placeholder="e.g. 2999"
                     value={productForm.price}
                     onChange={(e) => setProductForm({ ...productForm, price: e.target.value })}
                   />
@@ -617,7 +801,7 @@ function SellerHubApp() {
                     type="number"
                     min="1"
                     className="form-control"
-                    placeholder="e.g. 2999"
+                    placeholder="e.g. 4999"
                     value={productForm.originalPrice}
                     onChange={(e) => setProductForm({ ...productForm, originalPrice: e.target.value })}
                   />
@@ -630,25 +814,31 @@ function SellerHubApp() {
                   type="url"
                   required
                   className="form-control"
+                  placeholder="https://images.unsplash.com/..."
                   value={productForm.image}
                   onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
                 />
               </div>
 
               <div className="form-group">
-                <label className="form-label">Description</label>
+                <label className="form-label">Description & Key Specifications</label>
                 <textarea
                   rows="3"
                   className="form-control"
-                  placeholder="Key features, specifications, and warranty..."
+                  placeholder="Describe technical specs, warranty, packaging details..."
                   value={productForm.description}
                   onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
                 ></textarea>
               </div>
 
-              <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', padding: '0.8rem' }}>
-                {editingProduct ? 'Save Product Changes' : 'Publish Product to Marketplace'}
-              </button>
+              <div className="modal-footer-actions">
+                <button type="button" className="btn-secondary" onClick={() => setIsProductModalOpen(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary">
+                  {editingProduct ? 'Save Changes' : 'Publish Product'}
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -659,30 +849,34 @@ function SellerHubApp() {
         <div className="seller-modal-overlay" onClick={() => setIsSellerAuthOpen(false)}>
           <div className="seller-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{authMode === 'login' ? '💼 Seller Center Login' : '🏪 Register New Seller Store'}</h3>
-              <button style={{ background: 'transparent', border: 'none', fontSize: '1.25rem', cursor: 'pointer' }} onClick={() => setIsSellerAuthOpen(false)}>✕</button>
+              <div className="modal-title-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--sh-primary)' }}>
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                  <polyline points="10 17 15 12 10 7"></polyline>
+                  <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                <h3>{authMode === 'login' ? 'Seller Hub Portal Sign In' : 'Register New Merchant Account'}</h3>
+              </div>
+              <button className="modal-close-btn" onClick={() => setIsSellerAuthOpen(false)}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
             <div className="modal-body">
-              {/* Tab Switcher */}
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', background: 'var(--sh-bg)', padding: '0.3rem', borderRadius: '8px' }}>
+              {/* Modern Tab Switcher */}
+              <div className="auth-tab-bar">
                 <button
                   type="button"
-                  style={{
-                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
-                    background: authMode === 'login' ? 'var(--sh-surface)' : 'transparent',
-                    color: authMode === 'login' ? 'var(--sh-primary)' : 'var(--sh-text-muted)'
-                  }}
+                  className={`auth-tab-btn ${authMode === 'login' ? 'active' : ''}`}
                   onClick={() => { setAuthMode('login'); setAuthError(''); }}
                 >
                   Sign In
                 </button>
                 <button
                   type="button"
-                  style={{
-                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
-                    background: authMode === 'register' ? 'var(--sh-surface)' : 'transparent',
-                    color: authMode === 'register' ? 'var(--sh-primary)' : 'var(--sh-text-muted)'
-                  }}
+                  className={`auth-tab-btn ${authMode === 'register' ? 'active' : ''}`}
                   onClick={() => { setAuthMode('register'); setAuthError(''); }}
                 >
                   Register Store
@@ -690,15 +884,20 @@ function SellerHubApp() {
               </div>
 
               {authError && (
-                <div style={{ padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1rem' }}>
-                  ⚠️ {authError}
+                <div className="auth-error-banner">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                  <span>{authError}</span>
                 </div>
               )}
 
               {authMode === 'login' ? (
                 <form onSubmit={handleSellerLogin}>
                   <div className="form-group">
-                    <label className="form-label">Seller Email Address</label>
+                    <label className="form-label">Registered Business Email</label>
                     <input
                       type="email"
                       required
@@ -718,26 +917,26 @@ function SellerHubApp() {
                     />
                   </div>
 
-                  <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.82rem' }}>
-                    <div style={{ fontWeight: 600, marginBottom: '0.35rem' }}>Switch to Demo Store:</div>
-                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <div className="demo-stores-panel">
+                    <div className="demo-panel-title">Demo Merchant Accounts:</div>
+                    <div className="demo-chip-group">
                       <button
                         type="button"
-                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        className="demo-store-chip"
                         onClick={() => setAuthForm({ ...authForm, email: 'vikram@aerotech.com', password: 'password123' })}
                       >
                         AeroTech Electronics
                       </button>
                       <button
                         type="button"
-                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        className="demo-store-chip"
                         onClick={() => setAuthForm({ ...authForm, email: 'pooja@urbanchic.in', password: 'password123' })}
                       >
                         Urban Chic Apparels
                       </button>
                       <button
                         type="button"
-                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        className="demo-store-chip"
                         onClick={() => setAuthForm({ ...authForm, email: 'rameshwar@heritagehome.in', password: 'password123' })}
                       >
                         Heritage Home
@@ -745,14 +944,14 @@ function SellerHubApp() {
                     </div>
                   </div>
 
-                  <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.8rem' }}>
-                    Sign In to Store Hub
+                  <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.75rem' }}>
+                    Sign In to Seller Dashboard
                   </button>
                 </form>
               ) : (
                 <form onSubmit={handleSellerRegister}>
                   <div className="form-group">
-                    <label className="form-label">Store Brand Name</label>
+                    <label className="form-label">Storefront Name</label>
                     <input
                       type="text"
                       required
@@ -763,7 +962,7 @@ function SellerHubApp() {
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Proprietor / Owner Name</label>
+                    <label className="form-label">Proprietor / Contact Name</label>
                     <input
                       type="text"
                       required
@@ -795,8 +994,8 @@ function SellerHubApp() {
                       onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
                     />
                   </div>
-                  <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.8rem' }}>
-                    Register Store & Start Selling
+                  <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.75rem' }}>
+                    Register Merchant Account
                   </button>
                 </form>
               )}

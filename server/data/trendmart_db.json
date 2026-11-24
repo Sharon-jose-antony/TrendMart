@@ -258,10 +258,10 @@
       "categoryId": "cat-3",
       "sellerId": "seller-3",
       "sellerName": "Heritage Home & Living",
-      "stock": 15,
+      "stock": 7,
       "rating": 4.9,
       "reviewsCount": 51,
-      "status": "In Stock",
+      "status": "Low Stock",
       "image": "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500&auto=format&fit=crop&q=60",
       "createdAt": "2026-03-12T10:00:00Z"
     },
@@ -438,8 +438,8 @@
       "password": "password123",
       "phone": "+91 98234 55667",
       "address": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
-      "ordersCount": 3,
-      "totalSpent": 6297,
+      "ordersCount": 4,
+      "totalSpent": 21489,
       "registeredAt": "2026-02-05"
     },
     {
@@ -455,6 +455,51 @@
     }
   ],
   "orders": [
+    {
+      "id": "ORD-3417",
+      "orderNumber": "TM-2026-26448",
+      "customerId": "cust-1795529272159",
+      "customerName": "Diya Patel",
+      "customerEmail": "diya.patel@example.com",
+      "customerPhone": "+91 98234 55667",
+      "shippingAddress": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "items": [
+        {
+          "productId": "prod-11",
+          "sellerId": "seller-3",
+          "title": "Artisanal Ceramic Pour-Over Coffee Dripper Set",
+          "price": 1899,
+          "quantity": 8
+        }
+      ],
+      "totalAmount": 15192,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "status": "Delivered",
+      "orderDate": "2026-11-24T14:07:52.159Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-24T14:07:52.159Z",
+          "note": "Order confirmed successfully on TrendMart"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-11-24T14:07:52.159Z",
+          "note": "Seller notified for dispatch packaging"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-11-24T14:08:01.166Z",
+          "note": "Updated by seller Heritage Home & Living"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-11-24T14:08:03.803Z",
+          "note": "Updated by seller Heritage Home & Living"
+        }
+      ]
+    },
     {
       "id": "ORD-1008",
       "orderNumber": "TM-2026-55597",
@@ -475,7 +520,7 @@
       "totalAmount": 1899,
       "paymentMethod": "UPI",
       "paymentStatus": "Paid",
-      "status": "Shipped",
+      "status": "Delivered",
       "orderDate": "2026-11-24T13:51:03.635Z",
       "trackingHistory": [
         {
@@ -491,6 +536,11 @@
         {
           "status": "Shipped",
           "timestamp": "2026-11-24T13:51:39.393Z",
+          "note": "Updated by seller Heritage Home & Living"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-11-24T14:07:30.656Z",
           "note": "Updated by seller Heritage Home & Living"
         }
       ]
