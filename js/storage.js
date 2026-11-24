@@ -42,46 +42,18 @@ window.StorageAPI = {
         },
       ],
       tm_customers: [
-        { id: 1, name: "Aarav Sharma", email: "aarav@example.com", mobile: "9876543210", address: "Mumbai, Maharashtra" },
-        { id: 2, name: "Priya Nair", email: "priya@example.com", mobile: "9123456780", address: "Bengaluru, Karnataka" },
-        { id: 3, name: "Rohan Verma", email: "rohan.v@example.com", mobile: "9811223344", address: "New Delhi, Delhi" },
-        { id: 4, name: "Ananya Iyer", email: "ananya.iyer@example.com", mobile: "9822334455", address: "Chennai, Tamil Nadu" },
-        { id: 5, name: "Vikramaditya Singh", email: "vikram.singh@example.com", mobile: "9833445566", address: "Jaipur, Rajasthan" },
-        { id: 6, name: "Sneha Patel", email: "sneha.p@example.com", mobile: "9844556677", address: "Ahmedabad, Gujarat" },
-        { id: 7, name: "Arjun Kapoor", email: "arjun.k@example.com", mobile: "9855667788", address: "Pune, Maharashtra" },
-        { id: 8, name: "Meera Nambiar", email: "meera.n@example.com", mobile: "9866778899", address: "Kochi, Kerala" },
-        { id: 9, name: "Kabir Chatterjee", email: "kabir.c@example.com", mobile: "9877889900", address: "Kolkata, West Bengal" },
-        { id: 10, name: "Divya Deshmukh", email: "divya.d@example.com", mobile: "9888990011", address: "Hyderabad, Telangana" },
-        { id: 11, name: "Rajesh Kulkarni", email: "rajesh.k@example.com", mobile: "9899001122", address: "Nagpur, Maharashtra" },
-        { id: 12, name: "Neha Bansal", email: "neha.bansal@example.com", mobile: "9900112233", address: "Chandigarh, Punjab" },
+        { id: 1, name: "Aarav Sharma", email: "aarav@example.com", mobile: "9876543210", address: "Mumbai, IN" },
+        { id: 2, name: "Priya Nair", email: "priya@example.com", mobile: "9123456780", address: "Bengaluru, IN" },
       ],
       tm_orders: [
         { id: "ORD-1001", customer: "Aarav Sharma", total: 2999, status: "Pending" },
         { id: "ORD-1002", customer: "Priya Nair", total: 3149, status: "Delivered" },
-        { id: "ORD-1003", customer: "Rohan Verma", total: 1850, status: "Processing" },
-        { id: "ORD-1004", customer: "Ananya Iyer", total: 4299, status: "Delivered" },
       ],
     };
 
     Object.keys(seed).forEach((key) => {
-      const existing = localStorage.getItem(key);
-      if (!existing) {
+      if (!localStorage.getItem(key)) {
         localStorage.setItem(key, JSON.stringify(seed[key]));
-      } else if (key === "tm_customers") {
-        try {
-          const list = JSON.parse(existing);
-          if (Array.isArray(list) && list.length < 10) {
-            // Merge seed customers to guarantee 10+ entries
-            const existingIds = new Set(list.map((c) => c.id));
-            const merged = [...list];
-            seed.tm_customers.forEach((c) => {
-              if (!existingIds.has(c.id)) merged.push(c);
-            });
-            localStorage.setItem(key, JSON.stringify(merged));
-          }
-        } catch (e) {
-          localStorage.setItem(key, JSON.stringify(seed[key]));
-        }
       }
     });
   },

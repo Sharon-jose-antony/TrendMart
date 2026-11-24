@@ -1,53 +1,26 @@
-/* ========================================================
-   TRENDMART - CUSTOMERS MANAGEMENT WITH PAGINATION
-   Native React 18 / In-Browser Babel Standalone Architecture
-======================================================== */
 
 window.Customers = function Customers() {
-  const { useState, useEffect, useMemo } = React;
+  const { useState, useEffect } = React;
   const { KEYS, get, save } = window.StorageAPI;
 
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [message, setMessage] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const PAGE_SIZE = 10;
 
   // Load customers from LocalStorage
   useEffect(() => {
-    window.StorageAPI.init();
     setCustomers(get(KEYS.CUSTOMERS));
   }, []);
 
-  // Filter customers by search
-  const filteredCustomers = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    if (!query) return customers;
+  // Search customers
+  const filteredCustomers = customers.filter((customer) => {
+    const name = String(customer.name || "").toLowerCase();
+    const email = String(customer.email || "").toLowerCase();
+    const query = search.toLowerCase();
 
-    return customers.filter((customer) => {
-      const name = String(customer.name || "").toLowerCase();
-      const email = String(customer.email || "").toLowerCase();
-      const mobile = String(customer.mobile || "").toLowerCase();
-      const address = String(customer.address || "").toLowerCase();
-      return (
-        name.includes(query) ||
-        email.includes(query) ||
-        mobile.includes(query) ||
-        address.includes(query)
-      );
-    });
-  }, [customers, search]);
-
-  // Reset page when search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
-
-  // Pagination slice
-  const totalPages = Math.max(1, Math.ceil(filteredCustomers.length / PAGE_SIZE));
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const paginatedCustomers = filteredCustomers.slice(startIndex, startIndex + PAGE_SIZE);
+    return name.includes(query) || email.includes(query);
+  });
 
   // Delete customer
   const handleDelete = (id) => {
@@ -63,10 +36,10 @@ window.Customers = function Customers() {
       );
 
       save(KEYS.CUSTOMERS, updatedCustomers);
+
       setCustomers(updatedCustomers);
       setSelectedCustomer(null);
       setMessage("Customer deleted successfully!");
-      setTimeout(() => setMessage(""), 3000);
     } catch (error) {
       setMessage("Unable to delete customer. Please try again.");
     }
@@ -74,73 +47,59 @@ window.Customers = function Customers() {
 
   return (
     <div className="customers-page">
+
       {/* Header */}
       <div className="customers-header">
         <div>
-          <h2>Customer Directory & Accounts</h2>
-          <p>Manage, search and review all registered TrendMart buyer accounts.</p>
+          <h2>Customer Management</h2>
+          <p>Manage and view your registered customers.</p>
         </div>
       </div>
 
       {/* Notification */}
       {message && (
         <div className="customer-message">
-          <span>{message}</span>
+          {message}
           <button onClick={() => setMessage("")}>✕</button>
         </div>
       )}
 
-      {/* Centered Search Toolbar */}
+      {/* Customer Statistics */}
+      <div className="customers-stat-card">
+        <div>
+          <p>Total Customers</p>
+          <h2>{customers.length}</h2>
+        </div>
+        <span>👥</span>
+      </div>
+
+      {/* Search */}
       <div className="customers-toolbar">
         <input
           type="text"
-          placeholder="🔍 Search customers by name, email, mobile, or address..."
+          placeholder="Search by name or email..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
-      {/* Customer Table with 10-Entry Pagination */}
+      {/* Customer Table */}
       <div className="table-card customers-table">
         <table>
           <thead>
             <tr>
-              <th>#</th>
-              <th>Customer Name</th>
-              <th>Email Address</th>
+              <th>Customer</th>
+              <th>Email</th>
               <th>Mobile Number</th>
-              <th>Shipping Address</th>
+              <th>Address</th>
               <th>Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {paginatedCustomers.map((customer, index) => (
+            {filteredCustomers.map((customer) => (
               <tr key={customer.id}>
-                <td style={{ color: "var(--text-muted)", fontSize: "0.8rem", width: "40px" }}>
-                  {startIndex + index + 1}
-                </td>
-                <td>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                    <div
-                      style={{
-                        width: "32px",
-                        height: "32px",
-                        borderRadius: "50%",
-                        background: "var(--accent)",
-                        color: "#ffffff",
-                        display: "grid",
-                        placeItems: "center",
-                        fontSize: "0.8rem",
-                        fontWeight: 600,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {String(customer.name || "C").charAt(0).toUpperCase()}
-                    </div>
-                    <strong>{customer.name}</strong>
-                  </div>
-                </td>
+                <td>{customer.name}</td>
                 <td>{customer.email}</td>
                 <td>{customer.mobile}</td>
                 <td>{customer.address}</td>
@@ -151,7 +110,7 @@ window.Customers = function Customers() {
                       className="customer-view-btn"
                       onClick={() => setSelectedCustomer(customer)}
                     >
-                      View Details
+                      View
                     </button>
 
                     <button
@@ -165,85 +124,50 @@ window.Customers = function Customers() {
               </tr>
             ))}
 
-            {paginatedCustomers.length === 0 && (
+            {filteredCustomers.length === 0 && (
               <tr>
-                <td colSpan="6" className="empty-message">
-                  No customers found matching your search.
+                <td colSpan="5" className="empty-message">
+                  No customers found.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-
-        {/* Pagination Bar (Max 10 Entries Per Slot) */}
-        {filteredCustomers.length > 0 && (
-          <div className="pagination-bar">
-            <div className="pagination-info">
-              Showing <strong>{startIndex + 1}</strong> to{" "}
-              <strong>{Math.min(startIndex + PAGE_SIZE, filteredCustomers.length)}</strong> of{" "}
-              <strong>{filteredCustomers.length}</strong> customers
-            </div>
-
-            <div className="pagination-controls">
-              <button
-                className="pagination-btn"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              >
-                ◀ Previous
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                <button
-                  key={pageNum}
-                  className={`pagination-btn ${pageNum === currentPage ? "active" : ""}`}
-                  onClick={() => setCurrentPage(pageNum)}
-                >
-                  {pageNum}
-                </button>
-              ))}
-
-              <button
-                className="pagination-btn"
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              >
-                Next ▶
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Customer Details Modal */}
       {selectedCustomer && (
-        <div className="customer-modal-overlay" onClick={() => setSelectedCustomer(null)}>
-          <div className="customer-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Customer Account Details</h3>
+        <div className="customer-modal-overlay">
+          <div className="customer-modal">
+
+            <h3>Customer Details</h3>
 
             <p>
-              <strong>Customer ID:</strong> #CUST-{selectedCustomer.id}
+              <strong>Name:</strong> {selectedCustomer.name}
             </p>
-            <p>
-              <strong>Full Name:</strong> {selectedCustomer.name}
-            </p>
+
             <p>
               <strong>Email:</strong> {selectedCustomer.email}
             </p>
+
             <p>
-              <strong>Mobile Number:</strong> {selectedCustomer.mobile}
-            </p>
-            <p>
-              <strong>Shipping Address:</strong> {selectedCustomer.address}
-            </p>
-            <p>
-              <strong>Account Status:</strong> <span style={{ color: "#059669", fontWeight: 600 }}>Active Verified Buyer</span>
+              <strong>Mobile:</strong> {selectedCustomer.mobile}
             </p>
 
-            <button onClick={() => setSelectedCustomer(null)}>Close</button>
+            <p>
+              <strong>Address:</strong> {selectedCustomer.address}
+            </p>
+
+            <button
+              onClick={() => setSelectedCustomer(null)}
+            >
+              Close
+            </button>
+
           </div>
         </div>
       )}
+
     </div>
   );
 };
