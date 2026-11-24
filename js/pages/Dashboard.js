@@ -41,7 +41,7 @@ window.Dashboard = function Dashboard({ onNavigate }) {
 
   // Compute live revenue and metrics
   const totalRevenue = useMemo(() => {
-    return orders.reduce((sum, ord) => sum + Number(ord.total || 0), 0);
+    return orders.reduce((sum, ord) => sum + Number(ord.total || ord.totalAmount || 0), 0);
   }, [orders]);
 
   const totalUnits = useMemo(() => {
