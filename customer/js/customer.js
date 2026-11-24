@@ -17,14 +17,87 @@ function CustomerStoreApp() {
   const [orderSuccess, setOrderSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Form State for Checkout
-  const [checkoutForm, setCheckoutForm] = useState({
-    name: 'Aarav Sharma',
+  // Authentication State
+  const [currentUser, setCurrentUser] = useState(() => {
+    return window.TrendMartAPI.getCurrentCustomer() || {
+      id: 'cust-1',
+      name: 'Aarav Sharma',
+      email: 'aarav.sharma@example.com',
+      phone: '+91 98765 11223',
+      address: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103'
+    };
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+  const [authError, setAuthError] = useState('');
+  const [authForm, setAuthForm] = useState({
+    name: '',
     email: 'aarav.sharma@example.com',
+    password: 'password123',
     phone: '+91 98765 11223',
-    address: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103',
+    address: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103'
+  });
+
+  // Form State for Checkout (auto-synced with logged-in user)
+  const [checkoutForm, setCheckoutForm] = useState({
+    name: currentUser ? currentUser.name : '',
+    email: currentUser ? currentUser.email : '',
+    phone: currentUser ? currentUser.phone : '',
+    address: currentUser ? currentUser.address : '',
     paymentMethod: 'UPI'
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setCheckoutForm(prev => ({
+        ...prev,
+        name: currentUser.name || prev.name,
+        email: currentUser.email || prev.email,
+        phone: currentUser.phone || prev.phone,
+        address: currentUser.address || prev.address
+      }));
+    }
+  }, [currentUser]);
+
+  // Handle Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      const res = await window.TrendMartAPI.customerLogin(authForm.email, authForm.password);
+      if (res.error) {
+        setAuthError(res.error);
+      } else {
+        setCurrentUser(res.user);
+        setIsAuthModalOpen(false);
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Login failed');
+    }
+  };
+
+  // Handle Register
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      const res = await window.TrendMartAPI.customerRegister(authForm);
+      if (res.error) {
+        setAuthError(res.error);
+      } else {
+        setCurrentUser(res.user);
+        setIsAuthModalOpen(false);
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Registration failed');
+    }
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    window.TrendMartAPI.setCurrentCustomer(null);
+    setCurrentUser(null);
+  };
 
   // Load Data from Backend DB via Universal API
   const loadStoreData = async () => {
@@ -179,6 +252,25 @@ function CustomerStoreApp() {
           </div>
 
           <div className="store-nav-actions">
+            {currentUser ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--tm-bg)', padding: '0.35rem 0.75rem', borderRadius: '8px', border: '1px solid var(--tm-border)' }}>
+                <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--tm-primary)' }}>
+                  👤 {currentUser.name.split(' ')[0]}
+                </span>
+                <button 
+                  className="store-btn store-btn-secondary" 
+                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', marginLeft: '0.25rem' }}
+                  onClick={handleLogout}
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <button className="store-btn store-btn-secondary" onClick={() => { setAuthError(''); setIsAuthModalOpen(true); }}>
+                🔑 Sign In
+              </button>
+            )}
+
             <button className="store-btn store-btn-secondary" onClick={openMyOrders}>
               📦 My Orders
             </button>
@@ -625,6 +717,166 @@ function CustomerStoreApp() {
               >
                 {quickViewProduct.stock <= 0 ? 'Out of Stock' : 'Add to Cart & View Cart'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 9. Customer Authentication Modal (Login / Register) */}
+      {isAuthModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsAuthModalOpen(false)}>
+          <div className="modal-content" style={{ maxWidth: '480px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{authMode === 'login' ? '🔑 Sign In to TrendMart' : '✨ Create Customer Account'}</h3>
+              <button className="cart-close-btn" onClick={() => setIsAuthModalOpen(false)}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              {/* Tab Switcher */}
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', background: 'var(--tm-bg)', padding: '0.3rem', borderRadius: '8px' }}>
+                <button
+                  type="button"
+                  style={{
+                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
+                    background: authMode === 'login' ? 'var(--tm-surface)' : 'transparent',
+                    color: authMode === 'login' ? 'var(--tm-primary)' : 'var(--tm-text-muted)',
+                    boxShadow: authMode === 'login' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                  }}
+                  onClick={() => { setAuthMode('login'); setAuthError(''); }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
+                    background: authMode === 'register' ? 'var(--tm-surface)' : 'transparent',
+                    color: authMode === 'register' ? 'var(--tm-primary)' : 'var(--tm-text-muted)',
+                    boxShadow: authMode === 'register' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                  }}
+                  onClick={() => { setAuthMode('register'); setAuthError(''); }}
+                >
+                  New Account
+                </button>
+              </div>
+
+              {authError && (
+                <div style={{ padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1rem' }}>
+                  ⚠️ {authError}
+                </div>
+              )}
+
+              {authMode === 'login' ? (
+                <form onSubmit={handleLogin}>
+                  <div className="form-group">
+                    <label className="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      className="form-input"
+                      placeholder="e.g. aarav.sharma@example.com"
+                      value={authForm.email}
+                      onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      required
+                      className="form-input"
+                      placeholder="••••••••"
+                      value={authForm.password}
+                      onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                    />
+                  </div>
+
+                  <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '0.35rem' }}>Demo Accounts:</div>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'aarav.sharma@example.com', password: 'password123' })}
+                      >
+                        Aarav Sharma
+                      </button>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'diya.patel@example.com', password: 'password123' })}
+                      >
+                        Diya Patel
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="checkout-btn">
+                    Sign In & Continue
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleRegister}>
+                  <div className="form-group">
+                    <label className="form-label">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      className="form-input"
+                      placeholder="e.g. Priya Sundaram"
+                      value={authForm.name}
+                      onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      className="form-input"
+                      placeholder="e.g. priya@example.com"
+                      value={authForm.email}
+                      onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Create Password</label>
+                    <input
+                      type="password"
+                      required
+                      className="form-input"
+                      placeholder="Minimum 6 characters"
+                      value={authForm.password}
+                      onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Phone Number</label>
+                    <input
+                      type="tel"
+                      required
+                      className="form-input"
+                      placeholder="+91 98765 00000"
+                      value={authForm.phone}
+                      onChange={(e) => setAuthForm({ ...authForm, phone: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Delivery Address</label>
+                    <textarea
+                      rows="2"
+                      required
+                      className="form-textarea"
+                      placeholder="House/Flat No, Street, City, State, PIN"
+                      value={authForm.address}
+                      onChange={(e) => setAuthForm({ ...authForm, address: e.target.value })}
+                    ></textarea>
+                  </div>
+                  <button type="submit" className="checkout-btn">
+                    Create Account & Continue
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
