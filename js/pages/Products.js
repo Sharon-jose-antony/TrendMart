@@ -12,6 +12,9 @@ window.Products = function Products() {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("success");
   const [error, setError] = useState("");
@@ -25,14 +28,14 @@ window.Products = function Products() {
     description: ""
   };
 
-  const [formData, setFormData] = useState(emptyForm);
+  const [formData, setFormData] = useState({ ...emptyForm });
 
-  // Load existing products and categories
+  // Load products and categories
   useEffect(() => {
     window.StorageAPI.init();
 
-    setProducts(get(KEYS.PRODUCTS));
-    setCategories(get(KEYS.CATEGORIES));
+    setProducts(get(KEYS.PRODUCTS) || []);
+    setCategories(get(KEYS.CATEGORIES) || []);
   }, []);
 
   // Display notification
@@ -41,7 +44,7 @@ window.Products = function Products() {
     setMessageType(type);
   };
 
-  // Handle form inputs
+  // General input handling
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -49,9 +52,131 @@ window.Products = function Products() {
       ...prev,
       [name]: value
     }));
+
+    setError("");
   };
 
-  // Handle product image upload
+  // Sequential field validation
+  const validatePreviousField = (currentField) => {
+    const fieldOrder = [
+      "name",
+      "image",
+      "category",
+      "price",
+      "stock",
+      "description"
+    ];
+
+    const currentIndex = fieldOrder.indexOf(currentField);
+
+    if (currentIndex <= 0) return;
+
+    const previousField = fieldOrder[currentIndex - 1];
+
+    let valid = true;
+    let errorMessage = "";
+
+    switch (previousField) {
+      case "name":
+        valid = formData.name.trim() !== "";
+        errorMessage = "Please enter the product name first.";
+        break;
+
+      case "image":
+        valid = formData.image !== "";
+        errorMessage = "Please upload a product image first.";
+        break;
+
+      case "category":
+        valid = categories.some(
+          (category) => category.name === formData.category
+        );
+        errorMessage = "Please select a category first.";
+        break;
+
+      case "price":
+        valid =
+          /^\d+(\.\d{1,2})?$/.test(formData.price) &&
+          Number(formData.price) > 0 &&
+          Number.isFinite(Number(formData.price));
+
+        errorMessage = "Please enter a valid price first.";
+        break;
+
+      case "stock":
+        valid =
+          /^\d+$/.test(formData.stock) &&
+          Number.isSafeInteger(Number(formData.stock));
+
+        errorMessage = "Please enter a valid stock quantity first.";
+        break;
+
+      default:
+        break;
+    }
+
+    if (!valid) {
+      setError(errorMessage);
+    } else {
+      setError("");
+    }
+  };
+
+  // Price: numbers only, maximum two decimal places
+  const handlePriceChange = (e) => {
+    const value = e.target.value;
+
+    if (value === "") {
+      setFormData((prev) => ({
+        ...prev,
+        price: ""
+      }));
+
+      setError("Price is required.");
+      return;
+    }
+
+    if (!/^\d*\.?\d{0,2}$/.test(value)) {
+      setError("Price must contain numbers only (up to 2 decimal places).");
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      price: value
+    }));
+
+    setError("");
+  };
+
+  // Stock: whole numbers only
+  const handleStockChange = (e) => {
+    const value = e.target.value;
+
+    if (value === "") {
+      setFormData((prev) => ({
+        ...prev,
+        stock: ""
+      }));
+
+      setError("Stock quantity is required.");
+      return;
+    }
+
+    if (!/^\d+$/.test(value)) {
+      setError("Stock quantity must contain whole numbers only.");
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      stock: value
+    }));
+
+    setError("");
+  };
+
+  // Product image upload and preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -64,12 +189,10 @@ window.Products = function Products() {
     }
 
     if (file.size > 1024 * 1024) {
-      setError("Image size must be less than 1 MB.");
+      setError("Image size must not exceed 1 MB.");
       e.target.value = "";
       return;
     }
-
-    setError("");
 
     const reader = new FileReader();
 
@@ -78,6 +201,8 @@ window.Products = function Products() {
         ...prev,
         image: reader.result
       }));
+
+      setError("");
     };
 
     reader.onerror = () => {
@@ -87,10 +212,30 @@ window.Products = function Products() {
     reader.readAsDataURL(file);
   };
 
+  // Check all six required fields
+  const isFormValid = (
+    formData.name.trim() !== "" &&
+    formData.image !== "" &&
+
+    categories.some(
+      (category) => category.name === formData.category
+    ) &&
+
+    /^\d+(\.\d{1,2})?$/.test(formData.price) &&
+    Number.isFinite(Number(formData.price)) &&
+    Number(formData.price) > 0 &&
+
+    /^\d+$/.test(formData.stock) &&
+    Number.isSafeInteger(Number(formData.stock)) &&
+    Number(formData.stock) >= 0 &&
+
+    formData.description.trim() !== ""
+  );
+
   // Open Add Product form
   const handleAdd = () => {
     setEditingProduct(null);
-    setFormData(emptyForm);
+    setFormData({ ...emptyForm });
     setError("");
     setShowModal(true);
   };
@@ -112,6 +257,14 @@ window.Products = function Products() {
     setShowModal(true);
   };
 
+  // Close Add/Edit form
+  const closeFormModal = () => {
+    setShowModal(false);
+    setEditingProduct(null);
+    setFormData({ ...emptyForm });
+    setError("");
+  };
+
   // Add or Update Product
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -122,25 +275,32 @@ window.Products = function Products() {
     const price = Number(formData.price);
     const stock = Number(formData.stock);
 
-    // Validate required fields
+    // Required fields
     if (
       !name ||
       !formData.image ||
       !formData.category ||
-      formData.price === "" ||
-      formData.stock === "" ||
+      formData.price.trim() === "" ||
+      formData.stock.trim() === "" ||
       !description
     ) {
       setError("Please fill in all required fields.");
       return;
     }
 
-    if (!Number.isFinite(price) || price <= 0) {
-      setError("Price must be greater than zero.");
+    // Price validation
+    if (
+      !/^\d+(\.\d{1,2})?$/.test(formData.price) ||
+      !Number.isFinite(price) ||
+      price <= 0
+    ) {
+      setError("Price must be greater than zero and contain valid numbers.");
       return;
     }
 
+    // Stock validation
     if (
+      !/^\d+$/.test(formData.stock) ||
       !Number.isSafeInteger(stock) ||
       stock < 0
     ) {
@@ -148,6 +308,7 @@ window.Products = function Products() {
       return;
     }
 
+    // Category validation
     const categoryExists = categories.some(
       (category) => category.name === formData.category
     );
@@ -157,6 +318,7 @@ window.Products = function Products() {
       return;
     }
 
+    // Prepare product
     const productData = {
       id: editingProduct ? editingProduct.id : Date.now(),
       name,
@@ -183,9 +345,7 @@ window.Products = function Products() {
       save(KEYS.PRODUCTS, updatedProducts);
 
       setProducts(updatedProducts);
-      setShowModal(false);
-      setEditingProduct(null);
-      setFormData(emptyForm);
+      closeFormModal();
 
       showMessage(
         editingProduct
@@ -199,24 +359,37 @@ window.Products = function Products() {
     }
   };
 
-  // Delete Product
-  const handleDelete = (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this product?"
-    );
+  // Open Delete confirmation
+  const handleDelete = (product) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
 
-    if (!confirmed) return;
+  // Cancel deletion
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setProductToDelete(null);
+  };
+
+  // Confirm deletion
+  const confirmDelete = () => {
+    if (!productToDelete) return;
 
     const updatedProducts = products.filter(
-      (product) => product.id !== id
+      (product) => product.id !== productToDelete.id
     );
 
     try {
       save(KEYS.PRODUCTS, updatedProducts);
+
       setProducts(updatedProducts);
+      setShowDeleteModal(false);
+      setProductToDelete(null);
 
       showMessage("Product deleted successfully!");
     } catch (err) {
+      setShowDeleteModal(false);
+      setProductToDelete(null);
       showMessage("Unable to delete product.", "error");
     }
   };
@@ -249,7 +422,11 @@ window.Products = function Products() {
           <p>Manage, add, edit and organize your store products.</p>
         </div>
 
-        <button className="product-add-btn" onClick={handleAdd}>
+        <button
+          type="button"
+          className="product-add-btn"
+          onClick={handleAdd}
+        >
           + Add Product
         </button>
       </div>
@@ -258,7 +435,13 @@ window.Products = function Products() {
       {message && (
         <div className={`product-message ${messageType}`}>
           <span>{message}</span>
-          <button onClick={() => setMessage("")}>✕</button>
+
+          <button
+            type="button"
+            onClick={() => setMessage("")}
+          >
+            ✕
+          </button>
         </div>
       )}
 
@@ -372,6 +555,7 @@ window.Products = function Products() {
                     <div className="product-actions">
 
                       <button
+                        type="button"
                         className="product-edit-btn"
                         onClick={() => handleEdit(product)}
                       >
@@ -379,8 +563,9 @@ window.Products = function Products() {
                       </button>
 
                       <button
+                        type="button"
                         className="product-delete-btn"
-                        onClick={() => handleDelete(product.id)}
+                        onClick={() => handleDelete(product)}
                       >
                         Delete
                       </button>
@@ -415,7 +600,7 @@ window.Products = function Products() {
           className="product-modal-overlay"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
-              setShowModal(false);
+              closeFormModal();
             }
           }}
         >
@@ -435,8 +620,9 @@ window.Products = function Products() {
               </div>
 
               <button
+                type="button"
                 className="product-modal-close"
-                onClick={() => setShowModal(false)}
+                onClick={closeFormModal}
               >
                 ✕
               </button>
@@ -444,15 +630,23 @@ window.Products = function Products() {
             </div>
 
             {error && (
-              <div className="product-form-error">
+              <div
+                className="product-form-error"
+                role="alert"
+              >
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="product-form">
+            <form
+              onSubmit={handleSubmit}
+              className="product-form"
+              noValidate
+            >
 
               {/* PRODUCT NAME */}
               <div className="product-form-group">
+
                 <label>Product Name *</label>
 
                 <input
@@ -461,38 +655,60 @@ window.Products = function Products() {
                   placeholder="Enter product name"
                   value={formData.name}
                   onChange={handleChange}
+                  onFocus={() => validatePreviousField("name")}
+                  maxLength="100"
+                  required
                 />
+
               </div>
 
               {/* PRODUCT IMAGE */}
               <div className="product-form-group">
+
                 <label>Product Image *</label>
 
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
+                  onFocus={() => validatePreviousField("image")}
                 />
 
                 <small>Maximum image size: 1 MB</small>
 
+                {/* IMAGE PREVIEW */}
                 {formData.image && (
-                  <img
-                    src={formData.image}
-                    alt="Product preview"
-                    className="product-image-preview"
-                  />
+
+                  <div className="product-preview-container">
+
+                    <p>Image Preview</p>
+
+                    <img
+                      src={formData.image}
+                      alt="Product preview"
+                      className="product-image-preview"
+                      onError={() => {
+                        setError("Unable to display the selected image.");
+                      }}
+                    />
+
+                  </div>
+
                 )}
+
               </div>
 
               {/* CATEGORY */}
               <div className="product-form-group">
+
                 <label>Category *</label>
 
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
+                  onFocus={() => validatePreviousField("category")}
+                  required
                 >
                   <option value="">Select Category</option>
 
@@ -505,42 +721,54 @@ window.Products = function Products() {
                 </select>
 
                 {categories.length === 0 && (
-                  <small>No categories available. Add a category first.</small>
+                  <small>
+                    No categories available. Add a category first.
+                  </small>
                 )}
+
               </div>
 
               {/* PRICE */}
               <div className="product-form-group">
+
                 <label>Price (₹) *</label>
 
                 <input
-                  type="number"
+                  type="text"
                   name="price"
                   placeholder="Enter price"
-                  min="0.01"
-                  step="0.01"
+                  inputMode="decimal"
                   value={formData.price}
-                  onChange={handleChange}
+                  onChange={handlePriceChange}
+                  onFocus={() => validatePreviousField("price")}
+                  autoComplete="off"
+                  required
                 />
+
               </div>
 
               {/* STOCK */}
               <div className="product-form-group">
+
                 <label>Stock Quantity *</label>
 
                 <input
-                  type="number"
+                  type="text"
                   name="stock"
                   placeholder="Enter stock quantity"
-                  min="0"
-                  step="1"
+                  inputMode="numeric"
                   value={formData.stock}
-                  onChange={handleChange}
+                  onChange={handleStockChange}
+                  onFocus={() => validatePreviousField("stock")}
+                  autoComplete="off"
+                  required
                 />
+
               </div>
 
               {/* DESCRIPTION */}
               <div className="product-form-group">
+
                 <label>Description *</label>
 
                 <textarea
@@ -549,7 +777,11 @@ window.Products = function Products() {
                   rows="4"
                   value={formData.description}
                   onChange={handleChange}
+                  onFocus={() => validatePreviousField("description")}
+                  maxLength="1000"
+                  required
                 />
+
               </div>
 
               {/* FORM BUTTONS */}
@@ -558,18 +790,82 @@ window.Products = function Products() {
                 <button
                   type="button"
                   className="product-cancel-btn"
-                  onClick={() => setShowModal(false)}
+                  onClick={closeFormModal}
                 >
                   Cancel
                 </button>
 
-                <button type="submit" className="product-save-btn">
+                <button
+                  type="submit"
+                  className="product-save-btn"
+                  disabled={!isFormValid}
+                >
                   {editingProduct ? "Update Product" : "Save Product"}
                 </button>
 
               </div>
 
             </form>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {/* CUSTOM DELETE CONFIRMATION */}
+      {showDeleteModal && (
+
+        <div
+          className="product-delete-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              cancelDelete();
+            }
+          }}
+        >
+
+          <div
+            className="product-delete-modal"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-modal-title"
+            aria-describedby="delete-modal-description"
+          >
+
+            <div className="delete-warning-icon">
+              ⚠️
+            </div>
+
+            <h2 id="delete-modal-title">
+              Delete Product?
+            </h2>
+
+            <p id="delete-modal-description">
+              Are you sure you want to delete
+              <strong> {productToDelete?.name}</strong>?
+              This action cannot be undone.
+            </p>
+
+            <div className="delete-modal-actions">
+
+              <button
+                type="button"
+                className="delete-cancel-btn"
+                onClick={cancelDelete}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="delete-confirm-btn"
+                onClick={confirmDelete}
+              >
+                Yes, Delete
+              </button>
+
+            </div>
 
           </div>
 
