@@ -22,12 +22,25 @@ const MIME_TYPES = {
 
 function createStaticServer(siteName, rootDir, port) {
   const server = http.createServer((req, res) => {
-    const parsed = url.parse(req.url);
-    let safePath = path.normalize(parsed.pathname).replace(/^(\.\.[\/\\])+/, '');
+    const rawPath = url.parse(req.url).pathname || '/';
+    let cleanPath = rawPath.replace(/^\/(customer|seller)(\/|$)/, '/');
+    let safePath = path.normalize(cleanPath).replace(/^(\.\.[\/\\])+/, '');
+    if (safePath.startsWith(path.sep)) safePath = safePath.slice(1);
+
     let filePath = path.join(rootDir, safePath);
 
     if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
       filePath = path.join(filePath, 'index.html');
+    }
+
+    // Fallback: if not found, check if it's requesting root or html
+    if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+      if (rawPath === '/' || rawPath === '' || rawPath.endsWith('/') || !path.extname(rawPath)) {
+        const fallbackIndex = path.join(rootDir, 'index.html');
+        if (fs.existsSync(fallbackIndex)) {
+          filePath = fallbackIndex;
+        }
+      }
     }
 
     if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
@@ -39,7 +52,7 @@ function createStaticServer(siteName, rootDir, port) {
       fs.createReadStream(filePath).pipe(res);
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end(`404 Not Found on ${siteName}: ${parsed.pathname}`);
+      res.end(`404 Not Found on ${siteName}: ${rawPath}`);
     }
   });
 
