@@ -185,11 +185,11 @@ function SellerHubApp() {
         </ul>
 
         <div style={{ marginTop: 'auto', borderTop: '1px solid var(--sh-border)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <a href="../customer/" className="seller-nav-item" style={{ textDecoration: 'none' }} target="_blank">
-            🛍️ Open Customer Store →
+          <a href="http://localhost:3001" className="seller-nav-item" style={{ textDecoration: 'none' }} target="_blank">
+            🛍️ Open Customer Store (3001) →
           </a>
-          <a href="../" className="seller-nav-item" style={{ textDecoration: 'none' }}>
-            👑 Admin Dashboard →
+          <a href="http://localhost:3000" className="seller-nav-item" style={{ textDecoration: 'none' }}>
+            👑 Admin Dashboard (3000) →
           </a>
         </div>
       </aside>

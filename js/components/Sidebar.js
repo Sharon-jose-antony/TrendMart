@@ -35,6 +35,25 @@ window.Sidebar = function Sidebar({ activeTab, setActiveTab, isOpen, onClose }) 
           </li>
         ))}
       </ul>
+
+      <div style={{ marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+        <a 
+          href="http://localhost:3001" 
+          target="_blank" 
+          style={{ textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', borderRadius: '6px' }}
+        >
+          <span>🛍️</span>
+          <span>Customer Store (3001) ↗</span>
+        </a>
+        <a 
+          href="http://localhost:3002" 
+          target="_blank" 
+          style={{ textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', borderRadius: '6px' }}
+        >
+          <span>💼</span>
+          <span>Seller Hub (3002) ↗</span>
+        </a>
+      </div>
     </aside>
   );
 };
