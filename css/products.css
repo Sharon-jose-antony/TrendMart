@@ -507,3 +507,247 @@
     width: 100%;
   }
 }
+
+/* =========================================
+   PRODUCTS MODULE - FINAL IMPROVEMENTS
+========================================= */
+
+/* Disabled Save / Update button */
+
+.product-save-btn:disabled {
+  background: #6b7280;
+  color: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+.product-save-btn:disabled:hover {
+  background: #6b7280;
+  opacity: 0.5;
+}
+
+/* Price and Stock inputs */
+
+.product-form-group input[name="price"],
+.product-form-group input[name="stock"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* Remove browser spinner arrows */
+
+.product-form-group input[name="price"]::-webkit-inner-spin-button,
+.product-form-group input[name="price"]::-webkit-outer-spin-button,
+.product-form-group input[name="stock"]::-webkit-inner-spin-button,
+.product-form-group input[name="stock"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* =========================================
+   CUSTOM DELETE CONFIRMATION MODAL
+========================================= */
+
+.product-delete-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(3px);
+}
+
+/* Delete modal container */
+
+.product-delete-modal {
+  width: 100%;
+  max-width: 420px;
+
+  padding: 30px 25px;
+
+  background: var(--bg-card);
+  color: var(--text-primary);
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  text-align: center;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+
+  animation: deleteModalAppear 0.2s ease-out;
+}
+
+/* Warning icon */
+
+.delete-warning-icon {
+  width: 68px;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 18px;
+
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+
+  border-radius: 50%;
+
+  font-size: 32px;
+}
+
+/* Modal heading */
+
+.product-delete-modal h2 {
+  margin-bottom: 12px;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  color: var(--text-primary);
+}
+
+/* Modal description */
+
+.product-delete-modal p {
+  margin-bottom: 25px;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.product-delete-modal strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Modal buttons */
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.delete-cancel-btn,
+.delete-confirm-btn {
+  min-width: 115px;
+
+  padding: 11px 18px;
+
+  border-radius: 8px;
+  border: none;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+/* Cancel button */
+
+.delete-cancel-btn {
+  background: var(--bg-main);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.delete-cancel-btn:hover {
+  opacity: 0.8;
+}
+
+/* Confirm button */
+
+.delete-confirm-btn {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.delete-confirm-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* Modal animation */
+
+@keyframes deleteModalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive design */
+
+@media (max-width: 480px) {
+  .product-delete-modal {
+    padding: 25px 18px;
+  }
+
+  .delete-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .delete-cancel-btn,
+  .delete-confirm-btn {
+    width: 100%;
+  }
+}
+
+/* =====================================
+   PRODUCT IMAGE PREVIEW
+===================================== */
+
+.product-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.product-preview-container p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.product-image-preview {
+  display: block;
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  padding: 8px;
+
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+/* Field focus feedback */
+
+.product-form-group input:focus,
+.product-form-group select:focus,
+.product-form-group textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
