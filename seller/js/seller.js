@@ -4,11 +4,75 @@ const { useState, useEffect, useMemo } = React;
 function SellerHubApp() {
   const [currentView, setCurrentView] = useState('inventory');
   const [sellers, setSellers] = useState([]);
-  const [activeSellerId, setActiveSellerId] = useState('seller-1');
+  const [currentSeller, setCurrentSeller] = useState(() => {
+    return window.TrendMartAPI.getCurrentSeller() || {
+      id: 'seller-1',
+      storeName: 'AeroTech Electronics',
+      ownerName: 'Vikram Malhotra',
+      email: 'vikram@aerotech.com'
+    };
+  });
+  const [activeSellerId, setActiveSellerId] = useState(() => {
+    const s = window.TrendMartAPI.getCurrentSeller();
+    return s ? s.id : 'seller-1';
+  });
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Seller Auth Modal State
+  const [isSellerAuthOpen, setIsSellerAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+  const [authError, setAuthError] = useState('');
+  const [authForm, setAuthForm] = useState({
+    storeName: '',
+    ownerName: '',
+    email: 'vikram@aerotech.com',
+    password: 'password123',
+    phone: '',
+    address: ''
+  });
+
+  const handleSellerLogin = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      const res = await window.TrendMartAPI.sellerLogin(authForm.email, authForm.password);
+      if (res.error) {
+        setAuthError(res.error);
+      } else {
+        setCurrentSeller(res.seller);
+        setActiveSellerId(res.seller.id);
+        setIsSellerAuthOpen(false);
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Login failed');
+    }
+  };
+
+  const handleSellerRegister = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      const res = await window.TrendMartAPI.sellerRegister(authForm);
+      if (res.error) {
+        setAuthError(res.error);
+      } else {
+        setCurrentSeller(res.seller);
+        setActiveSellerId(res.seller.id);
+        setIsSellerAuthOpen(false);
+        loadSellerData();
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Registration failed');
+    }
+  };
+
+  const handleSellerLogout = () => {
+    window.TrendMartAPI.setCurrentSeller(null);
+    setCurrentSeller(null);
+  };
 
   // Modal States
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -200,17 +264,31 @@ function SellerHubApp() {
         <header className="seller-topbar">
           <div className="seller-store-select-wrap">
             <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--sh-text-muted)' }}>Store Profile:</span>
-            <select
-              className="seller-store-select"
-              value={activeSellerId}
-              onChange={(e) => setActiveSellerId(e.target.value)}
-            >
-              {sellers.map(s => (
-                <option key={s.id} value={s.id}>
-                  🏪 {s.storeName} ({s.ownerName})
-                </option>
-              ))}
-            </select>
+            {currentSeller ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontWeight: 700, color: 'var(--sh-primary)', fontSize: '0.95rem' }}>
+                  🏪 {currentSeller.storeName} ({currentSeller.ownerName})
+                </span>
+                <button
+                  className="btn-icon"
+                  style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
+                  onClick={() => { setAuthError(''); setIsSellerAuthOpen(true); }}
+                >
+                  Switch Store
+                </button>
+                <button
+                  className="btn-icon btn-icon-danger"
+                  style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
+                  onClick={handleSellerLogout}
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <button className="btn-primary" style={{ padding: '0.4rem 0.9rem', fontSize: '0.85rem' }} onClick={() => { setAuthError(''); setIsSellerAuthOpen(true); }}>
+                🔑 Seller Sign In / Register Store
+              </button>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -572,6 +650,157 @@ function SellerHubApp() {
                 {editingProduct ? 'Save Product Changes' : 'Publish Product to Marketplace'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Seller Authentication Modal (Login / Register Store) */}
+      {isSellerAuthOpen && (
+        <div className="seller-modal-overlay" onClick={() => setIsSellerAuthOpen(false)}>
+          <div className="seller-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{authMode === 'login' ? '💼 Seller Center Login' : '🏪 Register New Seller Store'}</h3>
+              <button style={{ background: 'transparent', border: 'none', fontSize: '1.25rem', cursor: 'pointer' }} onClick={() => setIsSellerAuthOpen(false)}>✕</button>
+            </div>
+            <div className="modal-body">
+              {/* Tab Switcher */}
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', background: 'var(--sh-bg)', padding: '0.3rem', borderRadius: '8px' }}>
+                <button
+                  type="button"
+                  style={{
+                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
+                    background: authMode === 'login' ? 'var(--sh-surface)' : 'transparent',
+                    color: authMode === 'login' ? 'var(--sh-primary)' : 'var(--sh-text-muted)'
+                  }}
+                  onClick={() => { setAuthMode('login'); setAuthError(''); }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
+                    background: authMode === 'register' ? 'var(--sh-surface)' : 'transparent',
+                    color: authMode === 'register' ? 'var(--sh-primary)' : 'var(--sh-text-muted)'
+                  }}
+                  onClick={() => { setAuthMode('register'); setAuthError(''); }}
+                >
+                  Register Store
+                </button>
+              </div>
+
+              {authError && (
+                <div style={{ padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1rem' }}>
+                  ⚠️ {authError}
+                </div>
+              )}
+
+              {authMode === 'login' ? (
+                <form onSubmit={handleSellerLogin}>
+                  <div className="form-group">
+                    <label className="form-label">Seller Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      className="form-control"
+                      value={authForm.email}
+                      onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      required
+                      className="form-control"
+                      value={authForm.password}
+                      onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                    />
+                  </div>
+
+                  <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '0.35rem' }}>Switch to Demo Store:</div>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'vikram@aerotech.com', password: 'password123' })}
+                      >
+                        AeroTech Electronics
+                      </button>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'pooja@urbanchic.in', password: 'password123' })}
+                      >
+                        Urban Chic Apparels
+                      </button>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'rameshwar@heritagehome.in', password: 'password123' })}
+                      >
+                        Heritage Home
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.8rem' }}>
+                    Sign In to Store Hub
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleSellerRegister}>
+                  <div className="form-group">
+                    <label className="form-label">Store Brand Name</label>
+                    <input
+                      type="text"
+                      required
+                      className="form-control"
+                      placeholder="e.g. Apex Sports Gear"
+                      value={authForm.storeName}
+                      onChange={(e) => setAuthForm({ ...authForm, storeName: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Proprietor / Owner Name</label>
+                    <input
+                      type="text"
+                      required
+                      className="form-control"
+                      placeholder="e.g. Sanjay Singhal"
+                      value={authForm.ownerName}
+                      onChange={(e) => setAuthForm({ ...authForm, ownerName: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Business Email</label>
+                    <input
+                      type="email"
+                      required
+                      className="form-control"
+                      placeholder="contact@store.com"
+                      value={authForm.email}
+                      onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      required
+                      className="form-control"
+                      placeholder="Minimum 6 characters"
+                      value={authForm.password}
+                      onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                    />
+                  </div>
+                  <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '0.8rem' }}>
+                    Register Store & Start Selling
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       )}

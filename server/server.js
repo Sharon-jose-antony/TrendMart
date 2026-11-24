@@ -97,6 +97,28 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(res, 200, { status: 'healthy', timestamp: new Date().toISOString() });
       }
 
+      // 1.5 Authentication Endpoints
+      if (pathname === '/api/auth/customer/login' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.customerLogin(body.email, body.password);
+        return sendJSON(res, result.error ? 401 : 200, result);
+      }
+      if (pathname === '/api/auth/customer/register' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.customerRegister(body);
+        return sendJSON(res, result.error ? 400 : 201, result);
+      }
+      if (pathname === '/api/auth/seller/login' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.sellerLogin(body.email, body.password);
+        return sendJSON(res, result.error ? 401 : 200, result);
+      }
+      if (pathname === '/api/auth/seller/register' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.sellerRegister(body);
+        return sendJSON(res, result.error ? 400 : 201, result);
+      }
+
       // 2. Stats endpoint (KPIs for Admin / Seller)
       if (pathname === '/api/stats' && method === 'GET') {
         return sendJSON(res, 200, db.getStats());
