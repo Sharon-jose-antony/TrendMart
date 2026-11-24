@@ -58,12 +58,21 @@ function App() {
       setAdminProfile(getSavedAdminProfile());
     };
 
+    const syncTheme = (e) => {
+      if (e?.detail && e.detail.theme) {
+        setTheme(e.detail.theme);
+      }
+    };
+
     window.addEventListener("trendmart:profile-updated", syncProfile);
     window.addEventListener("tm-profile-updated", syncProfile);
+    window.addEventListener("tm-theme-updated", syncTheme);
     window.addEventListener("storage", syncProfile);
+
     return () => {
       window.removeEventListener("trendmart:profile-updated", syncProfile);
       window.removeEventListener("tm-profile-updated", syncProfile);
+      window.removeEventListener("tm-theme-updated", syncTheme);
       window.removeEventListener("storage", syncProfile);
     };
   }, []);
@@ -156,35 +165,3 @@ function App() {
             <button className="theme-btn" onClick={toggleTheme}>
               {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
             </button>
-          </div>
-        </header>
-
-        <main className="content-area">
-          {activeTab === "dashboard" && (
-            <window.Dashboard onNavigate={setActiveTab} />
-          )}
-
-          {activeTab === "customers" && <window.Customers />}
-
-          {activeTab === "orders" && <window.Orders />}
-
-          {activeTab === "banners" && <window.Banners />}
-
-          {activeTab === "profile" && <window.Profile />}
-
-          {!["dashboard", "customers", "orders", "banners", "profile"].includes(
-            activeTab
-          ) && (
-            <div className="placeholder-box">
-              <h2>{activeTab.toUpperCase()} Module</h2>
-              <p>Ready to build next.</p>
-            </div>
-          )}
-        </main>
-      </div>
-    </div>
-  );
-}
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);

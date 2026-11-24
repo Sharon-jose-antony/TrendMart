@@ -1,0 +1,315 @@
+{
+  "categories": [
+    {
+      "id": "cat-1",
+      "name": "Electronics",
+      "slug": "electronics",
+      "icon": "⚡",
+      "description": "Gadgets, smartphones, and smart gear"
+    },
+    {
+      "id": "cat-2",
+      "name": "Fashion & Apparel",
+      "slug": "fashion",
+      "icon": "👔",
+      "description": "Clothing, footwear, and accessories"
+    },
+    {
+      "id": "cat-3",
+      "name": "Home & Kitchen",
+      "slug": "home-kitchen",
+      "icon": "🏡",
+      "description": "Decor, kitchenware, and furniture"
+    },
+    {
+      "id": "cat-4",
+      "name": "Beauty & Wellness",
+      "slug": "beauty",
+      "icon": "✨",
+      "description": "Skincare, haircare, and personal grooming"
+    },
+    {
+      "id": "cat-5",
+      "name": "Sports & Outdoors",
+      "slug": "sports",
+      "icon": "⚽",
+      "description": "Sporting goods and fitness gear"
+    }
+  ],
+  "sellers": [
+    {
+      "id": "seller-1",
+      "storeName": "AeroTech Electronics",
+      "ownerName": "Vikram Malhotra",
+      "email": "vikram@aerotech.com",
+      "phone": "+91 98765 43210",
+      "address": "Indiranagar, Bengaluru, Karnataka 560038",
+      "rating": 4.8,
+      "totalSales": 450000,
+      "status": "active",
+      "joinedAt": "2026-01-15"
+    },
+    {
+      "id": "seller-2",
+      "storeName": "Urban Chic Apparels",
+      "ownerName": "Pooja Singhania",
+      "email": "pooja@urbanchic.in",
+      "phone": "+91 98112 34567",
+      "address": "Bandra West, Mumbai, Maharashtra 400050",
+      "rating": 4.6,
+      "totalSales": 320000,
+      "status": "active",
+      "joinedAt": "2026-02-10"
+    },
+    {
+      "id": "seller-3",
+      "storeName": "Heritage Home Decor",
+      "ownerName": "Rameshwar Sharma",
+      "email": "rameshwar@heritagehome.in",
+      "phone": "+91 98290 12345",
+      "address": "MI Road, Jaipur, Rajasthan 302001",
+      "rating": 4.9,
+      "totalSales": 280000,
+      "status": "active",
+      "joinedAt": "2026-03-01"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-1",
+      "title": "Noise-Cancelling Wireless Headphones Pro",
+      "description": "Active noise cancellation with 40-hour battery life, high-res audio drivers, and comfortable memory foam ear cushions.",
+      "price": 4999,
+      "originalPrice": 8999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 45,
+      "rating": 4.7,
+      "reviewsCount": 128,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-10T10:00:00Z"
+    },
+    {
+      "id": "prod-2",
+      "title": "Smart Fitness Tracker Watch AMOLED",
+      "description": "Track heart rate, SpO2, sleep stages, and over 100 sport modes with 1.4-inch vibrant AMOLED display.",
+      "price": 2499,
+      "originalPrice": 4999,
+      "category": "Electronics",
+      "categoryId": "cat-1",
+      "sellerId": "seller-1",
+      "sellerName": "AeroTech Electronics",
+      "stock": 6,
+      "rating": 4.5,
+      "reviewsCount": 84,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-12T11:30:00Z"
+    },
+    {
+      "id": "prod-3",
+      "title": "Tailored Slim-Fit Cotton Oxford Shirt",
+      "description": "Crafted from 100% breathable organic cotton. Classic button-down collar perfect for professional and casual styling.",
+      "price": 1299,
+      "originalPrice": 2299,
+      "category": "Fashion & Apparel",
+      "categoryId": "cat-2",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 80,
+      "rating": 4.6,
+      "reviewsCount": 65,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-15T09:15:00Z"
+    },
+    {
+      "id": "prod-4",
+      "title": "Minimalist Ceramic Pour-Over Coffee Maker",
+      "description": "Artisanal ceramic dripper with wooden collar and heat-resistant glass carafe for the quintessential morning brew.",
+      "price": 1899,
+      "originalPrice": 2599,
+      "category": "Home & Kitchen",
+      "categoryId": "cat-3",
+      "sellerId": "seller-3",
+      "sellerName": "Heritage Home Decor",
+      "stock": 18,
+      "rating": 4.9,
+      "reviewsCount": 42,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-18T14:20:00Z"
+    },
+    {
+      "id": "prod-5",
+      "title": "Ergonomic Memory Foam Lumbar Cushion",
+      "description": "Orthopedic posture support cushion engineered with high-density memory foam and breathable 3D mesh fabric.",
+      "price": 999,
+      "originalPrice": 1799,
+      "category": "Home & Kitchen",
+      "categoryId": "cat-3",
+      "sellerId": "seller-3",
+      "sellerName": "Heritage Home Decor",
+      "stock": 4,
+      "rating": 4.4,
+      "reviewsCount": 31,
+      "status": "Low Stock",
+      "image": "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-20T16:45:00Z"
+    },
+    {
+      "id": "prod-6",
+      "title": "Botanical Vitamin C Brightening Serum (30ml)",
+      "description": "Pure 15% Vitamin C blended with hyaluronic acid and ferulic acid for radiant skin texture and antioxidant protection.",
+      "price": 799,
+      "originalPrice": 1299,
+      "category": "Beauty & Wellness",
+      "categoryId": "cat-4",
+      "sellerId": "seller-2",
+      "sellerName": "Urban Chic Apparels",
+      "stock": 55,
+      "rating": 4.8,
+      "reviewsCount": 110,
+      "status": "In Stock",
+      "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&auto=format&fit=crop&q=60",
+      "createdAt": "2026-03-22T08:00:00Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "cust-1",
+      "name": "Aarav Sharma",
+      "email": "aarav.sharma@example.com",
+      "phone": "+91 98765 11223",
+      "address": "Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103",
+      "ordersCount": 4,
+      "totalSpent": 12496,
+      "registeredAt": "2026-01-20"
+    },
+    {
+      "id": "cust-2",
+      "name": "Diya Patel",
+      "email": "diya.patel@example.com",
+      "phone": "+91 98234 55667",
+      "address": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "ordersCount": 2,
+      "totalSpent": 4398,
+      "registeredAt": "2026-02-05"
+    },
+    {
+      "id": "cust-3",
+      "name": "Rohan Verma",
+      "email": "rohan.verma@example.com",
+      "phone": "+91 97112 33445",
+      "address": "Sector 62, Noida, Uttar Pradesh 201309",
+      "ordersCount": 1,
+      "totalSpent": 4999,
+      "registeredAt": "2026-02-18"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-1001",
+      "orderNumber": "TM-2026-1001",
+      "customerId": "cust-1",
+      "customerName": "Aarav Sharma",
+      "customerEmail": "aarav.sharma@example.com",
+      "customerPhone": "+91 98765 11223",
+      "shippingAddress": "Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103",
+      "items": [
+        {
+          "productId": "prod-1",
+          "sellerId": "seller-1",
+          "title": "Noise-Cancelling Wireless Headphones Pro",
+          "quantity": 1,
+          "price": 4999
+        }
+      ],
+      "totalAmount": 4999,
+      "paymentMethod": "UPI / Card",
+      "paymentStatus": "Paid",
+      "status": "Delivered",
+      "orderDate": "2026-03-25T14:32:00Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-03-25T14:32:00Z",
+          "note": "Order confirmed"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-03-25T16:00:00Z",
+          "note": "Packed by seller AeroTech Electronics"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-03-26T09:30:00Z",
+          "note": "Dispatched via BlueDart Express"
+        },
+        {
+          "status": "Delivered",
+          "timestamp": "2026-03-27T15:20:00Z",
+          "note": "Delivered to customer"
+        }
+      ]
+    },
+    {
+      "id": "ORD-1002",
+      "orderNumber": "TM-2026-1002",
+      "customerId": "cust-2",
+      "customerName": "Diya Patel",
+      "customerEmail": "diya.patel@example.com",
+      "customerPhone": "+91 98234 55667",
+      "shippingAddress": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "items": [
+        {
+          "productId": "prod-3",
+          "sellerId": "seller-2",
+          "title": "Tailored Slim-Fit Cotton Oxford Shirt",
+          "quantity": 2,
+          "price": 1299
+        }
+      ],
+      "totalAmount": 2598,
+      "paymentMethod": "Cash on Delivery",
+      "paymentStatus": "Pending",
+      "status": "Processing",
+      "orderDate": "2026-03-28T10:15:00Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-03-28T10:15:00Z",
+          "note": "Order confirmed"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-03-28T11:00:00Z",
+          "note": "Awaiting seller dispatch"
+        }
+      ]
+    }
+  ],
+  "banners": [
+    {
+      "id": "ban-1",
+      "title": "Summer Mega Fest 2026",
+      "subtitle": "Up to 60% OFF on Top Electronics & Apparel",
+      "linkText": "Shop the Sale",
+      "category": "Electronics",
+      "active": true,
+      "image": "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "ban-2",
+      "title": "Smart Living, Smarter Prices",
+      "subtitle": "Trending home decor & kitchen essentials curated for you",
+      "linkText": "Explore Home",
+      "category": "Home & Kitchen",
+      "active": true,
+      "image": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&auto=format&fit=crop&q=80"
+    }
+  ]
+}
