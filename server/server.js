@@ -97,6 +97,28 @@ const server = http.createServer(async (req, res) => {
         return sendJSON(res, 200, { status: 'healthy', timestamp: new Date().toISOString() });
       }
 
+      // 1.5 Authentication Endpoints
+      if (pathname === '/api/auth/customer/login' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.customerLogin(body.email, body.password);
+        return sendJSON(res, result.error ? 401 : 200, result);
+      }
+      if (pathname === '/api/auth/customer/register' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.customerRegister(body);
+        return sendJSON(res, result.error ? 400 : 201, result);
+      }
+      if (pathname === '/api/auth/seller/login' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.sellerLogin(body.email, body.password);
+        return sendJSON(res, result.error ? 401 : 200, result);
+      }
+      if (pathname === '/api/auth/seller/register' && method === 'POST') {
+        const body = await parseBody(req);
+        const result = db.sellerRegister(body);
+        return sendJSON(res, result.error ? 400 : 201, result);
+      }
+
       // 2. Stats endpoint (KPIs for Admin / Seller)
       if (pathname === '/api/stats' && method === 'GET') {
         return sendJSON(res, 200, db.getStats());
@@ -151,6 +173,15 @@ const server = http.createServer(async (req, res) => {
       if (orderMatch && method === 'GET') {
         const item = db.getOrderById(orderMatch[1]);
         return item ? sendJSON(res, 200, item) : sendJSON(res, 404, { error: 'Order not found' });
+      }
+      if (orderMatch && method === 'PUT') {
+        const body = await parseBody(req);
+        const updated = db.updateOrderStatus(orderMatch[1], body.status || body.newStatus, body.note);
+        return updated ? sendJSON(res, 200, updated) : sendJSON(res, 404, { error: 'Order not found' });
+      }
+      if (orderMatch && method === 'DELETE') {
+        const deleted = db.deleteOrder(orderMatch[1]);
+        return deleted ? sendJSON(res, 200, { success: true }) : sendJSON(res, 404, { error: 'Order not found' });
       }
       const orderStatusMatch = pathname.match(/^\/api\/orders\/([^\/]+)\/status$/);
       if (orderStatusMatch && method === 'PUT') {

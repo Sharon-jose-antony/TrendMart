@@ -17,14 +17,87 @@ function CustomerStoreApp() {
   const [orderSuccess, setOrderSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Form State for Checkout
-  const [checkoutForm, setCheckoutForm] = useState({
-    name: 'Aarav Sharma',
+  // Authentication State
+  const [currentUser, setCurrentUser] = useState(() => {
+    return window.TrendMartAPI.getCurrentCustomer() || {
+      id: 'cust-1',
+      name: 'Aarav Sharma',
+      email: 'aarav.sharma@example.com',
+      phone: '+91 98765 11223',
+      address: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103'
+    };
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+  const [authError, setAuthError] = useState('');
+  const [authForm, setAuthForm] = useState({
+    name: '',
     email: 'aarav.sharma@example.com',
+    password: 'password123',
     phone: '+91 98765 11223',
-    address: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103',
+    address: 'Flat 402, Green Glen Layout, Bellandur, Bengaluru 560103'
+  });
+
+  // Form State for Checkout (auto-synced with logged-in user)
+  const [checkoutForm, setCheckoutForm] = useState({
+    name: currentUser ? currentUser.name : '',
+    email: currentUser ? currentUser.email : '',
+    phone: currentUser ? currentUser.phone : '',
+    address: currentUser ? currentUser.address : '',
     paymentMethod: 'UPI'
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setCheckoutForm(prev => ({
+        ...prev,
+        name: currentUser.name || prev.name,
+        email: currentUser.email || prev.email,
+        phone: currentUser.phone || prev.phone,
+        address: currentUser.address || prev.address
+      }));
+    }
+  }, [currentUser]);
+
+  // Handle Login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      const res = await window.TrendMartAPI.customerLogin(authForm.email, authForm.password);
+      if (res.error) {
+        setAuthError(res.error);
+      } else {
+        setCurrentUser(res.user);
+        setIsAuthModalOpen(false);
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Login failed');
+    }
+  };
+
+  // Handle Register
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setAuthError('');
+    try {
+      const res = await window.TrendMartAPI.customerRegister(authForm);
+      if (res.error) {
+        setAuthError(res.error);
+      } else {
+        setCurrentUser(res.user);
+        setIsAuthModalOpen(false);
+      }
+    } catch (err) {
+      setAuthError(err.message || 'Registration failed');
+    }
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    window.TrendMartAPI.setCurrentCustomer(null);
+    setCurrentUser(null);
+  };
 
   // Load Data from Backend DB via Universal API
   const loadStoreData = async () => {
@@ -162,49 +235,107 @@ function CustomerStoreApp() {
       {/* 1. Header / Navbar */}
       <header className="store-header">
         <div className="store-topbar">
-          <div className="store-brand" onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}>
-            <img src="../assets/logo-light.png" alt="TrendMart" className="store-brand-logo" onError={(e) => { e.target.style.display='none'; }} />
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#4338ca', letterSpacing: '-0.02em', marginLeft: '0.25rem' }}>TrendMart</h2>
+          {/* Logo only - clicking takes user to home page */}
+          <div 
+            className="store-brand" 
+            onClick={() => { setActiveCategory('all'); setSearchQuery(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            title="TrendMart Home"
+          >
+            <img 
+              src="assets/logo-light.png" 
+              alt="TrendMart - Shop Smarter, Live Better" 
+              className="store-brand-logo" 
+            />
           </div>
 
           <div className="store-search-wrap">
-            <span className="store-search-icon">🔍</span>
+            <span className="store-search-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
             <input
               type="text"
               className="store-search-input"
-              placeholder="Search products, brands, or electronics..."
+              placeholder="Search products, brands, or categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
           <div className="store-nav-actions">
-            <button className="store-btn store-btn-secondary" onClick={openMyOrders}>
-              📦 My Orders
-            </button>
+            {/* Direct Switcher Links */}
+            <a href="http://localhost:3000" className="portal-link" title="Open Admin Panel">
+              Admin (3000)
+            </a>
+            <a href="http://localhost:3002" className="portal-link" title="Open Seller Center">
+              Seller Hub (3002)
+            </a>
 
-            <button className="store-btn store-btn-primary" onClick={() => setIsCartOpen(true)}>
-              🛒 Cart
+            {/* Cart Button */}
+            <button className="store-btn store-btn-primary" onClick={() => setIsCartOpen(true)} title="View Cart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+              </svg>
+              <span>Cart</span>
               {cartCount > 0 && <span className="store-badge">{cartCount}</span>}
             </button>
 
-            <a href="../" className="store-btn store-btn-secondary" title="Switch to Admin Management">
-              ⚙️ Admin
-            </a>
-            <a href="../seller/" className="store-btn store-btn-secondary" title="Switch to Seller Portal">
-              💼 Seller Hub
-            </a>
+            {/* My Orders Button (Before User Profile) */}
+            <button className="store-btn store-btn-secondary" onClick={openMyOrders} title="View My Orders">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <span>My Orders</span>
+            </button>
+
+            {/* User Profile on the Top Right Corner */}
+            {currentUser ? (
+              <div className="user-profile-badge">
+                <div className="user-avatar-circle">
+                  {(currentUser.name || 'U').charAt(0).toUpperCase()}
+                </div>
+                <span className="user-profile-name" title={currentUser.name}>
+                  {currentUser.name}
+                </span>
+                <button 
+                  className="user-signout-btn" 
+                  onClick={handleLogout}
+                  title="Sign out of account"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <button 
+                className="store-btn store-btn-secondary" 
+                style={{ background: '#4338ca', color: '#ffffff', borderColor: '#4338ca' }}
+                onClick={() => { setAuthError(''); setIsAuthModalOpen(true); }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Sign In</span>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Category Pills Bar */}
+        {/* Clean, Professional Category Bar without Emojis */}
         <div className="category-filter-bar">
           <div className="category-filter-inner">
             <button
               className={`cat-pill ${activeCategory === 'all' ? 'active' : ''}`}
               onClick={() => setActiveCategory('all')}
             >
-              🔥 All Deals
+              All Deals
             </button>
             {categories.map(cat => (
               <button
@@ -212,7 +343,7 @@ function CustomerStoreApp() {
                 className={`cat-pill ${activeCategory === cat.name ? 'active' : ''}`}
                 onClick={() => setActiveCategory(cat.name)}
               >
-                {cat.icon} {cat.name}
+                {cat.name}
               </button>
             ))}
           </div>
@@ -625,6 +756,166 @@ function CustomerStoreApp() {
               >
                 {quickViewProduct.stock <= 0 ? 'Out of Stock' : 'Add to Cart & View Cart'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 9. Customer Authentication Modal (Login / Register) */}
+      {isAuthModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsAuthModalOpen(false)}>
+          <div className="modal-content" style={{ maxWidth: '480px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{authMode === 'login' ? '🔑 Sign In to TrendMart' : '✨ Create Customer Account'}</h3>
+              <button className="cart-close-btn" onClick={() => setIsAuthModalOpen(false)}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              {/* Tab Switcher */}
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', background: 'var(--tm-bg)', padding: '0.3rem', borderRadius: '8px' }}>
+                <button
+                  type="button"
+                  style={{
+                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
+                    background: authMode === 'login' ? 'var(--tm-surface)' : 'transparent',
+                    color: authMode === 'login' ? 'var(--tm-primary)' : 'var(--tm-text-muted)',
+                    boxShadow: authMode === 'login' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                  }}
+                  onClick={() => { setAuthMode('login'); setAuthError(''); }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    flex: 1, padding: '0.55rem', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.88rem', cursor: 'pointer',
+                    background: authMode === 'register' ? 'var(--tm-surface)' : 'transparent',
+                    color: authMode === 'register' ? 'var(--tm-primary)' : 'var(--tm-text-muted)',
+                    boxShadow: authMode === 'register' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+                  }}
+                  onClick={() => { setAuthMode('register'); setAuthError(''); }}
+                >
+                  New Account
+                </button>
+              </div>
+
+              {authError && (
+                <div style={{ padding: '0.75rem', background: '#fee2e2', color: '#991b1b', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1rem' }}>
+                  ⚠️ {authError}
+                </div>
+              )}
+
+              {authMode === 'login' ? (
+                <form onSubmit={handleLogin}>
+                  <div className="form-group">
+                    <label className="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      className="form-input"
+                      placeholder="e.g. aarav.sharma@example.com"
+                      value={authForm.email}
+                      onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      required
+                      className="form-input"
+                      placeholder="••••••••"
+                      value={authForm.password}
+                      onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                    />
+                  </div>
+
+                  <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+                    <div style={{ fontWeight: 600, marginBottom: '0.35rem' }}>Demo Accounts:</div>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'aarav.sharma@example.com', password: 'password123' })}
+                      >
+                        Aarav Sharma
+                      </button>
+                      <button
+                        type="button"
+                        style={{ padding: '0.3rem 0.6rem', border: '1px solid #cbd5e1', borderRadius: '4px', background: '#fff', cursor: 'pointer', fontSize: '0.78rem' }}
+                        onClick={() => setAuthForm({ ...authForm, email: 'diya.patel@example.com', password: 'password123' })}
+                      >
+                        Diya Patel
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="checkout-btn">
+                    Sign In & Continue
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleRegister}>
+                  <div className="form-group">
+                    <label className="form-label">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      className="form-input"
+                      placeholder="e.g. Priya Sundaram"
+                      value={authForm.name}
+                      onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      className="form-input"
+                      placeholder="e.g. priya@example.com"
+                      value={authForm.email}
+                      onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Create Password</label>
+                    <input
+                      type="password"
+                      required
+                      className="form-input"
+                      placeholder="Minimum 6 characters"
+                      value={authForm.password}
+                      onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Phone Number</label>
+                    <input
+                      type="tel"
+                      required
+                      className="form-input"
+                      placeholder="+91 98765 00000"
+                      value={authForm.phone}
+                      onChange={(e) => setAuthForm({ ...authForm, phone: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Delivery Address</label>
+                    <textarea
+                      rows="2"
+                      required
+                      className="form-textarea"
+                      placeholder="House/Flat No, Street, City, State, PIN"
+                      value={authForm.address}
+                      onChange={(e) => setAuthForm({ ...authForm, address: e.target.value })}
+                    ></textarea>
+                  </div>
+                  <button type="submit" className="checkout-btn">
+                    Create Account & Continue
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
