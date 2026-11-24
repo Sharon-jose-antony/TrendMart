@@ -163,7 +163,7 @@ function CustomerStoreApp() {
       <header className="store-header">
         <div className="store-topbar">
           <div className="store-brand" onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}>
-            <img src="../assets/logo-light.png" alt="TrendMart" className="store-brand-logo" onError={(e) => { e.target.style.display='none'; }} />
+            <img src="assets/logo-light.png" alt="TrendMart" className="store-brand-logo" onError={(e) => { e.target.style.display='none'; }} />
             <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#4338ca', letterSpacing: '-0.02em', marginLeft: '0.25rem' }}>TrendMart</h2>
           </div>
 
@@ -188,11 +188,11 @@ function CustomerStoreApp() {
               {cartCount > 0 && <span className="store-badge">{cartCount}</span>}
             </button>
 
-            <a href="../" className="store-btn store-btn-secondary" title="Switch to Admin Management">
-              ⚙️ Admin
+            <a href="http://localhost:3000" className="store-btn store-btn-secondary" title="Switch to Admin Management">
+              ⚙️ Admin Panel (3000)
             </a>
-            <a href="../seller/" className="store-btn store-btn-secondary" title="Switch to Seller Portal">
-              💼 Seller Hub
+            <a href="http://localhost:3002" className="store-btn store-btn-secondary" title="Switch to Seller Portal">
+              💼 Seller Hub (3002)
             </a>
           </div>
         </div>

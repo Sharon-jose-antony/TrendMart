@@ -1,6 +1,7 @@
 // Shared TrendMart Universal API Client
 (function () {
-  const API_BASE = window.location.origin + '/api';
+  const API_BASE = window.TRENDMART_API_BASE || 
+    (window.location.port === '5000' ? window.location.origin + '/api' : 'http://localhost:5000/api');
 
   window.TrendMartAPI = {
     // Health / Stats
