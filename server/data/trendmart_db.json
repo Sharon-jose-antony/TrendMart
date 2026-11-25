@@ -105,7 +105,7 @@
       "categoryId": "cat-1",
       "sellerId": "seller-1",
       "sellerName": "AeroTech Electronics",
-      "stock": 12,
+      "stock": 11,
       "rating": 4.5,
       "reviewsCount": 89,
       "status": "In Stock",
@@ -258,7 +258,7 @@
       "categoryId": "cat-3",
       "sellerId": "seller-3",
       "sellerName": "Heritage Home & Living",
-      "stock": 7,
+      "stock": 4,
       "rating": 4.9,
       "reviewsCount": 51,
       "status": "Low Stock",
@@ -438,8 +438,8 @@
       "password": "password123",
       "phone": "+91 98234 55667",
       "address": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
-      "ordersCount": 4,
-      "totalSpent": 21489,
+      "ordersCount": 5,
+      "totalSpent": 29685,
       "registeredAt": "2026-02-05"
     },
     {
@@ -455,6 +455,53 @@
     }
   ],
   "orders": [
+    {
+      "id": "ORD-1656",
+      "orderNumber": "TM-2026-77144",
+      "customerId": "cust-1795581734662",
+      "customerName": "Diya Patel",
+      "customerEmail": "diya.patel@example.com",
+      "customerPhone": "+91 98234 55667",
+      "shippingAddress": "B-12, Shanti Kunj, Satellite Road, Ahmedabad 380015",
+      "items": [
+        {
+          "productId": "prod-2",
+          "sellerId": "seller-1",
+          "title": "Smart Fitness Tracker Watch AMOLED",
+          "price": 2499,
+          "quantity": 1
+        },
+        {
+          "productId": "prod-11",
+          "sellerId": "seller-3",
+          "title": "Artisanal Ceramic Pour-Over Coffee Dripper Set",
+          "price": 1899,
+          "quantity": 3
+        }
+      ],
+      "totalAmount": 8196,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "status": "Shipped",
+      "orderDate": "2026-11-25T04:42:14.662Z",
+      "trackingHistory": [
+        {
+          "status": "Order Placed",
+          "timestamp": "2026-11-25T04:42:14.662Z",
+          "note": "Order confirmed successfully on TrendMart"
+        },
+        {
+          "status": "Processing",
+          "timestamp": "2026-11-25T04:42:14.662Z",
+          "note": "Seller notified for dispatch packaging"
+        },
+        {
+          "status": "Shipped",
+          "timestamp": "2026-11-25T04:42:34.218Z",
+          "note": "Updated by seller Heritage Home & Living"
+        }
+      ]
+    },
     {
       "id": "ORD-3417",
       "orderNumber": "TM-2026-26448",

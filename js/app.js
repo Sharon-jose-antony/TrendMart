@@ -35,18 +35,22 @@ function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(
-    () => localStorage.getItem(window.StorageAPI.KEYS.THEME) || "light"
+    () => (window.StorageAPI?.KEYS?.THEME && localStorage.getItem(window.StorageAPI.KEYS.THEME)) || "light"
   );
   const [adminProfile, setAdminProfile] = useState(getSavedAdminProfile);
 
   useEffect(() => {
-    window.StorageAPI.init();
+    if (window.StorageAPI?.init) {
+      window.StorageAPI.init();
+    }
     setAdminProfile(getSavedAdminProfile());
   }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem(window.StorageAPI.KEYS.THEME, theme);
+    if (window.StorageAPI?.KEYS?.THEME) {
+      localStorage.setItem(window.StorageAPI.KEYS.THEME, theme);
+    }
   }, [theme]);
 
   useEffect(() => {
@@ -91,12 +95,14 @@ function App() {
 
   return (
     <div className="app-layout">
-      <window.Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+      {window.Sidebar && (
+        <window.Sidebar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      )}
 
       <div className="main-wrapper">
         <header className="topbar">
@@ -108,7 +114,9 @@ function App() {
             >
               ☰
             </button>
-            <h1 className="topbar-title">{activeTab}</h1>
+            <h1 className="topbar-title">
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+            </h1>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
@@ -165,3 +173,65 @@ function App() {
             <button className="theme-btn" onClick={toggleTheme}>
               {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
             </button>
+          </div>
+        </header>
+
+        <main className="content-area">
+          {activeTab === "dashboard" && window.Dashboard && (
+            <window.Dashboard onNavigate={setActiveTab} />
+          )}
+
+          {activeTab === "categories" && window.Categories && (
+            <window.Categories onNavigate={setActiveTab} />
+          )}
+
+          {activeTab === "products" && window.Products && (
+            <window.Products onNavigate={setActiveTab} />
+          )}
+
+          {activeTab === "customers" && window.Customers && (
+            <window.Customers />
+          )}
+
+          {activeTab === "orders" && window.Orders && (
+            <window.Orders />
+          )}
+
+          {activeTab === "banners" && window.Banners && (
+            <window.Banners />
+          )}
+
+          {activeTab === "profile" && window.Profile && (
+            <window.Profile />
+          )}
+
+          {activeTab === "settings" && window.Settings && (
+            <window.Settings onNavigate={setActiveTab} />
+          )}
+
+          {![
+            "dashboard",
+            "categories",
+            "products",
+            "customers",
+            "orders",
+            "banners",
+            "profile",
+            "settings"
+          ].includes(activeTab) && (
+            <div className="placeholder-box">
+              <h2>{activeTab.toUpperCase()} Module</h2>
+              <p>Ready to build next.</p>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+const rootEl = document.getElementById("root");
+if (rootEl) {
+  const root = ReactDOM.createRoot(rootEl);
+  root.render(<App />);
+}
