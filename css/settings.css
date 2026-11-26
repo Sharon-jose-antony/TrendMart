@@ -1,7 +1,36 @@
 /* ========================================================
    TRENDMART - ELEGANT SELLER CENTRAL SETTINGS UI
-   Refined Typography, Sleek Lines & Understated Luxury
+   Full Obsidian Night Mode & Daylight Support
 ======================================================== */
+
+[data-theme="dark"] {
+  --bg-main: #090d16;
+  --bg-card: #111827;
+  --bg-sidebar: #0b0f19;
+  --bg-subtle: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: #1f2937;
+  --border-light: #1e293b;
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] .app-layout,
+[data-theme="dark"] .main-wrapper,
+[data-theme="dark"] .content-area {
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .topbar {
+  background-color: rgba(17, 24, 39, 0.92) !important;
+  border-bottom-color: #1f2937 !important;
+}
+
+[data-theme="dark"] .topbar-title {
+  color: #f8fafc !important;
+}
 
 .settings-container {
   display: flex;
@@ -15,7 +44,7 @@
 .settings-header-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius, 14px);
   padding: 1.25rem 1.65rem;
   display: flex;
   justify-content: space-between;
@@ -470,6 +499,63 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
+}
+
+/* 7. EXPLICIT DARK MODE SURFACES & TYPOGRAPHY */
+[data-theme="dark"] .settings-header-banner,
+[data-theme="dark"] .amazon-settings-card,
+[data-theme="dark"] .amazon-modal-card,
+[data-theme="dark"] .amazon-theme-tile.active-theme {
+  background-color: #111827 !important;
+  border-color: #1f2937 !important;
+}
+
+[data-theme="dark"] .amazon-theme-tile.active-theme {
+  border-color: #f59e0b !important;
+}
+
+[data-theme="dark"] .amazon-theme-tile:not(.active-theme),
+[data-theme="dark"] .session-card-content {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+[data-theme="dark"] .seller-settings-info h2,
+[data-theme="dark"] .amazon-card-header h3,
+[data-theme="dark"] .theme-name-group h4,
+[data-theme="dark"] .session-text h4,
+[data-theme="dark"] .amazon-modal-card h3 {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .seller-settings-info p,
+[data-theme="dark"] .amazon-card-header p,
+[data-theme="dark"] .theme-name-group p,
+[data-theme="dark"] .session-text p,
+[data-theme="dark"] .amazon-modal-card p {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .merchant-field-group label {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .merchant-field-group input,
+[data-theme="dark"] .merchant-field-group select,
+[data-theme="dark"] .merchant-field-group textarea {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+[data-theme="dark"] .merchant-field-group input::placeholder,
+[data-theme="dark"] .merchant-field-group textarea::placeholder {
+  color: #64748b !important;
+}
+
+[data-theme="dark"] .merchant-field-group select option {
+  background-color: #1e293b;
+  color: #f8fafc;
 }
 
 /* RESPONSIVE */

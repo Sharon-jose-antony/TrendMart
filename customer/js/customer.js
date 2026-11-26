@@ -5,6 +5,7 @@ function CustomerStoreApp() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [bannerIndex, setBannerIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState([]);
@@ -99,6 +100,18 @@ function CustomerStoreApp() {
     setCurrentUser(null);
   };
 
+  // Refresh banners from backend API
+  const refreshBanners = async () => {
+    try {
+      const bans = await window.TrendMartAPI.getBanners();
+      if (Array.isArray(bans)) {
+        setBanners(bans);
+      }
+    } catch (err) {
+      console.error('Failed to refresh banners:', err);
+    }
+  };
+
   // Load Data from Backend DB via Universal API
   const loadStoreData = async () => {
     try {
@@ -125,12 +138,56 @@ function CustomerStoreApp() {
     if (savedCart) {
       try { setCart(JSON.parse(savedCart)); } catch (e) {}
     }
+
+    const handleFocus = () => refreshBanners();
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        refreshBanners();
+      }
+    };
+
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibility);
+    const pollId = window.setInterval(refreshBanners, 4000);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.clearInterval(pollId);
+    };
   }, []);
 
   // Save cart changes
   useEffect(() => {
     localStorage.setItem('tm_customer_cart', JSON.stringify(cart));
   }, [cart]);
+
+  // Order banners starting with the active banner first so rotation highlights it immediately
+  const orderedBanners = useMemo(() => {
+    if (!Array.isArray(banners) || banners.length === 0) return [];
+    const activeIdx = banners.findIndex(b => Boolean(b.active));
+    if (activeIdx <= 0) return banners;
+    return [...banners.slice(activeIdx), ...banners.slice(0, activeIdx)];
+  }, [banners]);
+
+  useEffect(() => {
+    if (orderedBanners.length === 0) {
+      setBannerIndex(0);
+      return;
+    }
+    setBannerIndex(prev => (prev >= orderedBanners.length ? 0 : prev));
+  }, [orderedBanners.length]);
+
+  // Auto-rotate banners every 5 seconds when more than 1 banner exists
+  useEffect(() => {
+    if (orderedBanners.length <= 1) return;
+    const timer = window.setInterval(() => {
+      setBannerIndex(prev => (prev + 1) % orderedBanners.length);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [orderedBanners.length]);
+
+  const activeBanner = orderedBanners[bannerIndex] || orderedBanners[0] || null;
 
   // Filtered Products
   const filteredProducts = useMemo(() => {
@@ -352,22 +409,61 @@ function CustomerStoreApp() {
 
       {/* 2. Main Storefront Container */}
       <main className="store-container">
-        {/* Hero Promo Banner */}
-        {banners.length > 0 && (
-          <div className="store-hero">
+        {/* Rotating Hero Promo Banner */}
+        {activeBanner && (
+          <div className="store-hero" style={{ position: 'relative' }}>
             <div className="store-hero-content">
               <span className="store-hero-badge">TRENDMART EXCLUSIVE</span>
-              <h1>{banners[0].title}</h1>
-              <p>{banners[0].subtitle}</p>
-              <button 
-                className="store-btn store-btn-primary"
-                style={{ padding: '0.8rem 1.75rem', fontSize: '1rem', background: '#ffffff', color: '#312e81' }}
-                onClick={() => setActiveCategory(banners[0].category || 'all')}
-              >
-                {banners[0].linkText || 'Shop Now'} →
-              </button>
+              <h1>{activeBanner.title}</h1>
+              {activeBanner.subtitle && <p>{activeBanner.subtitle}</p>}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <button 
+                  className="store-btn store-btn-primary"
+                  style={{ padding: '0.8rem 1.75rem', fontSize: '1rem', background: '#ffffff', color: '#312e81' }}
+                  onClick={() => setActiveCategory(activeBanner.category || 'all')}
+                >
+                  {activeBanner.linkText || 'Shop Now'} →
+                </button>
+                {orderedBanners.length > 1 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => setBannerIndex(prev => (prev - 1 + orderedBanners.length) % orderedBanners.length)}
+                      style={{ padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(15,23,42,0.35)', color: '#fff', cursor: 'pointer' }}
+                      aria-label="Previous banner"
+                    >
+                      ‹
+                    </button>
+                    {orderedBanners.map((b, idx) => (
+                      <button
+                        key={b.id || idx}
+                        type="button"
+                        onClick={() => setBannerIndex(idx)}
+                        aria-label={`Show banner ${idx + 1}`}
+                        style={{
+                          width: idx === bannerIndex ? '20px' : '8px',
+                          height: '8px',
+                          borderRadius: '999px',
+                          border: 'none',
+                          background: idx === bannerIndex ? '#ffffff' : 'rgba(255,255,255,0.45)',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                      />
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setBannerIndex(prev => (prev + 1) % orderedBanners.length)}
+                      style={{ padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(15,23,42,0.35)', color: '#fff', cursor: 'pointer' }}
+                      aria-label="Next banner"
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-            <img src={banners[0].image} alt="Banner" className="store-hero-img" />
+            <img src={activeBanner.image} alt={activeBanner.title || 'Banner'} className="store-hero-img" />
           </div>
         )}
 
@@ -675,7 +771,7 @@ function CustomerStoreApp() {
                       <div style={{ fontSize: '0.88rem', margin: '0.5rem 0' }}>
                         {(order.items || []).map((it, i) => (
                           <div key={i} style={{ color: 'var(--tm-text)' }}>
-                            • {it.title} (x{it.quantity}) – ₹{(it.price * it.quantity).toLocaleString('en-IN')}
+- {it.title} (x{it.quantity}) – ₹{(it.price * it.quantity).toLocaleString('en-IN')}
                           </div>
                         ))}
                       </div>

@@ -7,6 +7,11 @@ window.Customers = function Customers() {
   const { useState, useEffect, useMemo } = React;
   const { KEYS, get, save } = window.StorageAPI;
 
+  const API_BASE =
+    window.ApiClient?.BASE_URL ||
+    window.API_BASE_URL ||
+    "http://localhost:5000/api";
+
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -14,10 +19,47 @@ window.Customers = function Customers() {
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 10;
 
-  // Load customers from LocalStorage
+  function normalizeCustomer(item) {
+    const mobileValue = item.mobile || item.phone || "";
+    return {
+      ...item,
+      mobile: mobileValue,
+      phone: item.phone || mobileValue,
+    };
+  }
+
+  // Load customers from backend API with LocalStorage fallback
   useEffect(() => {
     window.StorageAPI.init();
-    setCustomers(get(KEYS.CUSTOMERS));
+    const localList = Array.isArray(get(KEYS.CUSTOMERS))
+      ? get(KEYS.CUSTOMERS).map(normalizeCustomer)
+      : [];
+    setCustomers(localList);
+
+    (async () => {
+      try {
+        let payload = null;
+        if (window.ApiClient?.get) {
+          payload = await window.ApiClient.get("/customers");
+        } else {
+          const res = await fetch(`${API_BASE}/customers`);
+          if (res.ok) {
+            payload = await res.json();
+          }
+        }
+
+        const remoteList = Array.isArray(payload)
+          ? payload
+          : payload?.customers;
+        if (Array.isArray(remoteList) && remoteList.length > 0) {
+          const normalized = remoteList.map(normalizeCustomer);
+          save(KEYS.CUSTOMERS, normalized);
+          setCustomers(normalized);
+        }
+      } catch {
+        // Keep local cache when backend is unreachable
+      }
+    })();
   }, []);
 
   // Filter customers by search
@@ -28,7 +70,7 @@ window.Customers = function Customers() {
     return customers.filter((customer) => {
       const name = String(customer.name || "").toLowerCase();
       const email = String(customer.email || "").toLowerCase();
-      const mobile = String(customer.mobile || "").toLowerCase();
+      const mobile = String(customer.mobile || customer.phone || "").toLowerCase();
       const address = String(customer.address || "").toLowerCase();
       return (
         name.includes(query) ||
@@ -142,7 +184,7 @@ window.Customers = function Customers() {
                   </div>
                 </td>
                 <td>{customer.email}</td>
-                <td>{customer.mobile}</td>
+                <td>{customer.mobile || customer.phone}</td>
                 <td>{customer.address}</td>
 
                 <td>
@@ -231,7 +273,7 @@ window.Customers = function Customers() {
               <strong>Email:</strong> {selectedCustomer.email}
             </p>
             <p>
-              <strong>Mobile Number:</strong> {selectedCustomer.mobile}
+              <strong>Mobile Number:</strong> {selectedCustomer.mobile || selectedCustomer.phone}
             </p>
             <p>
               <strong>Shipping Address:</strong> {selectedCustomer.address}

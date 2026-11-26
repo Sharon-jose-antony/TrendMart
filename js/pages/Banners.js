@@ -6,6 +6,11 @@ window.Banners = function Banners() {
   const FALLBACK_BANNER =
     "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&q=85";
 
+  const API_BASE =
+    window.ApiClient?.BASE_URL ||
+    window.API_BASE_URL ||
+    "http://localhost:5000/api";
+
   const DEFAULT_BANNERS = [
     {
       id: 1001,
@@ -78,17 +83,77 @@ window.Banners = function Banners() {
     }));
   }
 
+  function broadcastBannersUpdate(normalizedList) {
+    try {
+      window.dispatchEvent(
+        new CustomEvent("trendmart:banners-updated", {
+          detail: { banners: normalizedList },
+        })
+      );
+      window.dispatchEvent(
+        new CustomEvent("tm-banners-updated", {
+          detail: { banners: normalizedList },
+        })
+      );
+    } catch {
+      // Ignore event dispatch issues
+    }
+  }
+
+  async function syncBannersToServer(normalizedList) {
+    try {
+      if (window.ApiClient?.put) {
+        await window.ApiClient.put("/banners", { banners: normalizedList });
+        return;
+      }
+      await fetch(`${API_BASE}/banners`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ banners: normalizedList }),
+      });
+    } catch {
+      // Fallback: local storage already updated
+    }
+  }
+
   function persistBanners(nextList, preferredActiveId = null) {
     const normalized = normalizeSingleActive(nextList, preferredActiveId);
     save(KEYS.BANNERS, normalized);
     setBanners(normalized);
+    broadcastBannersUpdate(normalized);
+    syncBannersToServer(normalized);
     return normalized;
   }
 
-  function loadBanners() {
+  async function loadBanners() {
+    try {
+      let payload = null;
+      if (window.ApiClient?.get) {
+        payload = await window.ApiClient.get("/banners");
+      } else {
+        const res = await fetch(`${API_BASE}/banners`);
+        if (res.ok) {
+          payload = await res.json();
+        }
+      }
+
+      const remoteList = Array.isArray(payload) ? payload : payload?.banners;
+      if (Array.isArray(remoteList) && remoteList.length > 0) {
+        const normalized = normalizeSingleActive(remoteList);
+        save(KEYS.BANNERS, normalized);
+        setBanners(normalized);
+        broadcastBannersUpdate(normalized);
+        return;
+      }
+    } catch {
+      // Fallback to local storage when backend route is unreachable
+    }
+
     const stored = get ? get(KEYS.BANNERS) : null;
     if (Array.isArray(stored) && stored.length > 0) {
-      setBanners(normalizeSingleActive(stored));
+      const normalized = normalizeSingleActive(stored);
+      setBanners(normalized);
+      syncBannersToServer(normalized);
     } else {
       const initial = normalizeSingleActive(DEFAULT_BANNERS, 1001);
       try {
@@ -97,6 +162,7 @@ window.Banners = function Banners() {
         // Ignore restricted storage write errors
       }
       setBanners(initial);
+      syncBannersToServer(initial);
     }
   }
 

@@ -809,7 +809,7 @@ class TrendMartDB {
     order.trackingHistory.push({
       status: newStatus,
       timestamp: new Date().toISOString(),
-      note: note || `Status updated to ${newStatus}`
+      note: note || `Status updated to \${newStatus}`
     });
     this.saveData(data);
     return order;
@@ -846,6 +846,28 @@ class TrendMartDB {
   // --- Banners ---
   getBanners() {
     return this.loadData().banners || [];
+  }
+
+  saveBanners(bannersList) {
+    const data = this.loadData();
+    const incoming = Array.isArray(bannersList) ? bannersList : [];
+
+    // Enforce single active banner rule across backend & storefront
+    let activeAssigned = false;
+    const normalized = incoming.map((item) => {
+      const wantsActive = Boolean(item.active) && !activeAssigned;
+      if (wantsActive) activeAssigned = true;
+      return {
+        ...item,
+        linkText: item.linkText || 'Shop the Sale',
+        category: item.category || 'Electronics',
+        active: wantsActive,
+      };
+    });
+
+    data.banners = normalized;
+    this.saveData(data);
+    return normalized;
   }
 
   // --- KPI Aggregates ---

@@ -209,6 +209,11 @@ const server = http.createServer(async (req, res) => {
       if (pathname === '/api/banners' && method === 'GET') {
         return sendJSON(res, 200, db.getBanners());
       }
+      if (pathname === '/api/banners' && method === 'PUT') {
+        const body = await parseBody(req);
+        const list = Array.isArray(body) ? body : body.banners;
+        return sendJSON(res, 200, db.saveBanners(list));
+      }
 
       // 9. Reset seed data
       if (pathname === '/api/seed' && method === 'POST') {

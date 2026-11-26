@@ -165,3 +165,50 @@ function App() {
             <button className="theme-btn" onClick={toggleTheme}>
               {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
             </button>
+          </div>
+        </header>
+
+        <main className="content-area">
+          {activeTab === "dashboard" && (
+            <window.Dashboard onNavigate={setActiveTab} />
+          )}
+
+          {activeTab === "categories" && <window.Categories />}
+
+          {activeTab === "customers" && <window.Customers />}
+
+          {activeTab === "orders" && <window.Orders />}
+
+          {activeTab === "products" && <window.Products />}
+
+          {activeTab === "banners" && <window.Banners />}
+
+          {activeTab === "profile" && <window.Profile />}
+
+          {activeTab === "settings" && (
+            <window.Settings onNavigate={setActiveTab} />
+          )}
+
+          {![
+            "dashboard",
+            "categories",
+            "customers",
+            "orders",
+            "products",
+            "banners",
+            "profile",
+            "settings",
+          ].includes(activeTab) && (
+            <div className="placeholder-box">
+              <h2>{activeTab.toUpperCase()} Module</h2>
+              <p>Ready to build next.</p>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);

@@ -76,7 +76,7 @@
     // Health / Stats
     getStats: async () => {
       try {
-        const res = await fetch(`${API_BASE}/stats`);
+        const res = await fetch(`${API_BASE}/stats`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         console.warn('[TrendMartAPI] Fallback to local stats', e);
@@ -88,7 +88,7 @@
     getProducts: async (params = {}) => {
       try {
         const query = new URLSearchParams(params).toString();
-        const res = await fetch(`${API_BASE}/products${query ? '?' + query : ''}`);
+        const res = await fetch(`${API_BASE}/products${query ? '?' + query : ''}`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         console.warn('[TrendMartAPI] Fallback to local products', e);
@@ -98,7 +98,7 @@
 
     getProductById: async (id) => {
       try {
-        const res = await fetch(`${API_BASE}/products/${id}`);
+        const res = await fetch(`${API_BASE}/products/${id}`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return null;
@@ -156,7 +156,7 @@
     // Categories
     getCategories: async () => {
       try {
-        const res = await fetch(`${API_BASE}/categories`);
+        const res = await fetch(`${API_BASE}/categories`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return window.StorageAPI ? window.StorageAPI.getCategories() : [];
@@ -167,7 +167,7 @@
     getOrders: async (params = {}) => {
       try {
         const query = new URLSearchParams(params).toString();
-        const res = await fetch(`${API_BASE}/orders${query ? '?' + query : ''}`);
+        const res = await fetch(`${API_BASE}/orders${query ? '?' + query : ''}`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return window.StorageAPI ? window.StorageAPI.getOrders() : [];
@@ -176,7 +176,7 @@
 
     getOrderById: async (id) => {
       try {
-        const res = await fetch(`${API_BASE}/orders/${id}`);
+        const res = await fetch(`${API_BASE}/orders/${id}`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return null;
@@ -252,7 +252,7 @@
     // Customers
     getCustomers: async () => {
       try {
-        const res = await fetch(`${API_BASE}/customers`);
+        const res = await fetch(`${API_BASE}/customers`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return window.StorageAPI ? window.StorageAPI.getCustomers() : [];
@@ -262,7 +262,7 @@
     // Sellers
     getSellers: async () => {
       try {
-        const res = await fetch(`${API_BASE}/sellers`);
+        const res = await fetch(`${API_BASE}/sellers`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return [];
@@ -272,7 +272,7 @@
     // Banners
     getBanners: async () => {
       try {
-        const res = await fetch(`${API_BASE}/banners`);
+        const res = await fetch(`${API_BASE}/banners`, { cache: 'no-store' });
         return await res.json();
       } catch (e) {
         return window.StorageAPI ? window.StorageAPI.getBanners() : [];
