@@ -50,3 +50,30 @@ python -m http.server 8000
 
 # Or using npx serve
 npx serve .
+```
+
+---
+
+## MongoDB & Team Setup (MERN Stack)
+
+TrendMart supports **both** MongoDB (via Mongoose) and the local JSON database (`server/data/trendmart_db.json`) with automatic fallback:
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+2. **Configure MongoDB** (optional — falls back to `trendmart_db.json` if omitted or unreachable):
+   - Copy `.env.example` to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Set `MONGO_URI` in `.env` to your local MongoDB (`mongodb://127.0.0.1:27017/trendmart`) or shared MongoDB Atlas connection string.
+3. **Run the ecosystem**:
+   ```bash
+   npm start
+   ```
+   - On first connection to an empty MongoDB database, TrendMart **automatically seeds** all collections from `server/data/trendmart_db.json`.
+   - To manually re-seed MongoDB from `server/data/trendmart_db.json` at any time, run:
+     ```bash
+     npm run seed
+     ```

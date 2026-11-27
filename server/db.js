@@ -709,6 +709,22 @@ class TrendMartDB {
     return this.loadData().categories || [];
   }
 
+  createCategory(item) {
+    const data = this.loadData();
+    const name = item.name || 'New Category';
+    const slug = item.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const newCategory = {
+      id: item.id || ('cat-' + Date.now()),
+      name,
+      slug,
+      icon: item.icon || '📦',
+      description: item.description || ''
+    };
+    data.categories = [...(data.categories || []), newCategory];
+    this.saveData(data);
+    return newCategory;
+  }
+
   // --- Orders CRUD ---
   getOrders(query = {}) {
     let list = this.loadData().orders || [];
@@ -809,7 +825,7 @@ class TrendMartDB {
     order.trackingHistory.push({
       status: newStatus,
       timestamp: new Date().toISOString(),
-      note: note || `Status updated to \${newStatus}`
+      note: note || `Status updated to ${newStatus}`
     });
     this.saveData(data);
     return order;
@@ -900,4 +916,86 @@ class TrendMartDB {
   }
 }
 
-module.exports = new TrendMartDB();
+class DualTrendMartDB {
+  constructor() {
+    this.jsonStore = new TrendMartDB();
+    this.mongoStore = null;
+    this.activeStore = this.jsonStore;
+    this.mode = 'json';
+    this._initPromise = null;
+  }
+
+  async init() {
+    if (this._initPromise) return this._initPromise;
+    this._initPromise = (async () => {
+      try {
+        require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+      } catch (_) {}
+
+      const mongoUri = (process.env.MONGO_URI || process.env.MONGODB_URI || '').trim();
+      if (!mongoUri) {
+        console.log('[TrendMartDB] No MONGO_URI configured. Using JSON database (server/data/trendmart_db.json).');
+        this.activeStore = this.jsonStore;
+        this.mode = 'json';
+        return this.mode;
+      }
+
+      try {
+        const MongoDBStore = require('./mongo');
+        const store = new MongoDBStore();
+        await store.connect(mongoUri);
+        const seeded = await store.seedIfEmpty(this.jsonStore.loadData());
+        this.mongoStore = store;
+        this.activeStore = store;
+        this.mode = 'mongodb';
+        console.log(`[TrendMartDB] Connected to MongoDB${seeded ? ' (seeded initial data from trendmart_db.json)' : ''}.`);
+      } catch (err) {
+        console.warn(`[TrendMartDB] MongoDB connection failed (${err.message}). Falling back to JSON database.`);
+        this.activeStore = this.jsonStore;
+        this.mode = 'json';
+      }
+      return this.mode;
+    })();
+    return this._initPromise;
+  }
+
+  getMode() {
+    return this.mode;
+  }
+
+  getJsonData() {
+    return this.jsonStore.loadData();
+  }
+
+  customerLogin(email, password) { return this.activeStore.customerLogin(email, password); }
+  customerRegister(data) { return this.activeStore.customerRegister(data); }
+  sellerLogin(email, password) { return this.activeStore.sellerLogin(email, password); }
+  sellerRegister(data) { return this.activeStore.sellerRegister(data); }
+  getProducts(query) { return this.activeStore.getProducts(query); }
+  getProductById(id) { return this.activeStore.getProductById(id); }
+  createProduct(item) { return this.activeStore.createProduct(item); }
+  updateProduct(id, updates) { return this.activeStore.updateProduct(id, updates); }
+  deleteProduct(id) { return this.activeStore.deleteProduct(id); }
+  getCategories() { return this.activeStore.getCategories(); }
+  createCategory(item) { return this.activeStore.createCategory(item); }
+  getOrders(query) { return this.activeStore.getOrders(query); }
+  getOrderById(id) { return this.activeStore.getOrderById(id); }
+  createOrder(orderData) { return this.activeStore.createOrder(orderData); }
+  updateOrderStatus(id, newStatus, note) { return this.activeStore.updateOrderStatus(id, newStatus, note); }
+  deleteOrder(id) { return this.activeStore.deleteOrder(id); }
+  getCustomers() { return this.activeStore.getCustomers(); }
+  getSellers() { return this.activeStore.getSellers(); }
+  getSellerById(id) { return this.activeStore.getSellerById(id); }
+  getBanners() { return this.activeStore.getBanners(); }
+  saveBanners(bannersList) { return this.activeStore.saveBanners(bannersList); }
+  getStats() { return this.activeStore.getStats(); }
+
+  resetData() {
+    if (this.mode === 'mongodb' && this.mongoStore) {
+      return this.mongoStore.resetData(this.jsonStore.loadData());
+    }
+    return this.jsonStore.resetData();
+  }
+}
+
+module.exports = new DualTrendMartDB();

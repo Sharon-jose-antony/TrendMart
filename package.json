@@ -1,0 +1,15 @@
+{
+  "name": "trendmart",
+  "version": "1.0.0",
+  "description": "TrendMart Multi-Site E-Commerce Ecosystem (Admin, Customer, Seller) with MongoDB and JSON fallback",
+  "main": "run_ecosystem.js",
+  "scripts": {
+    "start": "node run_ecosystem.js",
+    "server": "node server/server.js",
+    "seed": "node server/seed.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.8.0"
+  }
+}
