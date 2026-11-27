@@ -967,28 +967,313 @@ class DualTrendMartDB {
     return this.jsonStore.loadData();
   }
 
-  customerLogin(email, password) { return this.activeStore.customerLogin(email, password); }
-  customerRegister(data) { return this.activeStore.customerRegister(data); }
-  sellerLogin(email, password) { return this.activeStore.sellerLogin(email, password); }
-  sellerRegister(data) { return this.activeStore.sellerRegister(data); }
-  getProducts(query) { return this.activeStore.getProducts(query); }
-  getProductById(id) { return this.activeStore.getProductById(id); }
-  createProduct(item) { return this.activeStore.createProduct(item); }
-  updateProduct(id, updates) { return this.activeStore.updateProduct(id, updates); }
-  deleteProduct(id) { return this.activeStore.deleteProduct(id); }
-  getCategories() { return this.activeStore.getCategories(); }
-  createCategory(item) { return this.activeStore.createCategory(item); }
-  getOrders(query) { return this.activeStore.getOrders(query); }
-  getOrderById(id) { return this.activeStore.getOrderById(id); }
-  createOrder(orderData) { return this.activeStore.createOrder(orderData); }
-  updateOrderStatus(id, newStatus, note) { return this.activeStore.updateOrderStatus(id, newStatus, note); }
-  deleteOrder(id) { return this.activeStore.deleteOrder(id); }
-  getCustomers() { return this.activeStore.getCustomers(); }
-  getSellers() { return this.activeStore.getSellers(); }
-  getSellerById(id) { return this.activeStore.getSellerById(id); }
-  getBanners() { return this.activeStore.getBanners(); }
-  saveBanners(bannersList) { return this.activeStore.saveBanners(bannersList); }
-  getStats() { return this.activeStore.getStats(); }
+  customerLogin(email, password) {
+    try {
+      const res = this.activeStore.customerLogin(email, password);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in customerLogin: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.customerLogin(email, password);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.customerLogin(email, password);
+    }
+  }
+
+  customerRegister(data) {
+    try {
+      const res = this.activeStore.customerRegister(data);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in customerRegister: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.customerRegister(data);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.customerRegister(data);
+    }
+  }
+
+  sellerLogin(email, password) {
+    try {
+      const res = this.activeStore.sellerLogin(email, password);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in sellerLogin: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.sellerLogin(email, password);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.sellerLogin(email, password);
+    }
+  }
+
+  sellerRegister(data) {
+    try {
+      const res = this.activeStore.sellerRegister(data);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in sellerRegister: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.sellerRegister(data);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.sellerRegister(data);
+    }
+  }
+
+  getProducts(query) {
+    try {
+      const res = this.activeStore.getProducts(query);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getProducts: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getProducts(query);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getProducts(query);
+    }
+  }
+
+  getProductById(id) {
+    try {
+      const res = this.activeStore.getProductById(id);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getProductById: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getProductById(id);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getProductById(id);
+    }
+  }
+
+  createProduct(item) {
+    try {
+      const res = this.activeStore.createProduct(item);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in createProduct: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.createProduct(item);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.createProduct(item);
+    }
+  }
+
+  updateProduct(id, updates) {
+    try {
+      const res = this.activeStore.updateProduct(id, updates);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in updateProduct: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.updateProduct(id, updates);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.updateProduct(id, updates);
+    }
+  }
+
+  deleteProduct(id) {
+    try {
+      const res = this.activeStore.deleteProduct(id);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in deleteProduct: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.deleteProduct(id);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.deleteProduct(id);
+    }
+  }
+
+  getCategories() {
+    try {
+      const res = this.activeStore.getCategories();
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getCategories: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getCategories();
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getCategories();
+    }
+  }
+
+  createCategory(item) {
+    try {
+      const res = this.activeStore.createCategory(item);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in createCategory: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.createCategory(item);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.createCategory(item);
+    }
+  }
+
+  getOrders(query) {
+    try {
+      const res = this.activeStore.getOrders(query);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getOrders: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getOrders(query);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getOrders(query);
+    }
+  }
+
+  getOrderById(id) {
+    try {
+      const res = this.activeStore.getOrderById(id);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getOrderById: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getOrderById(id);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getOrderById(id);
+    }
+  }
+
+  createOrder(orderData) {
+    try {
+      const res = this.activeStore.createOrder(orderData);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in createOrder: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.createOrder(orderData);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.createOrder(orderData);
+    }
+  }
+
+  updateOrderStatus(id, newStatus, note) {
+    try {
+      const res = this.activeStore.updateOrderStatus(id, newStatus, note);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in updateOrderStatus: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.updateOrderStatus(id, newStatus, note);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.updateOrderStatus(id, newStatus, note);
+    }
+  }
+
+  deleteOrder(id) {
+    try {
+      const res = this.activeStore.deleteOrder(id);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in deleteOrder: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.deleteOrder(id);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.deleteOrder(id);
+    }
+  }
+
+  getCustomers() {
+    try {
+      const res = this.activeStore.getCustomers();
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getCustomers: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getCustomers();
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getCustomers();
+    }
+  }
+
+  getSellers() {
+    try {
+      const res = this.activeStore.getSellers();
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getSellers: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getSellers();
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getSellers();
+    }
+  }
+
+  getSellerById(id) {
+    try {
+      const res = this.activeStore.getSellerById(id);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getSellerById: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getSellerById(id);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getSellerById(id);
+    }
+  }
+
+  getBanners() {
+    try {
+      const res = this.activeStore.getBanners();
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getBanners: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getBanners();
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getBanners();
+    }
+  }
+
+  saveBanners(bannersList) {
+    try {
+      const res = this.activeStore.saveBanners(bannersList);
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in saveBanners: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.saveBanners(bannersList);
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.saveBanners(bannersList);
+    }
+  }
+
+  getStats() {
+    try {
+      const res = this.activeStore.getStats();
+      return res && typeof res.catch === 'function' ? res.catch(err => {
+        console.warn(`[TrendMartDB] DB error in getStats: ${err.message}. Falling back to JSON.`);
+        this.activeStore = this.jsonStore;
+        return this.jsonStore.getStats();
+      }) : res;
+    } catch (err) {
+      this.activeStore = this.jsonStore;
+      return this.jsonStore.getStats();
+    }
+  }
 
   resetData() {
     if (this.mode === 'mongodb' && this.mongoStore) {
